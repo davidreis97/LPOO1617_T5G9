@@ -4,13 +4,18 @@ import java.util.Scanner;
 
 public class main {
 		
+	
+	public static void secondMap(){
+		//Map map2 = new Map();
+	}
+	
+	
 	public static void main(String[] args) {
 		
 		Scanner keyboard = new Scanner(System.in);
 		String kbdInput;
-		Map map1 = new Map();
-		
-		char dungeonMap1[][] =
+		 
+		char dungeonMap[][] =
 			{	{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
 					{'X', 'H', ' ', ' ', 'I', ' ', 'X', ' ', 'G', 'X'},
 					{'X', 'X', 'X', ' ', 'X', 'X', 'X', ' ', ' ', 'X'},
@@ -21,23 +26,17 @@ public class main {
 					{'X', 'X', 'X', ' ', 'X', 'X', 'X', 'X', ' ', 'X'},
 					{'X', ' ', 'I', ' ', 'I', ' ', 'X', 'k', ' ', 'X'},
 					{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}};
-		map1.dungeonMap = dungeonMap1;
 		
-		Hero hero = new Hero();
-		hero.x = 1;
-		hero.y = 1;
-		
-		Guard guard = new Guard();
-		String guardPath1[] = {"a","s","s","s","s","a","a","a","a","a","a","s",
+		String guardPath[] = {"a","s","s","s","s","a","a","a","a","a","a","s",
 								"d","d","d","d","d","d","d","w","w","w","w","w"};
-		guard.x = 8;
-		guard.y = 1;
-		guard.stepCounter = 0;
-		guard.guardPath = guardPath1;
 		
-		map1.guards = new Guard[1];
-		map1.guards[0] = guard;
-		map1.hero = hero;
+		Hero hero = new Hero(1,1); //Hero(x,y)
+		
+		Guard guard = new Guard(8,1,guardPath); //Guard(x,y,patrol[])
+		Guard guards[] = new Guard[1];
+		guards[0] = guard;
+		
+		Map map1 = new Map(hero,dungeonMap,guards);
 				
 		do {
 			
@@ -52,8 +51,8 @@ public class main {
 			
 			if(status.equals("Exit")) {
 				System.out.println("You won!");
-				//Here is where we insert the new map.
-				return;
+				secondMap();
+			return;
 			} else if(status.equals("Caught")) {
 				System.out.println("You lost!");
 				map1.printMap();

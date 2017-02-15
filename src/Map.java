@@ -6,6 +6,17 @@ public class Map {
 	
 	char dungeonMap[][];
 	
+	public Map(Hero h, char dM[][], Guard g[]){
+		hero = h;
+		guards = g;
+		dungeonMap = dM;
+	}
+	
+	public Map(Hero h, char dM[][]){
+		hero = h;
+		dungeonMap = dM;
+	}
+	
 	void printMap() {
 		for(int i = 0; i< dungeonMap.length; i++) {
 			for(int j = 0; j < dungeonMap[i].length; j++) {
