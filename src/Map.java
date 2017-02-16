@@ -28,6 +28,14 @@ public class Map {
 		for(int i = 0; i < ogres.length; i++){
 			int ogreoldx = ogres[i].x;
 			int ogreoldy = ogres[i].y;
+			int ogreoldclubx = ogres[i].ogreClubX;
+			int ogreoldcluby = ogres[i].ogreClubY;
+			
+			if(dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] == '$'){
+				dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] = 'k';
+			}else{
+				dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] = ' ';
+			}
 			
 			if(dungeonMap[ogres[i].y][ogres[i].x] == '$'){
 				dungeonMap[ogres[i].y][ogres[i].x] = 'k';
@@ -35,7 +43,8 @@ public class Map {
 				dungeonMap[ogres[i].y][ogres[i].x] = ' ';
 			}
 			
-			String ogreDirection = ogres[i].generateNextStep();
+			String ogreDirection = ogres[i].generateNewDirection();
+			String clubDirection = ogres[i].generateNewDirection();
 			
 			if(ogreDirection.equals("w")) {
 				ogres[i].y--;
@@ -47,20 +56,48 @@ public class Map {
 				ogres[i].x++;
 			}
 			
+			if(clubDirection.equals("w")) {
+				ogres[i].ogreClubX = ogres[i].x; ogres[i].ogreClubY = ogres[i].y -1;
+			} else if(clubDirection.equals("a")) {
+				ogres[i].ogreClubX = ogres[i].x-1; ogres[i].ogreClubY = ogres[i].y;
+		    } else if(clubDirection.equals("s")) {
+		    	ogres[i].ogreClubX = ogres[i].x; ogres[i].ogreClubY = ogres[i].y +1;
+			} else if(clubDirection.equals("d")) {
+				ogres[i].ogreClubX = ogres[i].x+1; ogres[i].ogreClubY = ogres[i].y;
+			}
+			
 			//Ogre Wall collision
 			if(dungeonMap[ogres[i].y][ogres[i].x] == 'X' ||
 				dungeonMap[ogres[i].y][ogres[i].x] == 'I'||
 				dungeonMap[ogres[i].y][ogres[i].x] == 'S') {
 				
 				ogres[i].x = ogreoldx; ogres[i].y = ogreoldy;
-			}
-			
-			if(dungeonMap[ogres[i].y][ogres[i].x] == 'k'){
-				dungeonMap[ogres[i].y][ogres[i].x] = '$';
+				ogres[i].ogreClubX = ogreoldclubx; ogres[i].ogreClubY = ogreoldcluby;
+				updateOgrePosition();
 			}else{
-				dungeonMap[ogres[i].y][ogres[i].x] = '0';
+				
+				//Ogre Club Wall collision, only runs if the ogre new position is valid.
+				if(dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] == 'X' ||
+					dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] == 'I'||
+					dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] == 'S') {
+					
+					ogres[i].x = ogreoldx; ogres[i].y = ogreoldy;
+					ogres[i].ogreClubX = ogreoldclubx; ogres[i].ogreClubY = ogreoldcluby;
+					updateOgrePosition();
+				}else{
+					if(dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] == 'k'){
+						dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] = '$';
+					}else{
+						dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] = '*';
+					}
+				}
+				
+				if(dungeonMap[ogres[i].y][ogres[i].x] == 'k'){ //Only change the map if both the club and the ogre are in valid positions
+					dungeonMap[ogres[i].y][ogres[i].x] = '$';
+				}else{
+					dungeonMap[ogres[i].y][ogres[i].x] = '0';
+				}
 			}
-			
 		}
 	}
 	
@@ -149,17 +186,13 @@ public class Map {
 			tempheroy = dungeonMap.length - 2;
 		}
 		
-		//Guard collision
+		//Guard, ogre and club collision
 		if(dungeonMap[hero.y - 1][hero.x] == 'G' ||
 				dungeonMap[hero.y + 1][hero.x] == 'G' ||
 				dungeonMap[hero.y][hero.x - 1] == 'G' ||
 				dungeonMap[hero.y][hero.x + 1] == 'G' || 
-				dungeonMap[hero.y][hero.x] == 'G') {
-			return "Caught";
-		}
-		
-		//Ogre collision
-		if(dungeonMap[hero.y - 1][hero.x] == '0' ||
+				dungeonMap[hero.y][hero.x] == 'G' ||
+				dungeonMap[hero.y - 1][hero.x] == '0' ||
 				dungeonMap[hero.y + 1][hero.x] == '0' ||
 				dungeonMap[hero.y][hero.x - 1] == '0' ||
 				dungeonMap[hero.y][hero.x + 1] == '0' || 
@@ -168,11 +201,14 @@ public class Map {
 				dungeonMap[hero.y + 1][hero.x] == '$' ||
 				dungeonMap[hero.y][hero.x - 1] == '$' ||
 				dungeonMap[hero.y][hero.x + 1] == '$' || 
-				dungeonMap[hero.y][hero.x] == '$') {
+				dungeonMap[hero.y][hero.x] == '$' ||
+				dungeonMap[hero.y - 1][hero.x] == '*' ||
+				dungeonMap[hero.y + 1][hero.x] == '*' ||
+				dungeonMap[hero.y][hero.x - 1] == '*' ||
+				dungeonMap[hero.y][hero.x + 1] == '*' || 
+				dungeonMap[hero.y][hero.x] == '*') {
 			return "Caught";
 		}
-		
-		
 		
 		return "Normal";
 	}

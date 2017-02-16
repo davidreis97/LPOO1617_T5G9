@@ -4,9 +4,7 @@ import java.util.Scanner;
 
 public class main {
 		
-	
 	public static void secondMap(){
-		
 		Scanner keyboard = new Scanner(System.in);
 		String kbdInput;
 		
@@ -24,7 +22,7 @@ public class main {
 		
 		Hero hero = new Hero(1,8);
 		
-		Ogre ogre = new Ogre(4,1);
+		Ogre ogre = new Ogre(4,1,3,1);
 		Ogre ogres[] = new Ogre[1];
 		ogres[0] = ogre;
 	
@@ -57,8 +55,6 @@ public class main {
 	
 	
 	public static void main(String[] args) {
-		secondMap();
-		
 		Scanner keyboard = new Scanner(System.in);
 		String kbdInput;
 		 

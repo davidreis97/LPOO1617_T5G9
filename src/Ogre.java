@@ -3,12 +3,13 @@ import java.util.Random;
 public class Ogre {
 	public int x;
 	public int y;
+	public int ogreClubX, ogreClubY;
 	
-	public Ogre(int startx, int starty){
-		x = startx; y = starty;
+	public Ogre(int startx, int starty, int clubx, int cluby){
+		x = startx; y = starty; ogreClubX = clubx; ogreClubY = cluby;
 	}
 	
-	public String generateNextStep(){
+	public String generateNewDirection(){
 		Random rand = new Random();
 
 		int  n = rand.nextInt(4);
