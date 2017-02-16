@@ -35,13 +35,15 @@ public class Map {
 				dungeonMap[ogres[i].y][ogres[i].x] = ' ';
 			}
 			
-			if(ogres[i].generateNextStep().equals("w")) {
+			String ogreDirection = ogres[i].generateNextStep();
+			
+			if(ogreDirection.equals("w")) {
 				ogres[i].y--;
-			} else if(ogres[i].generateNextStep().equals("a")) {
+			} else if(ogreDirection.equals("a")) {
 				ogres[i].x--;
-		    } else if(ogres[i].generateNextStep().equals("s")) {
+		    } else if(ogreDirection.equals("s")) {
 		    	ogres[i].y++;
-			} else if(ogres[i].generateNextStep().equals("d")) {
+			} else if(ogreDirection.equals("d")) {
 				ogres[i].x++;
 			}
 			
@@ -50,7 +52,7 @@ public class Map {
 				dungeonMap[ogres[i].y][ogres[i].x] == 'I'||
 				dungeonMap[ogres[i].y][ogres[i].x] == 'S') {
 				
-				ogres[i].x = ogreoldx; ogres[i].y = ogreoldx;
+				ogres[i].x = ogreoldx; ogres[i].y = ogreoldy;
 			}
 			
 			if(dungeonMap[ogres[i].y][ogres[i].x] == 'k'){
