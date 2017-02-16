@@ -1,17 +1,17 @@
 
 public class Map {
 	
-	Hero hero;
-	Guard guards[];
-	Ogre ogres[];
+	private Hero hero;
+	private Guard guards[];
+	private Ogre ogres[];
 	
-	char dungeonMap[][];
+	private char dungeonMap[][];
 	
 	public Map(Hero h, char dM[][], Guard g[], Ogre o[]){
 		hero = h;
 		guards = g;
 		dungeonMap = dM;
-		ogres = o;
+		ogres = o;;
 	}
 	
 	void printMap() {
@@ -24,78 +24,77 @@ public class Map {
 	}
 	
 	void updateOgrePosition(){
-		
 		for(int i = 0; i < ogres.length; i++){
-			int ogreoldx = ogres[i].x;
-			int ogreoldy = ogres[i].y;
-			int ogreoldclubx = ogres[i].ogreClubX;
-			int ogreoldcluby = ogres[i].ogreClubY;
+			int ogreoldx = ogres[i].getX();
+			int ogreoldy = ogres[i].getY();
+			int ogreoldclubx = ogres[i].getOgreClubX();
+			int ogreoldcluby = ogres[i].getOgreClubY();
 			
-			if(dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] == '$'){
-				dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] = 'k';
+			if(dungeonMap[ogres[i].getOgreClubY()][ogres[i].getOgreClubX()] == '$'){
+				dungeonMap[ogres[i].getOgreClubY()][ogres[i].getOgreClubX()] = 'k';
 			}else{
-				dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] = ' ';
+				dungeonMap[ogres[i].getOgreClubY()][ogres[i].getOgreClubX()] = ' ';
 			}
 			
-			if(dungeonMap[ogres[i].y][ogres[i].x] == '$'){
-				dungeonMap[ogres[i].y][ogres[i].x] = 'k';
+			if(dungeonMap[ogres[i].getY()][ogres[i].getX()] == '$'){
+				dungeonMap[ogres[i].getY()][ogres[i].getX()] = 'k';
 			}else{
-				dungeonMap[ogres[i].y][ogres[i].x] = ' ';
+				dungeonMap[ogres[i].getY()][ogres[i].getX()] = ' ';
 			}
 			
 			String ogreDirection = ogres[i].generateNewDirection();
 			String clubDirection = ogres[i].generateNewDirection();
 			
 			if(ogreDirection.equals("w")) {
-				ogres[i].y--;
+				ogres[i].setY(ogres[i].getY() - 1);
 			} else if(ogreDirection.equals("a")) {
-				ogres[i].x--;
+				ogres[i].setX(ogres[i].getX() - 1);
 		    } else if(ogreDirection.equals("s")) {
-		    	ogres[i].y++;
+		    	ogres[i].setY(ogres[i].getY() + 1);
 			} else if(ogreDirection.equals("d")) {
-				ogres[i].x++;
+				ogres[i].setX(ogres[i].getX() + 1);
 			}
 			
 			if(clubDirection.equals("w")) {
-				ogres[i].ogreClubX = ogres[i].x; ogres[i].ogreClubY = ogres[i].y -1;
+				ogres[i].setOgreClubX(ogres[i].getX()); ogres[i].setOgreClubY(ogres[i].getY() -1);
 			} else if(clubDirection.equals("a")) {
-				ogres[i].ogreClubX = ogres[i].x-1; ogres[i].ogreClubY = ogres[i].y;
+				ogres[i].setOgreClubX(ogres[i].getX()-1); ogres[i].setOgreClubY(ogres[i].getY());
 		    } else if(clubDirection.equals("s")) {
-		    	ogres[i].ogreClubX = ogres[i].x; ogres[i].ogreClubY = ogres[i].y +1;
+		    	ogres[i].setOgreClubX(ogres[i].getX()); ogres[i].setOgreClubY(ogres[i].getY() +1);
 			} else if(clubDirection.equals("d")) {
-				ogres[i].ogreClubX = ogres[i].x+1; ogres[i].ogreClubY = ogres[i].y;
+				ogres[i].setOgreClubX(ogres[i].getX()+1); ogres[i].setOgreClubY(ogres[i].getY());
 			}
 			
 			//Ogre Wall collision
-			if(dungeonMap[ogres[i].y][ogres[i].x] == 'X' ||
-				dungeonMap[ogres[i].y][ogres[i].x] == 'I'||
-				dungeonMap[ogres[i].y][ogres[i].x] == 'S') {
+			if(dungeonMap[ogres[i].getY()][ogres[i].getX()] == 'X' ||
+				dungeonMap[ogres[i].getY()][ogres[i].getX()] == 'I'||
+				dungeonMap[ogres[i].getY()][ogres[i].getX()] == 'S') {
 				
-				ogres[i].x = ogreoldx; ogres[i].y = ogreoldy;
-				ogres[i].ogreClubX = ogreoldclubx; ogres[i].ogreClubY = ogreoldcluby;
+				ogres[i].setX(ogreoldx); ogres[i].setY(ogreoldy);
+				ogres[i].setOgreClubX(ogreoldclubx); ogres[i].setOgreClubY(ogreoldcluby);
 				updateOgrePosition();
 			}else{
 				
 				//Ogre Club Wall collision, only runs if the ogre new position is valid.
-				if(dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] == 'X' ||
-					dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] == 'I'||
-					dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] == 'S') {
+				if(dungeonMap[ogres[i].getOgreClubY()][ogres[i].getOgreClubX()] == 'X' ||
+					dungeonMap[ogres[i].getOgreClubY()][ogres[i].getOgreClubX()] == 'I'||
+					dungeonMap[ogres[i].getOgreClubY()][ogres[i].getOgreClubX()] == 'S') {
 					
-					ogres[i].x = ogreoldx; ogres[i].y = ogreoldy;
-					ogres[i].ogreClubX = ogreoldclubx; ogres[i].ogreClubY = ogreoldcluby;
+					ogres[i].setX(ogreoldx); ogres[i].setY(ogreoldy);
+					ogres[i].setOgreClubX(ogreoldclubx); ogres[i].setOgreClubY(ogreoldcluby);
 					updateOgrePosition();
 				}else{
-					if(dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] == 'k'){
-						dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] = '$';
+					if(dungeonMap[ogres[i].getOgreClubY()][ogres[i].getOgreClubX()] == 'k'){
+						dungeonMap[ogres[i].getOgreClubY()][ogres[i].getOgreClubX()] = '$';
 					}else{
-						dungeonMap[ogres[i].ogreClubY][ogres[i].ogreClubX] = '*';
+						dungeonMap[ogres[i].getOgreClubY()][ogres[i].getOgreClubX()] = '*';
 					}
 				}
 				
-				if(dungeonMap[ogres[i].y][ogres[i].x] == 'k'){ //Only change the map if both the club and the ogre are in valid positions
-					dungeonMap[ogres[i].y][ogres[i].x] = '$';
+				if(dungeonMap[ogres[i].getY()][ogres[i].getX()] == 'k'){ //Only change the map if both the club and the ogre are in valid positions
+					dungeonMap[ogres[i].getY()][ogres[i].getX()] = '$';
 				}else{
-					dungeonMap[ogres[i].y][ogres[i].x] = '0';
+					dungeonMap[ogres[i].getY()][ogres[i].getX()] = '0';
 				}
 			}
 		}
@@ -106,30 +105,30 @@ public class Map {
 		
 		for(int i = 0; i < guards.length; i++){
 			
-			dungeonMap[guards[i].y][guards[i].x] = ' ';
+			dungeonMap[guards[i].getY()][guards[i].getX()] = ' ';
 			
-			if(guards[i].guardPath[guards[i].stepCounter].equals("w")) {
-				guards[i].y--;
-			} else if(guards[i].guardPath[guards[i].stepCounter].equals("a")) {
-				guards[i].x--;
-		    } else if(guards[i].guardPath[guards[i].stepCounter].equals("s")) {
-		    	guards[i].y++;
-			} else if(guards[i].guardPath[guards[i].stepCounter].equals("d")) {
-				guards[i].x++;
+			if(guards[i].getGuardPath()[guards[i].getStepCounter()].equals("w")) {
+				guards[i].setY(guards[i].getY() - 1);
+			} else if(guards[i].getGuardPath()[guards[i].getStepCounter()].equals("a")) {
+				guards[i].setX(guards[i].getX() - 1);
+		    } else if(guards[i].getGuardPath()[guards[i].getStepCounter()].equals("s")) {
+		    	guards[i].setY(guards[i].getY() + 1);
+			} else if(guards[i].getGuardPath()[guards[i].getStepCounter()].equals("d")) {
+				guards[i].setX(guards[i].getX() + 1);
 			}
 			
-			dungeonMap[guards[i].y][guards[i].x] = 'G';
+			dungeonMap[guards[i].getY()][guards[i].getX()] = 'G';
 			
-			guards[i].stepCounter++;
-			if(guards[i].stepCounter >= guards[i].guardPath.length){
-				guards[i].stepCounter = 0;
+			guards[i].setStepCounter(guards[i].getStepCounter() + 1);
+			if(guards[i].getStepCounter() >= guards[i].getGuardPath().length){
+				guards[i].setStepCounter(0);
 			}
 		}
 	}
 	
 	String updateMap(String kbdInput) {
 		
-		int tempherox = hero.x; int tempheroy = hero.y;
+		int tempherox = hero.getX(); int tempheroy = hero.getY();
 		
 		updateGuardPosition();
 		updateOgrePosition();
@@ -147,9 +146,9 @@ public class Map {
 		
 		//Hero Wall collision
 		if(dungeonMap[tempheroy][tempherox] == ' ') {
-			dungeonMap[hero.y][hero.x] = ' ';
+			dungeonMap[hero.getY()][hero.getX()] = ' ';
 			dungeonMap[tempheroy][tempherox] = 'H';
-			hero.x = tempherox; hero.y = tempheroy;
+			hero.setX(tempherox); hero.setY(tempheroy);
 			
 		//Lever collision
 		} else if(dungeonMap[tempheroy][tempherox] == 'k') {
@@ -164,9 +163,9 @@ public class Map {
 		
 		//Exit door collision
 		if(dungeonMap[tempheroy][tempherox] == 'S' && (tempheroy == 0 || tempheroy == dungeonMap.length - 1 || tempherox == 0 || tempherox == dungeonMap[0].length - 1)) {
-			dungeonMap[hero.y][hero.x] = ' ';
+			dungeonMap[hero.getY()][hero.getX()] = ' ';
 			dungeonMap[tempheroy][tempherox] = 'H';
-			hero.x = tempherox; hero.y = tempheroy;
+			hero.setX(tempherox); hero.setY(tempheroy);
 			return "Exit";
 		}
 		
@@ -187,29 +186,61 @@ public class Map {
 		}
 		
 		//Guard, ogre and club collision
-		if(dungeonMap[hero.y - 1][hero.x] == 'G' ||
-				dungeonMap[hero.y + 1][hero.x] == 'G' ||
-				dungeonMap[hero.y][hero.x - 1] == 'G' ||
-				dungeonMap[hero.y][hero.x + 1] == 'G' || 
-				dungeonMap[hero.y][hero.x] == 'G' ||
-				dungeonMap[hero.y - 1][hero.x] == '0' ||
-				dungeonMap[hero.y + 1][hero.x] == '0' ||
-				dungeonMap[hero.y][hero.x - 1] == '0' ||
-				dungeonMap[hero.y][hero.x + 1] == '0' || 
-				dungeonMap[hero.y][hero.x] == '0' || 
-				dungeonMap[hero.y - 1][hero.x] == '$' ||
-				dungeonMap[hero.y + 1][hero.x] == '$' ||
-				dungeonMap[hero.y][hero.x - 1] == '$' ||
-				dungeonMap[hero.y][hero.x + 1] == '$' || 
-				dungeonMap[hero.y][hero.x] == '$' ||
-				dungeonMap[hero.y - 1][hero.x] == '*' ||
-				dungeonMap[hero.y + 1][hero.x] == '*' ||
-				dungeonMap[hero.y][hero.x - 1] == '*' ||
-				dungeonMap[hero.y][hero.x + 1] == '*' || 
-				dungeonMap[hero.y][hero.x] == '*') {
+		if(dungeonMap[hero.getY() - 1][hero.getX()] == 'G' ||
+				dungeonMap[hero.getY() + 1][hero.getX()] == 'G' ||
+				dungeonMap[hero.getY()][hero.getX() - 1] == 'G' ||
+				dungeonMap[hero.getY()][hero.getX() + 1] == 'G' || 
+				dungeonMap[hero.getY()][hero.getX()] == 'G' ||
+				dungeonMap[hero.getY() - 1][hero.getX()] == '0' ||
+				dungeonMap[hero.getY() + 1][hero.getX()] == '0' ||
+				dungeonMap[hero.getY()][hero.getX() - 1] == '0' ||
+				dungeonMap[hero.getY()][hero.getX() + 1] == '0' || 
+				dungeonMap[hero.getY()][hero.getX()] == '0' || 
+				dungeonMap[hero.getY() - 1][hero.getX()] == '$' ||
+				dungeonMap[hero.getY() + 1][hero.getX()] == '$' ||
+				dungeonMap[hero.getY()][hero.getX() - 1] == '$' ||
+				dungeonMap[hero.getY()][hero.getX() + 1] == '$' || 
+				dungeonMap[hero.getY()][hero.getX()] == '$' ||
+				dungeonMap[hero.getY() - 1][hero.getX()] == '*' ||
+				dungeonMap[hero.getY() + 1][hero.getX()] == '*' ||
+				dungeonMap[hero.getY()][hero.getX() - 1] == '*' ||
+				dungeonMap[hero.getY()][hero.getX() + 1] == '*' || 
+				dungeonMap[hero.getY()][hero.getX()] == '*') {
 			return "Caught";
 		}
 		
 		return "Normal";
+	}
+
+	Hero getHero() {
+		return hero;
+	}
+
+	void setHero(Hero hero) {
+		this.hero = hero;
+	}
+
+	Guard[] getGuards() {
+		return guards;
+	}
+
+	void setGuards(Guard guards[]) {
+		this.guards = guards;
+	}
+
+	Ogre[] getOgres() {
+		return ogres;
+	}
+
+	void setOgres(Ogre ogres[]) {
+		this.ogres = ogres;
+	}
+
+	char[][] getDungeonMap() {
+		return dungeonMap;
+	}
+
+	void setDungeonMap(char dungeonMap[][]) {
+		this.dungeonMap = dungeonMap;
 	}
 }
