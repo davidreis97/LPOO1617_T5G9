@@ -3,18 +3,15 @@ public class Map {
 	
 	Hero hero;
 	Guard guards[];
+	Ogre ogres[];
 	
 	char dungeonMap[][];
 	
-	public Map(Hero h, char dM[][], Guard g[]){
+	public Map(Hero h, char dM[][], Guard g[], Ogre o[]){
 		hero = h;
 		guards = g;
 		dungeonMap = dM;
-	}
-	
-	public Map(Hero h, char dM[][]){
-		hero = h;
-		dungeonMap = dM;
+		ogres = o;
 	}
 	
 	void printMap() {
@@ -23,6 +20,45 @@ public class Map {
 				System.out.print(dungeonMap[i][j]);
 			}
 			System.out.println();
+		}
+	}
+	
+	void updateOgrePosition(){
+		
+		for(int i = 0; i < ogres.length; i++){
+			int ogreoldx = ogres[i].x;
+			int ogreoldy = ogres[i].y;
+			
+			if(dungeonMap[ogres[i].y][ogres[i].x] == '$'){
+				dungeonMap[ogres[i].y][ogres[i].x] = 'k';
+			}else{
+				dungeonMap[ogres[i].y][ogres[i].x] = ' ';
+			}
+			
+			if(ogres[i].generateNextStep().equals("w")) {
+				ogres[i].y--;
+			} else if(ogres[i].generateNextStep().equals("a")) {
+				ogres[i].x--;
+		    } else if(ogres[i].generateNextStep().equals("s")) {
+		    	ogres[i].y++;
+			} else if(ogres[i].generateNextStep().equals("d")) {
+				ogres[i].x++;
+			}
+			
+			//Ogre Wall collision
+			if(dungeonMap[ogres[i].y][ogres[i].x] == 'X' ||
+				dungeonMap[ogres[i].y][ogres[i].x] == 'I'||
+				dungeonMap[ogres[i].y][ogres[i].x] == 'S') {
+				
+				ogres[i].x = ogreoldx; ogres[i].y = ogreoldx;
+			}
+			
+			if(dungeonMap[ogres[i].y][ogres[i].x] == 'k'){
+				dungeonMap[ogres[i].y][ogres[i].x] = '$';
+			}else{
+				dungeonMap[ogres[i].y][ogres[i].x] = '0';
+			}
+			
 		}
 	}
 	
@@ -57,6 +93,7 @@ public class Map {
 		int tempherox = hero.x; int tempheroy = hero.y;
 		
 		updateGuardPosition();
+		updateOgrePosition();
 		
 		//Input Processing (Generates next hero position)
 		if(kbdInput.equals("w") || kbdInput.equals("W")) {
@@ -69,7 +106,7 @@ public class Map {
 			tempherox++;
 		}
 		
-		//Wall collision
+		//Hero Wall collision
 		if(dungeonMap[tempheroy][tempherox] == ' ') {
 			dungeonMap[hero.y][hero.x] = ' ';
 			dungeonMap[tempheroy][tempherox] = 'H';
@@ -118,6 +155,22 @@ public class Map {
 				dungeonMap[hero.y][hero.x] == 'G') {
 			return "Caught";
 		}
+		
+		//Ogre collision
+		if(dungeonMap[hero.y - 1][hero.x] == '0' ||
+				dungeonMap[hero.y + 1][hero.x] == '0' ||
+				dungeonMap[hero.y][hero.x - 1] == '0' ||
+				dungeonMap[hero.y][hero.x + 1] == '0' || 
+				dungeonMap[hero.y][hero.x] == '0' || 
+				dungeonMap[hero.y - 1][hero.x] == '$' ||
+				dungeonMap[hero.y + 1][hero.x] == '$' ||
+				dungeonMap[hero.y][hero.x - 1] == '$' ||
+				dungeonMap[hero.y][hero.x + 1] == '$' || 
+				dungeonMap[hero.y][hero.x] == '$') {
+			return "Caught";
+		}
+		
+		
 		
 		return "Normal";
 	}
