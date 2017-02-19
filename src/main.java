@@ -1,3 +1,4 @@
+import java.awt.Point;
 import java.util.Scanner;
 
 //TODO unbuffered input (InputStreamReader?)
@@ -22,7 +23,7 @@ public class main {
 		
 		Hero hero = new Hero(1,8);
 		
-		Ogre ogre = new Ogre(4,1,3,1);
+		Ogre ogre = new Ogre(new Point(4, 1), new Point(3, 1));
 		Ogre ogres[] = new Ogre[1];
 		ogres[0] = ogre;
 	
@@ -53,8 +54,11 @@ public class main {
 		} while(!kbdInput.equals("exit"));
  	}
 	
-	
+	//TODO proper game loop with state flags for map1 / map2
 	public static void main(String[] args) {
+		
+		//secondMap();
+		
 		Scanner keyboard = new Scanner(System.in);
 		String kbdInput;
 		 
@@ -70,12 +74,12 @@ public class main {
 					{'X', ' ', 'I', ' ', 'I', ' ', 'X', 'k', ' ', 'X'},
 					{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}};
 		
-		String guardPath[] = {"a","s","s","s","s","a","a","a","a","a","a","s",
-								"d","d","d","d","d","d","d","w","w","w","w","w"};
+		char guardPath[] = {'a','s','s','s','s','a','a','a','a','a','a','s',
+								'd','d','d','d','d','d','d','w','w','w','w','w'};
 		
 		Hero hero = new Hero(1,1); //Hero(x,y)
 		
-		Guard guard = new Guard(8,1,guardPath); //Guard(x,y,patrol[])
+		Guard guard = new Guard(new Point(8, 1), guardPath);
 		Guard guards[] = new Guard[1];
 		guards[0] = guard;
 		
@@ -89,7 +93,7 @@ public class main {
 			
 			map1.printMap();
 			
-			kbdInput = keyboard.nextLine();
+			kbdInput = keyboard.nextLine(); //CAUTION crashes if user inputs Enter only
 			
 			String status = map1.updateMap(kbdInput);
 		

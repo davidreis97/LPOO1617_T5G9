@@ -1,49 +1,45 @@
+import java.awt.Point;
 
 public class Guard {
-	private int x;
-	private int y;
-	private int stepCounter; //Counts how many steps the guard has taken in the current patrol. Resets to 0 when he does a full loop.
-	private String guardPath[]; //Array of inputs that correspond to the guard's patrol.
+	private Point guardCoords;
+	private int stepCounter; //Counts how many steps the guard has taken in the current patrol. Resets to 0 when he does a full loop
+	private char guardPath[]; //Array of inputs that correspond to the guard's patrol
 	
-	public Guard(int startx, int starty){
-		x = startx; y = starty;
-	}
-	
-	public Guard(int startx, int starty, String gP[]){
-		x = startx; y = starty;
-		guardPath = gP;
-		stepCounter = 0;
+	public Guard(Point guardCoords, char path[]) {
+		this.guardCoords = guardCoords;
+		this.guardPath = path;
+		this.stepCounter = 0;
 	}
 
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
+	public Point getGuardCoords() {
+		return guardCoords;
 	}
 
 	public int getStepCounter() {
 		return stepCounter;
 	}
 
+	public char[] getGuardPath() {
+		return guardPath;
+	}
+
+	public void setGuardCoords(Point guardCoords) {
+		this.guardCoords = guardCoords;
+	}
+
 	public void setStepCounter(int stepCounter) {
 		this.stepCounter = stepCounter;
 	}
 
-	public String[] getGuardPath() {
-		return guardPath;
-	}
-
-	public void setGuardPath(String guardPath[]) {
+	public void setGuardPath(char[] guardPath) {
 		this.guardPath = guardPath;
+	}
+	
+	//Increments step counter and verifies end of path conditions
+	public void incrementStepCounter() {
+		this.stepCounter++;
+		if(this.stepCounter >= this.guardPath.length) {
+			this.stepCounter = 0;
+		}
 	}
 }

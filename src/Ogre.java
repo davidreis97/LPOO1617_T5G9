@@ -1,13 +1,17 @@
+import java.awt.Point;
 import java.util.Random;
 
 public class Ogre {
-	private int x;
-	private int y;
-	private int ogreClubX;
-	private int ogreClubY;
+	private Point ogreCoords;
+	private Point ogreClubCoords;
+	private char ogreChar;
+	private char ogreClubChar;
 	
-	public Ogre(int startx, int starty, int clubx, int cluby){
-		x = startx; y = starty; ogreClubX = clubx; ogreClubY = cluby;
+	public Ogre(Point ogreCoords, Point ogreClubCoords){
+		this.ogreCoords = ogreCoords;
+		this.ogreClubCoords = ogreClubCoords;
+		this.ogreChar = ' ';
+		this.ogreClubChar = ' ';
 	}
 	
 	public String generateNewDirection(){
@@ -28,35 +32,35 @@ public class Ogre {
 		return "";
 	}
 
-	public int getX() {
-		return x;
+	public Point getOgreCoords() {
+		return ogreCoords;
 	}
 
-	public void setX(int x) {
-		this.x = x;
+	public Point getOgreClubCoords() {
+		return ogreClubCoords;
 	}
 
-	public int getY() {
-		return y;
+	public char getOgreChar() {
+		return ogreChar;
 	}
 
-	public void setY(int y) {
-		this.y = y;
+	public char getOgreClubChar() {
+		return ogreClubChar;
 	}
 
-	public int getOgreClubX() {
-		return ogreClubX;
+	public void setOgreCoords(Point ogreCoords) {
+		this.ogreCoords = ogreCoords;
 	}
 
-	public void setOgreClubX(int ogreClubX) {
-		this.ogreClubX = ogreClubX;
+	public void setOgreClubCoords(Point ogreClubCoords) {
+		this.ogreClubCoords = ogreClubCoords;
 	}
 
-	public int getOgreClubY() {
-		return ogreClubY;
+	public void setOgreChar(char ogreChar) {
+		this.ogreChar = ogreChar;
 	}
 
-	public void setOgreClubY(int ogreClubY) {
-		this.ogreClubY = ogreClubY;
+	public void setOgreClubChar(char ogreClubChar) {
+		this.ogreClubChar = ogreClubChar;
 	}
 }
