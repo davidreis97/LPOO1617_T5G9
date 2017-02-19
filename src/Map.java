@@ -7,14 +7,21 @@ public class Map {
 	private Ogre ogres[];
 	private char dungeonMap[][];
 	
-	Map(Hero h, char dM[][], Guard g[], Ogre o[]){
-		hero = h;
-		guards = g;
-		dungeonMap = dM;
-		ogres = o;
+	Map(Hero hero, char dungeonMap[][], Ogre ogres[]){
+		this.hero = hero;
+		this.dungeonMap = dungeonMap;
+		this.guards = new Guard[0];
+		this.ogres = ogres;
 	}
 	
-	void printMap() {
+	Map(Hero hero, char dungeonMap[][], Guard guards[]){
+		this.hero = hero;
+		this.dungeonMap = dungeonMap;
+		this.guards = guards;
+		this.ogres = new Ogre[0];
+	}
+	
+	public void printMap() {
 		for(int i = 0; i< dungeonMap.length; i++) {
 			for(int j = 0; j < dungeonMap[i].length; j++) {
 				System.out.print(dungeonMap[i][j]);
@@ -23,8 +30,22 @@ public class Map {
 		}
 	}
 	
+	private boolean isInBounds(Point coords) {
+		if(coords.y >= this.dungeonMap.length || coords.y < 0) {
+			return false;
+		} else if(coords.x >= this.dungeonMap[coords.y].length || coords.x < 0) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	//Returns a string with collision type based on the char at coords
-	String checkCollisionType(Point coords) {
+	private String checkCollisionType(Point coords) {
+		
+		if(!isInBounds(coords)) {
+			return "Error";
+		}
 		
 		char collision = dungeonMap[coords.y][coords.x];
 		
@@ -55,7 +76,7 @@ public class Map {
 	}
 	
 	//Returns new coords based on given coords and direction
-	Point calcNewCoords(Point coords, char direction) {
+	private Point calcNewCoords(Point coords, char direction) {
 		
 		Point newCoords = new Point();
 		
@@ -82,8 +103,7 @@ public class Map {
 	}
 	
 	//TODO force valid movements
-	//TODO bounds checking
-	void updateOgrePosition(char ogreDirection, char clubDirection) {
+	private void updateOgrePosition(char ogreDirection, char clubDirection) {
 		
 		for(int i = 0; i < ogres.length; i++) {
 			
@@ -130,7 +150,7 @@ public class Map {
 		}
 	}
 	
-	void updateGuardPosition() {
+	private void updateGuardPosition() {
 		
 		for(int i = 0; i < guards.length; i++) {
 			
@@ -151,22 +171,23 @@ public class Map {
 	}
 	
 	//TODO fix map 2 key mechanic
-	String updateMap(String kbdInput) {
+	//TODO shorten function as much as possible
+	public String updateMap(char kbdInput) {
 		
 		int tempherox = hero.getX(); int tempheroy = hero.getY();
 		
 		updateGuardPosition();
 		//updateOgrePosition();
-		updateOgrePosition(kbdInput.charAt(0), kbdInput.charAt(0));
+		updateOgrePosition('s', 's');
 		
 		//Input Processing (Generates next hero position)
-		if(kbdInput.equals("w") || kbdInput.equals("W")) {
+		if(kbdInput == 'w' || kbdInput == 'W') {
 			tempheroy--;
-		} else if(kbdInput.equals("a") || kbdInput.equals("A")) {
+		} else if(kbdInput == 'a' || kbdInput == 'A') {
 			tempherox--;
-	    } else if(kbdInput.equals("s") || kbdInput.equals("S")) {
+	    } else if(kbdInput == 's' || kbdInput == 'S') {
 	    	tempheroy++;
-		} else if(kbdInput.equals("d") || kbdInput.equals("D")) {
+		} else if(kbdInput == 'd' || kbdInput == 'D') {
 			tempherox++;
 		}
 		
@@ -238,35 +259,35 @@ public class Map {
 		return "Normal";
 	}
 
-	Hero getHero() {
+	public Hero getHero() {
 		return hero;
 	}
 
-	void setHero(Hero hero) {
-		this.hero = hero;
-	}
-
-	Guard[] getGuards() {
+	public Guard[] getGuards() {
 		return guards;
 	}
 
-	void setGuards(Guard guards[]) {
-		this.guards = guards;
-	}
-
-	Ogre[] getOgres() {
+	public Ogre[] getOgres() {
 		return ogres;
 	}
 
-	void setOgres(Ogre ogres[]) {
-		this.ogres = ogres;
-	}
-
-	char[][] getDungeonMap() {
+	public char[][] getDungeonMap() {
 		return dungeonMap;
 	}
 
-	void setDungeonMap(char dungeonMap[][]) {
+	public void setHero(Hero hero) {
+		this.hero = hero;
+	}
+
+	public void setGuards(Guard[] guards) {
+		this.guards = guards;
+	}
+
+	public void setOgres(Ogre[] ogres) {
+		this.ogres = ogres;
+	}
+
+	public void setDungeonMap(char[][] dungeonMap) {
 		this.dungeonMap = dungeonMap;
 	}
 }
