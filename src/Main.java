@@ -32,7 +32,7 @@ public class Main {
 	
 	private static Map mapInit_2() {
 		
-		Hero hero = new Hero(1,8);
+		Hero hero = new Hero(new Point(1, 8));
 		
 		//Ogre setup
 		Ogre ogre = new Ogre(new Point(4, 1), new Point(3, 1));
@@ -44,7 +44,7 @@ public class Main {
 	
 	private static Map mapInit_1() {
 		
-		Hero hero = new Hero(1,1);
+		Hero hero = new Hero(new Point(1, 1));
 		
 		//Guard setup
 		char guardPath[] = {'a','s','s','s','s','a','a','a','a','a','a','s',

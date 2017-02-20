@@ -21,15 +21,6 @@ public class Map {
 		this.ogres = new Ogre[0];
 	}
 	
-	public void printMap() {
-		for(int i = 0; i< dungeonMap.length; i++) {
-			for(int j = 0; j < dungeonMap[i].length; j++) {
-				System.out.print(dungeonMap[i][j]);
-			}
-			System.out.println();
-		}
-	}
-	
 	private boolean isInBounds(Point coords) {
 		if(coords.y >= this.dungeonMap.length || coords.y < 0) {
 			return false;
@@ -78,31 +69,28 @@ public class Map {
 	//Returns new coords based on given coords and direction
 	private Point calcNewCoords(Point coords, char direction) {
 		
-		Point newCoords = new Point();
+		Point newCoords = new Point(coords.x, coords.y);
 		
 		switch(direction) {
 		case 'w':
-			newCoords.x = coords.x;
-			newCoords.y = coords.y - 1;
+			newCoords.y--;
 			break;
 		case 's':
-			newCoords.x = coords.x;
-			newCoords.y = coords.y + 1;
+			newCoords.y++;
 			break;
 		case 'a':
-			newCoords.x = coords.x - 1;
-			newCoords.y = coords.y;
+			newCoords.x--;
 			break;
 		case 'd':
-			newCoords.x = coords.x + 1;
-			newCoords.y = coords.y;
+			newCoords.x++;
 			break;
 		}
 		
 		return newCoords;
 	}
 	
-	//TODO force valid movements
+	//TODO force valid ogre movements
+	//CAUTION if guard blocks all movement of ogre, crashes
 	private void updateOgrePosition(char ogreDirection, char clubDirection) {
 		
 		for(int i = 0; i < ogres.length; i++) {
@@ -170,89 +158,82 @@ public class Map {
 		}
 	}
 	
+	//Checks adjacency (no diagonals) to Guard, Ogre and Ogre's club
+	private boolean isAdjacent(Point coords, int range) {
+		
+		boolean r_1, r_2, r_3, r_4;
+		r_1 = r_2 = r_3 = r_4 = false;
+		
+		String eligible = "G0$*";
+
+		if(isInBounds(calcNewCoords(coords, 'w'))) {
+			r_1 = eligible.contains("" + dungeonMap[coords.y - range][coords.x]);
+		}
+		
+		if(isInBounds(calcNewCoords(coords, 's'))) {
+			r_2 = eligible.contains("" + dungeonMap[coords.y + range][coords.x]);
+		}
+		
+		if(isInBounds(calcNewCoords(coords, 'a'))) {
+			r_3 = eligible.contains("" + dungeonMap[coords.y][coords.x - range]);
+		}
+		
+		if(isInBounds(calcNewCoords(coords, 'd'))) {
+			r_4 = eligible.contains("" + dungeonMap[coords.y][coords.x + range]);
+		}
+		
+		return (r_1 || r_2 || r_3 || r_4);
+	}
+	
+	public void printMap() {
+		for(int i = 0; i< dungeonMap.length; i++) {
+			for(int j = 0; j < dungeonMap[i].length; j++) {
+				System.out.print(dungeonMap[i][j]);
+			}
+			System.out.println();
+		}
+	}
+	
 	//TODO fix map 2 key mechanic
 	//TODO shorten function as much as possible
+	//TODO check whole iteration
+	//TODO force hero movement
 	public String updateMap(char kbdInput) {
 		
-		int tempherox = hero.getX(); int tempheroy = hero.getY();
+		Point heroOldCoords = hero.getHeroCoords();
 		
-		updateGuardPosition();
-		//updateOgrePosition();
-		updateOgrePosition('s', 's');
+		//New coords based on old hero position and player input
+		Point heroNewCoords = calcNewCoords(heroOldCoords, kbdInput);
+		String result;
 		
-		//Input Processing (Generates next hero position)
-		if(kbdInput == 'w' || kbdInput == 'W') {
-			tempheroy--;
-		} else if(kbdInput == 'a' || kbdInput == 'A') {
-			tempherox--;
-	    } else if(kbdInput == 's' || kbdInput == 'S') {
-	    	tempheroy++;
-		} else if(kbdInput == 'd' || kbdInput == 'D') {
-			tempherox++;
-		}
+		result = checkCollisionType(heroNewCoords);
 		
-		//Hero Wall collision
-		if(dungeonMap[tempheroy][tempherox] == ' ') {
-			dungeonMap[hero.getY()][hero.getX()] = ' ';
-			dungeonMap[tempheroy][tempherox] = 'H';
-			hero.setX(tempherox); hero.setY(tempheroy);
-			
-		//Lever collision
-		} else if(dungeonMap[tempheroy][tempherox] == 'k') {
-			for(int i = 0; i< dungeonMap.length; i++) {
-				for(int j = 0; j < dungeonMap[i].length; j++) {
-					if(dungeonMap[i][j] == 'I') {
-						dungeonMap[i][j] = 'S';
-					}
+		//Hero collision resolving
+		if(result == "Empty") {
+			dungeonMap[heroOldCoords.y][heroOldCoords.x] = ' ';
+			dungeonMap[heroNewCoords.y][heroNewCoords.x] = 'H';
+			hero.setHeroCoords(heroNewCoords);
+		} else if(result == "Key") {
+			for(int i = 0; i < dungeonMap.length; i++) {
+					if(dungeonMap[i][0] == 'I') {
+						dungeonMap[i][0] = 'S';
 				}
 			}
-		}
-		
-		//Exit door collision
-		if(dungeonMap[tempheroy][tempherox] == 'S' && (tempheroy == 0 || tempheroy == dungeonMap.length - 1 || tempherox == 0 || tempherox == dungeonMap[0].length - 1)) {
-			dungeonMap[hero.getY()][hero.getX()] = ' ';
-			dungeonMap[tempheroy][tempherox] = 'H';
-			hero.setX(tempherox); hero.setY(tempheroy);
+		} else if(result == "OpenDoor") {
+			dungeonMap[heroOldCoords.y][heroOldCoords.x] = ' ';
+			dungeonMap[heroNewCoords.y][heroNewCoords.x] = 'H';
+			hero.setHeroCoords(heroNewCoords);
 			return "Exit";
 		}
 		
-		if(tempherox - 1 < 0) {
-			tempherox = 1;
+		if(isAdjacent(heroNewCoords, 1)) {
+			return "Caught";
 		}
 		
-		if(tempheroy - 1 < 0) {
-			tempheroy = 1;
-		}
+		updateGuardPosition();
+		updateOgrePosition('s', 's');
 		
-		if(tempherox + 1 > dungeonMap[0].length - 1) {
-			tempherox = dungeonMap[0].length - 2;
-		}
-		
-		if(tempheroy + 1 > dungeonMap.length - 1) {
-			tempheroy = dungeonMap.length - 2;
-		}
-		
-		//Guard, ogre and club collision
-		if(dungeonMap[hero.getY() - 1][hero.getX()] == 'G' ||
-				dungeonMap[hero.getY() + 1][hero.getX()] == 'G' ||
-				dungeonMap[hero.getY()][hero.getX() - 1] == 'G' ||
-				dungeonMap[hero.getY()][hero.getX() + 1] == 'G' || 
-				dungeonMap[hero.getY()][hero.getX()] == 'G' ||
-				dungeonMap[hero.getY() - 1][hero.getX()] == '0' ||
-				dungeonMap[hero.getY() + 1][hero.getX()] == '0' ||
-				dungeonMap[hero.getY()][hero.getX() - 1] == '0' ||
-				dungeonMap[hero.getY()][hero.getX() + 1] == '0' || 
-				dungeonMap[hero.getY()][hero.getX()] == '0' || 
-				dungeonMap[hero.getY() - 1][hero.getX()] == '$' ||
-				dungeonMap[hero.getY() + 1][hero.getX()] == '$' ||
-				dungeonMap[hero.getY()][hero.getX() - 1] == '$' ||
-				dungeonMap[hero.getY()][hero.getX() + 1] == '$' || 
-				dungeonMap[hero.getY()][hero.getX()] == '$' ||
-				dungeonMap[hero.getY() - 1][hero.getX()] == '*' ||
-				dungeonMap[hero.getY() + 1][hero.getX()] == '*' ||
-				dungeonMap[hero.getY()][hero.getX() - 1] == '*' ||
-				dungeonMap[hero.getY()][hero.getX() + 1] == '*' || 
-				dungeonMap[hero.getY()][hero.getX()] == '*') {
+		if(isAdjacent(heroNewCoords, 1)) {
 			return "Caught";
 		}
 		

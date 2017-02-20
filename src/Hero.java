@@ -1,25 +1,17 @@
+import java.awt.Point;
 
 public class Hero {
-	private int x;
-	private int y;
+	private Point heroCoords;
 	
-	public Hero(int startx, int starty){
-		x=startx;y=starty;
+	public Hero(Point heroCoords) {
+		this.heroCoords = heroCoords;
 	}
 
-	int getY() {
-		return y;
+	public Point getHeroCoords() {
+		return heroCoords;
 	}
 
-	void setY(int y) {
-		this.y = y;
-	}
-
-	int getX() {
-		return x;
-	}
-
-	void setX(int x) {
-		this.x = x;
+	public void setHeroCoords(Point heroCoords) {
+		this.heroCoords = heroCoords;
 	}
 }
