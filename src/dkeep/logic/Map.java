@@ -1,3 +1,5 @@
+package dkeep.logic;
+
 import java.awt.Point;
 
 public class Map {
@@ -7,14 +9,14 @@ public class Map {
 	private Ogre ogres[];
 	private char dungeonMap[][];
 	
-	Map(Hero hero, char dungeonMap[][], Ogre ogres[]){
+	public Map(Hero hero, char dungeonMap[][], Ogre ogres[]){
 		this.hero = hero;
 		this.dungeonMap = dungeonMap;
 		this.guards = new Guard[0];
 		this.ogres = ogres;
 	}
 	
-	Map(Hero hero, char dungeonMap[][], Guard guards[]){
+	public Map(Hero hero, char dungeonMap[][], Guard guards[]){
 		this.hero = hero;
 		this.dungeonMap = dungeonMap;
 		this.guards = guards;

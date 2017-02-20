@@ -1,14 +1,15 @@
+package dkeep.logic;
+
 import java.awt.Point;
 import java.util.Random;
 
-public class Ogre {
-	private Point ogreCoords;
+public class Ogre extends Entity{
 	private Point ogreClubCoords;
 	private char ogreChar;
 	private char ogreClubChar;
 	
 	public Ogre(Point ogreCoords, Point ogreClubCoords){
-		this.ogreCoords = ogreCoords;
+		this.coords = ogreCoords;
 		this.ogreClubCoords = ogreClubCoords;
 		this.ogreChar = ' ';
 		this.ogreClubChar = ' ';
@@ -35,7 +36,7 @@ public class Ogre {
 	}
 
 	public Point getOgreCoords() {
-		return ogreCoords;
+		return coords;
 	}
 
 	public Point getOgreClubCoords() {
@@ -51,7 +52,7 @@ public class Ogre {
 	}
 
 	public void setOgreCoords(Point ogreCoords) {
-		this.ogreCoords = ogreCoords;
+		this.coords = ogreCoords;
 	}
 
 	public void setOgreClubCoords(Point ogreClubCoords) {

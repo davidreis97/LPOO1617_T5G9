@@ -1,16 +1,17 @@
+package dkeep.logic;
+
 import java.awt.Point;
 
-public class Hero {
-	private Point heroCoords;
+public class Hero extends Entity{
 	private char heroChar;
 	
 	public Hero(Point heroCoords) {
-		this.heroCoords = heroCoords;
+		this.coords = heroCoords;
 		this.heroChar = 'H';
 	}
 
 	public Point getHeroCoords() {
-		return heroCoords;
+		return coords;
 	}
 
 	public char getHeroChar() {
@@ -18,7 +19,7 @@ public class Hero {
 	}
 
 	public void setHeroCoords(Point heroCoords) {
-		this.heroCoords = heroCoords;
+		this.coords = heroCoords;
 	}
 
 	public void setHeroChar(char heroChar) {
