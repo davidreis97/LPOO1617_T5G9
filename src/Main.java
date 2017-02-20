@@ -1,9 +1,6 @@
 import java.awt.Point;
 import java.util.Scanner;
 
-//TODO unbuffered input (InputStreamReader?)
-//TODO generic map init?
-
 public class Main {
 		
 	private static char dungeonMap_1[][] =
@@ -30,6 +27,23 @@ public class Main {
 				{'X', 'H', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
 				{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}};
 	
+	private static char guardPath[] = {'a', 's', 's', 's', 's', 'a', 'a', 'a', 'a', 'a', 'a', 's',
+			                           'd', 'd', 'd', 'd', 'd', 'd', 'd', 'w', 'w', 'w', 'w', 'w'};
+	
+	//Initialize 1st map values
+	private static Map mapInit_1() {
+		
+		Hero hero = new Hero(new Point(1, 1));
+		
+		//Guard setup
+		Guard guard = new Guard(new Point(8, 1), guardPath);
+		Guard guards[] = new Guard[1];
+		guards[0] = guard;
+
+		return new Map(hero, dungeonMap_1, guards);
+	}
+
+	//Initialize 2nd map values
 	private static Map mapInit_2() {
 		
 		Hero hero = new Hero(new Point(1, 8));
@@ -42,20 +56,6 @@ public class Main {
 		return new Map(hero, dungeonMap_2, ogres);
 	}
 	
-	private static Map mapInit_1() {
-		
-		Hero hero = new Hero(new Point(1, 1));
-		
-		//Guard setup
-		char guardPath[] = {'a','s','s','s','s','a','a','a','a','a','a','s',
-				'd','d','d','d','d','d','d','w','w','w','w','w'};
-		Guard guard = new Guard(new Point(8, 1), guardPath);
-		Guard guards[] = new Guard[1];
-		guards[0] = guard;
-
-		return new Map(hero, dungeonMap_1, guards);
-	}
-
 	public static void main(String[] args) {
 		
 		Scanner keyboard = new Scanner(System.in);
@@ -73,9 +73,13 @@ public class Main {
 			
 			do {
 				kbdInput = keyboard.nextLine();
-			} while(kbdInput.isEmpty());
+				if(kbdInput.isEmpty()) {
+					kbdInput = " "; //Prevent crash when input is empty
+				}
+			} while(kbdInput.charAt(0) != 'w' && kbdInput.charAt(0) != 's'
+					&& kbdInput.charAt(0) != 'a' && kbdInput.charAt(0) != 'd');
 			
-			String status = currMap.updateMap(kbdInput.charAt(0));
+			String status = currMap.updateMap(kbdInput.charAt(0), mapCounter);
 		
 			if(status.equals("Exit")) {
 				if(mapCounter == 1) { //Change to map 2

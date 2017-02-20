@@ -14,22 +14,24 @@ public class Ogre {
 		this.ogreClubChar = ' ';
 	}
 	
-	public String generateNewDirection(){
-		Random rand = new Random();
-
-		int  n = rand.nextInt(4);
+	//Generate random direction for ogre
+	public char generateNewDirection() {
 		
-		if (n == 0){
-			return "w";
-		}else if (n == 1){
-			return "a";
-		}else if (n == 2){
-			return "s";
-		}else if (n == 3){
-			return "d";
+		Random rand = new Random();
+		int n = rand.nextInt(4);
+		
+		switch(n) {
+		case 0:
+			return 'w';
+		case 1:
+			return 's';
+		case 2:
+			return 'a';
+		case 3:
+			return 'd';
+		default:
+			return ' ';
 		}
-		System.out.println("Error!");
-		return "";
 	}
 
 	public Point getOgreCoords() {
