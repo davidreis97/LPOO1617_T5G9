@@ -8,9 +8,9 @@ public class Game {
 	private Map currMap;
 	private int mapCounter; //Keeps track of current map
 	
-	public Game(){
+	public Game() {
 		setCurrMap(mapInit_1());
-		mapCounter = 1; //Keeps track of current map
+		mapCounter = 1;
 		running = true;
 	}
 	
@@ -40,7 +40,6 @@ public class Game {
 
 	private static char guardPath[] = {'a', 's', 's', 's', 's', 'a', 'a', 'a', 'a', 'a', 'a', 's',
 		                           'd', 'd', 'd', 'd', 'd', 'd', 'd', 'w', 'w', 'w', 'w', 'w'};
-	
 
 	//Initialize 1st map values
 	public static Map mapInit_1() {
@@ -76,7 +75,7 @@ public class Game {
 		this.running = running;
 	}
 	
-	public void nextTick(char nextInput){
+	public void nextTick(char nextInput) {
 		
 		String status = getCurrMap().updateMap(nextInput, mapCounter);
 		
@@ -94,8 +93,6 @@ public class Game {
 			running = false;
 			return;
 		}
-		
-		getCurrMap().printMap();
 	}
 
 	public Map getCurrMap() {

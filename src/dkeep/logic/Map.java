@@ -155,19 +155,52 @@ public class Map {
 		
 		for(int i = 0; i < guards.length; i++) {
 			
-			//Clear previous position
+			//Handle logic for guard types, sleeping, reversing path, etc
+			guards[i].guardTick();
+			
 			Point guardOldCoords = guards[i].getGuardCoords();
-			dungeonMap[guardOldCoords.y][guardOldCoords.x] = ' ';
 			
-			//New guard coords based on old coords and current direction in path
-			Point guardNewCoords = calcNewCoords(guardOldCoords, guards[i].getGuardPath()[guards[i].getStepCounter()]);
-			
-			//CAUTION not checking guard collision
-			dungeonMap[guardNewCoords.y][guardNewCoords.x] = 'G';
-			guards[i].setGuardCoords(guardNewCoords);
-			
-			//Increment step count and reset if path has looped
-			guards[i].incrementStepCounter();
+			//Don't update position if sleeping
+			if(guards[i].getGuardState().equals("Sleeping")) {
+				
+				dungeonMap[guardOldCoords.y][guardOldCoords.x] = guards[i].getGuardChar();
+			//Update position
+			} else {
+
+				dungeonMap[guardOldCoords.y][guardOldCoords.x] = ' ';
+				
+				Point guardNewCoords;
+				
+				//Move in opposite direction if movement is reversed
+				if(guards[i].isReversed()) {
+					switch(guards[i].getGuardPath()[guards[i].getStepCounter()]) {
+					case 'w':
+						guardNewCoords = calcNewCoords(guardOldCoords, 's');
+						break;
+					case 's':
+						guardNewCoords = calcNewCoords(guardOldCoords, 'w');
+						break;
+					case 'a':
+						guardNewCoords = calcNewCoords(guardOldCoords, 'd');
+						break;
+					case 'd':
+						guardNewCoords = calcNewCoords(guardOldCoords, 'a');
+						break;
+					default:
+						guardNewCoords = guardOldCoords;
+						break;
+					}
+				} else {
+					guardNewCoords = calcNewCoords(guardOldCoords, guards[i].getGuardPath()[guards[i].getStepCounter()]);
+				}
+
+				//CAUTION not checking guard collision
+				dungeonMap[guardNewCoords.y][guardNewCoords.x] = guards[i].getGuardChar();
+				guards[i].setGuardCoords(guardNewCoords);
+				
+				//Update step count and reset if path has looped
+				guards[i].updateStepCounter();
+			}
 		}
 	}
 	
@@ -264,37 +297,5 @@ public class Map {
 		}
 		
 		return "Normal";
-	}
-
-	public Hero getHero() {
-		return hero;
-	}
-
-	public Guard[] getGuards() {
-		return guards;
-	}
-
-	public Ogre[] getOgres() {
-		return ogres;
-	}
-
-	public char[][] getDungeonMap() {
-		return dungeonMap;
-	}
-
-	public void setHero(Hero hero) {
-		this.hero = hero;
-	}
-
-	public void setGuards(Guard[] guards) {
-		this.guards = guards;
-	}
-
-	public void setOgres(Ogre[] ogres) {
-		this.ogres = ogres;
-	}
-
-	public void setDungeonMap(char[][] dungeonMap) {
-		this.dungeonMap = dungeonMap;
 	}
 }
