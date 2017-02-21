@@ -7,12 +7,16 @@ public class Ogre extends Entity {
 	private Point ogreClubCoords;
 	private char ogreChar;
 	private char ogreClubChar;
+	private boolean isStunned;
+	private int stunCount;
 	
 	public Ogre(Point ogreCoords, Point ogreClubCoords){
 		this.coords = ogreCoords;
 		this.ogreClubCoords = ogreClubCoords;
-		this.ogreChar = ' ';
-		this.ogreClubChar = ' ';
+		this.ogreChar = '0';
+		this.ogreClubChar = '*';
+		this.isStunned = false;
+		this.stunCount = 0;
 	}
 	
 	//Generate random direction for ogre
@@ -65,5 +69,30 @@ public class Ogre extends Entity {
 
 	public void setOgreClubChar(char ogreClubChar) {
 		this.ogreClubChar = ogreClubChar;
+	}
+
+	public boolean isStunned() {
+		return isStunned;
+	}
+
+	public void setStunned(boolean isStunned) {
+		this.stunCount = 2;
+		this.isStunned = isStunned;
+	}
+
+	public int getStunCount() {
+		return stunCount;
+	}
+
+	public void setStunCount(int stunCount) {
+		this.stunCount = stunCount;
+	}
+
+	public void decStunCount() {
+		this.stunCount--;
+		if (this.stunCount <= 0){
+			this.isStunned = false;
+			this.stunCount = 0;
+		}
 	}
 }

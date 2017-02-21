@@ -50,6 +50,8 @@ public class Map {
 			return "Wall";
 		case '0':
 			return "Ogre";
+		case '8':
+			return "OgreStunned";
 		case 'k':
 			return "Key"; //Works for key/lever depending on current map
 		case '*':
@@ -100,53 +102,77 @@ public class Map {
 			
 			Point ogreOld = ogres[i].getOgreCoords();
 			Point ogreClubOld = ogres[i].getOgreClubCoords();
-			String result; Point ogreNewCoords, ogreClubNewCoords;
-		
+			String result; Point ogreNewCoords = ogreOld, ogreClubNewCoords = ogreClubOld;
+			
 			//Clear previous position with ' ' or 'k'
-			dungeonMap[ogreOld.y][ogreOld.x] = ogres[i].getOgreChar();
-			if(dungeonMap[ogreClubOld.y][ogreClubOld.x] != '0') {
-				dungeonMap[ogreClubOld.y][ogreClubOld.x] = ogres[i].getOgreClubChar();
+			if(!(ogres[i].isStunned())){
+				if(ogres[i].getOgreChar() == '$'){
+					dungeonMap[ogreOld.y][ogreOld.x] = 'k';
+				}else {
+					dungeonMap[ogreOld.y][ogreOld.x] = ' ';
+				}
+			}else dungeonMap[ogreOld.y][ogreOld.x] = ogres[i].getOgreChar();
+			
+				
+			if(!(dungeonMap[ogreClubOld.y][ogreClubOld.x] == '8' || dungeonMap[ogreClubOld.y][ogreClubOld.x] == '0')){
+				if (ogres[i].getOgreClubChar() == '$'){
+					dungeonMap[ogreClubOld.y][ogreClubOld.x] = 'k';
+				}else{
+					dungeonMap[ogreClubOld.y][ogreClubOld.x] = ' ';
+				}
 			}
 			
-			do { //Force valid movement
-				
-				char ogreDirection = ogres[i].generateNewDirection();
-				
-				ogreNewCoords = calcNewCoords(ogreOld, ogreDirection); //New coords based on old ogre position
-				result = checkCollisionType(ogreNewCoords);
-				
-				//Ogre movement collision resolving
-				if(result.equals("Empty") || result.equals("Club") || result.equals("Ogre")) {
-					dungeonMap[ogreNewCoords.y][ogreNewCoords.x] = '0';
-					ogres[i].setOgreCoords(ogreNewCoords);
-					ogres[i].setOgreChar(' ');
-				} else if(result.equals("Key")) {
-					dungeonMap[ogreNewCoords.y][ogreNewCoords.x] = '$';
-					ogres[i].setOgreCoords(ogreNewCoords);
-					ogres[i].setOgreChar('k'); //Next clear char will be 'k'
-				}
 			
-			} while(result != "Empty" && result != "Key" && result != "Ogre");
+			if (!(ogres[i].isStunned())){
+				do { //Force valid movement
+					
+					char ogreDirection = ogres[i].generateNewDirection();
+					
+					ogreNewCoords = calcNewCoords(ogreOld, ogreDirection); //New coords based on old ogre position
+					result = checkCollisionType(ogreNewCoords);
+					
+					//Ogre movement collision resolving
+					if(result.equals("Empty") || result.equals("Club") || result.equals("Ogre")) {
+						ogres[i].setOgreChar('0');
+						dungeonMap[ogreNewCoords.y][ogreNewCoords.x] = ogres[i].getOgreChar();
+						ogres[i].setOgreCoords(ogreNewCoords);
+					} else if(result.equals("Key")) {
+						ogres[i].setOgreChar('$'); //Next clear char will be 'k'
+						dungeonMap[ogreNewCoords.y][ogreNewCoords.x] = ogres[i].getOgreChar();
+						ogres[i].setOgreCoords(ogreNewCoords);
+					}
+				
+				} while(result != "Empty" && result != "Key" && result != "Ogre" && result != "Club");
+			}
+			
 
-			do { //Force valid club position
 				
-				char clubDirection = ogres[i].generateNewDirection();
+				do{
+					char clubDirection = ogres[i].generateNewDirection();
+					
+					if(ogres[i].isStunned()){
+						ogreClubNewCoords = calcNewCoords(ogreOld, clubDirection); //New club coords based on the new ogre position
+					}else{
+						ogreClubNewCoords = calcNewCoords(ogreNewCoords, clubDirection); //New club coords based on the new ogre position
+					}
+				}while(ogreClubNewCoords == ogreOld);
 				
-				ogreClubNewCoords = calcNewCoords(ogreNewCoords, clubDirection); //New club coords based on the new ogre position
+				
 				result = checkCollisionType(ogreClubNewCoords);
 				
 				//Ogre club collision resolving
 				if(result.equals("Empty")) {
-					dungeonMap[ogreClubNewCoords.y][ogreClubNewCoords.x] = '*';
+					ogres[i].setOgreClubChar('*');
+					dungeonMap[ogreClubNewCoords.y][ogreClubNewCoords.x] = ogres[i].getOgreClubChar();
 					ogres[i].setOgreClubCoords(ogreClubNewCoords);
-					ogres[i].setOgreClubChar(' ');
 				} else if(result.equals("Key")) {
-					dungeonMap[ogreClubNewCoords.y][ogreClubNewCoords.x] = '$';
+					ogres[i].setOgreClubChar('$'); //Next clear char will be 'k'
+					dungeonMap[ogreClubNewCoords.y][ogreClubNewCoords.x] = ogres[i].getOgreClubChar();;
 					ogres[i].setOgreClubCoords(ogreClubNewCoords);
-					ogres[i].setOgreClubChar('k'); //Next clear char will be 'k'
 				}
 			
-			} while(result != "Empty" && result != "Key");
+			
+			ogres[i].decStunCount();
 		}
 	}
 	
@@ -275,10 +301,13 @@ public class Map {
 		} else if(result == "Door" && stage == 2 && hero.getHeroChar() == 'K') { //Hero opens door on map 2
 			dungeonMap[heroOldCoords.y][heroOldCoords.x] = hero.getHeroChar();
 			dungeonMap[heroNewCoords.y][heroNewCoords.x] = 'S';
-		} else dungeonMap[heroOldCoords.y][heroOldCoords.x] = hero.getHeroChar();
+		} else {
+			heroNewCoords = heroOldCoords;
+			dungeonMap[heroOldCoords.y][heroOldCoords.x] = hero.getHeroChar();
+		}
 		
 		//Check adjacency before enemy movement
-		if(isAdjacent(heroNewCoords, 1, "G*$")) {
+		if(isAdjacent(heroNewCoords, 1, "G*")) {
 			return "Caught";
 		}
 		
@@ -286,6 +315,7 @@ public class Map {
 		for(int i = 0; i < ogres.length; i++) {
 			if(isAdjacent(ogres[i].getOgreCoords(), 1, "AK")) {
 				ogres[i].setOgreChar('8');
+				ogres[i].setStunned(true);
 			}
 		}
 		

@@ -3,11 +3,6 @@ package dkeep.cli;
 import java.util.Scanner;
 import dkeep.logic.Game;
 
-//TODO "Create these strategies for the Guard, ensuring that your code allows for easy adding of other strategies in the future (without the need to modify existing code). Debate with your colleagues or teacher possible solutions for this."
-//TODO know current guard type?
-//TODO toString print map? cli method?
-//TODO Entity superclass reuse / Game class has entities
-
 public class Main {
 	
 	public static void main(String[] args) {

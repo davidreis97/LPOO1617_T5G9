@@ -10,8 +10,8 @@ public class Game {
 	private int mapCounter; //Keeps track of current map
 	
 	public Game() {
-		setCurrMap(mapInit_1());
-		mapCounter = 1;
+		setCurrMap(mapInit_2());
+		mapCounter = 2;
 		running = true;
 	}
 	
@@ -62,7 +62,6 @@ public class Game {
 		
 		Random rand = new Random();
 		int ogreN = rand.nextInt(3) + 1;
-ogreN = 1;
 		Ogre ogres[] = new Ogre[ogreN];
 		
 		for(int n = 0; n < ogreN; n++) {
