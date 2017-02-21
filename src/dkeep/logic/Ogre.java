@@ -3,7 +3,7 @@ package dkeep.logic;
 import java.awt.Point;
 import java.util.Random;
 
-public class Ogre extends Entity{
+public class Ogre extends Entity {
 	private Point ogreClubCoords;
 	private char ogreChar;
 	private char ogreClubChar;

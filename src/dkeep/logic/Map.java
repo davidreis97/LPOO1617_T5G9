@@ -95,7 +95,7 @@ public class Map {
 	//Update ogre position using old coords and random direction
 	//CAUTION if ogre is blocked (not by hero), crashes
 	private void updateOgrePosition() {
-		
+
 		for(int i = 0; i < ogres.length; i++) {
 			
 			Point ogreOld = ogres[i].getOgreCoords();
@@ -116,7 +116,7 @@ public class Map {
 				result = checkCollisionType(ogreNewCoords);
 				
 				//Ogre movement collision resolving
-				if(result.equals("Empty") || result.equals("Club")) {
+				if(result.equals("Empty") || result.equals("Club") || result.equals("Ogre")) {
 					dungeonMap[ogreNewCoords.y][ogreNewCoords.x] = '0';
 					ogres[i].setOgreCoords(ogreNewCoords);
 					ogres[i].setOgreChar(' ');
@@ -126,7 +126,7 @@ public class Map {
 					ogres[i].setOgreChar('k'); //Next clear char will be 'k'
 				}
 			
-			} while(result != "Empty" && result != "Key");
+			} while(result != "Empty" && result != "Key" && result != "Ogre");
 
 			do { //Force valid club position
 				
@@ -205,12 +205,10 @@ public class Map {
 	}
 	
 	//Checks adjacency (no diagonals) to Guard, Ogre and Ogre's club
-	private boolean isAdjacent(Point coords, int range) {
+	private boolean isAdjacent(Point coords, int range, String eligible) {
 		
 		boolean r_1, r_2, r_3, r_4;
 		r_1 = r_2 = r_3 = r_4 = false;
-		
-		String eligible = "G0$*";
 
 		if(isInBounds(calcNewCoords(coords, 'w'))) {
 			r_1 = eligible.contains("" + dungeonMap[coords.y - range][coords.x]);
@@ -280,8 +278,15 @@ public class Map {
 		} else dungeonMap[heroOldCoords.y][heroOldCoords.x] = hero.getHeroChar();
 		
 		//Check adjacency before enemy movement
-		if(isAdjacent(heroNewCoords, 1)) {
+		if(isAdjacent(heroNewCoords, 1, "G*$")) {
 			return "Caught";
+		}
+		
+		//Check if player moved near ogres to stun
+		for(int i = 0; i < ogres.length; i++) {
+			if(isAdjacent(ogres[i].getOgreCoords(), 1, "AK")) {
+				ogres[i].setOgreChar('8');
+			}
 		}
 		
 		//Update enemies, guard in stage 1, ogre in stage 2
@@ -292,7 +297,7 @@ public class Map {
 		}
 
 		//Check adjacency after enemy movement
-		if(isAdjacent(heroNewCoords, 1)) {
+		if(isAdjacent(heroNewCoords, 1, "G0*$")) {
 			return "Caught";
 		}
 		

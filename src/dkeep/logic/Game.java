@@ -1,6 +1,7 @@
 package dkeep.logic;
 
 import java.awt.Point;
+import java.util.Random;
 
 public class Game {
 
@@ -35,7 +36,7 @@ public class Game {
 			{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
 			{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
 			{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
-			{'X', 'H', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+			{'X', 'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
 			{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}};
 
 	private static char guardPath[] = {'a', 's', 's', 's', 's', 'a', 'a', 'a', 'a', 'a', 'a', 's',
@@ -44,7 +45,7 @@ public class Game {
 	//Initialize 1st map values
 	public static Map mapInit_1() {
 		
-		Hero hero = new Hero(new Point(1, 1));
+		Hero hero = new Hero(new Point(1, 1), false);
 		
 		//Guard setup
 		Guard guard = new Guard(new Point(8, 1), guardPath);
@@ -57,22 +58,18 @@ public class Game {
 	//Initialize 2nd map values
 	public static Map mapInit_2() {
 		
-		Hero hero = new Hero(new Point(1, 8));
+		Hero hero = new Hero(new Point(1, 8), true);
 		
-		//Ogre setup
-		Ogre ogre = new Ogre(new Point(4, 1), new Point(3, 1));
-		Ogre ogres[] = new Ogre[1];
-		ogres[0] = ogre;
+		Random rand = new Random();
+		int ogreN = rand.nextInt(3) + 1;
+ogreN = 1;
+		Ogre ogres[] = new Ogre[ogreN];
+		
+		for(int n = 0; n < ogreN; n++) {
+			ogres[n] = new Ogre(new Point(4, 1), new Point(3, 1));
+		}
 		
 		return new Map(hero, dungeonMap_2, ogres);
-	}
-
-	public boolean getRunning() {
-		return running;
-	}
-
-	public void setRunning(boolean running) {
-		this.running = running;
 	}
 	
 	public void nextTick(char nextInput) {
@@ -94,9 +91,17 @@ public class Game {
 			return;
 		}
 	}
+	
+	public boolean getRunning() {
+		return running;
+	}
 
 	public Map getCurrMap() {
 		return currMap;
+	}
+	
+	public void setRunning(boolean running) {
+		this.running = running;
 	}
 
 	public void setCurrMap(Map currMap) {
