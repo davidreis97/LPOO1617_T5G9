@@ -1,109 +1,76 @@
 package dkeep.logic;
 
 import java.awt.Point;
-import java.util.Random;
 
 public class Game {
-
-	private boolean running;
 	private Map currMap;
-	private int mapCounter; //Keeps track of current map
+	private Entity entities[];
+	private static String state; //ASK enum?
 	
+	//TODO init game function?
 	public Game() {
-		setCurrMap(mapInit_2());
-		mapCounter = 2;
-		running = true;
+		Entity entities[] = new Entity[2];
+		entities[0] = new Hero(new Point(1, 1), 'H');
+		entities[1] = new Guard(new Point(8, 1), 'G');
+		this.entities = entities;
+		this.currMap = new DungeonMap();
+		state = "Playing";
 	}
 	
-	private static char dungeonMap_1[][] =
-        {{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
-			{'X', 'H', ' ', ' ', 'I', ' ', 'X', ' ', 'G', 'X'},
-			{'X', 'X', 'X', ' ', 'X', 'X', 'X', ' ', ' ', 'X'},
-			{'X', ' ', 'I', ' ', 'I', ' ', 'X', ' ', ' ', 'X'},
-			{'X', 'X', 'X', ' ', 'X', 'X', 'X', ' ', ' ', 'X'},
-			{'I', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
-			{'I', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
-			{'X', 'X', 'X', ' ', 'X', 'X', 'X', 'X', ' ', 'X'},
-			{'X', ' ', 'I', ' ', 'I', ' ', 'X', 'k', ' ', 'X'},
-			{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}};
-
-	private static char dungeonMap_2[][] =
-        {{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
-			{'I', ' ', ' ', ' ', '0', ' ', ' ', ' ', 'k', 'X'},
-			{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
-			{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
-			{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
-			{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
-			{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
-			{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
-			{'X', 'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
-			{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}};
-
-	private static char guardPath[] = {'a', 's', 's', 's', 's', 'a', 'a', 'a', 'a', 'a', 'a', 's',
-		                           'd', 'd', 'd', 'd', 'd', 'd', 'd', 'w', 'w', 'w', 'w', 'w'};
-
-	//Initialize 1st map values
-	public static Map mapInit_1() {
+	
+	//Returns new coords based on given coords and direction
+	private Point calcNewCoords(Point coords, char direction) {
 		
-		Hero hero = new Hero(new Point(1, 1), false);
+		Point newCoords = new Point(coords.x, coords.y);
 		
-		//Guard setup
-		Guard guard = new Guard(new Point(8, 1), guardPath);
-		Guard guards[] = new Guard[1];
-		guards[0] = guard;
-
-		return new Map(hero, dungeonMap_1, guards);
-	}
-
-	//Initialize 2nd map values
-	public static Map mapInit_2() {
-		
-		Hero hero = new Hero(new Point(1, 8), true);
-		
-		Random rand = new Random();
-		int ogreN = rand.nextInt(3) + 1;
-		Ogre ogres[] = new Ogre[ogreN];
-		
-		for(int n = 0; n < ogreN; n++) {
-			ogres[n] = new Ogre(new Point(4, 1), new Point(3, 1));
+		switch(direction) {
+		case 'w':
+			newCoords.y--;
+			break;
+		case 's':
+			newCoords.y++;
+			break;
+		case 'a':
+			newCoords.x--;
+			break;
+		case 'd':
+			newCoords.x++;
+			break;
 		}
 		
-		return new Map(hero, dungeonMap_2, ogres);
+		return newCoords;
 	}
 	
-	public void nextTick(char nextInput) {
+	public void updateGame(char userInput) {
 		
-		String status = getCurrMap().updateMap(nextInput, mapCounter);
+		Point heroNewCoords = new Point(0, 0);
+		int i;
 		
-		if(status.equals("Exit")) {
-			if(mapCounter == 1) { //Change to map 2
-				mapCounter++;
-				setCurrMap(mapInit_2());
-			} else { //Exited map 2
-				System.out.println("You won!");
-				running = false;
-				return;
+		for(i = 0; i < entities.length; i++) {
+			if(entities[i] instanceof Hero) {
+				heroNewCoords = calcNewCoords(entities[i].coords, userInput);
+				break; //CAUTION assumes one Hero
 			}
-		} else if(status.equals("Caught")) {
-			System.out.println("You lost!");
-			running = false;
-			return;
+		}
+		
+		if(currMap.doMove(heroNewCoords)) {
+			entities[i].coords = heroNewCoords;
 		}
 	}
 	
-	public boolean getRunning() {
-		return running;
+	public char[][] getMap() {
+		return currMap.getMap();
 	}
 
-	public Map getCurrMap() {
-		return currMap;
-	}
-	
-	public void setRunning(boolean running) {
-		this.running = running;
+	public Entity[] getEntities() {
+		return entities;
 	}
 
-	public void setCurrMap(Map currMap) {
-		this.currMap = currMap;
+	public static String getState() {
+		return state;
+	}
+
+	public static void setState(String state) {
+		Game.state = state;
 	}
 }
