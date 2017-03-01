@@ -52,6 +52,7 @@ public class CLI {
 
 		} while(!(kbdInput.charAt(0) == 'q') && Game.getState().equals("Playing"));
 
+		printMap(game.getMap(), game.getEntities());
 		keyboard.close();
 		
 		if(Game.getState().equals("Win")) {

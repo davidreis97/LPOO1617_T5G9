@@ -2,9 +2,9 @@ package dkeep.logic;
 
 import java.awt.Point;
 
-public class Hero extends Entity {
+public class Club extends Entity {
 
-	public Hero(Point coords, char representation) {
+	public Club(Point coords, char representation) {
 		super(coords, representation);
 	}
 	
