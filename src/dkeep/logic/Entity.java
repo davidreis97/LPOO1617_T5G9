@@ -19,6 +19,13 @@ public abstract class Entity {
 		return representation;
 	}
 	
-	//TODO maybe implement on all entities and reuse?
-	public abstract void nextMovement();
+	public void setCoords(Point coords) {
+		this.coords = coords;
+	}
+
+	public void setRepresentation(char representation) {
+		this.representation = representation;
+	}
+	
+	public abstract void nextMovement(int index);
 }

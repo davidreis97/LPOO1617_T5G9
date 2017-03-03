@@ -8,7 +8,7 @@ public class Hero extends Entity {
 		super(coords, representation);
 	}
 	
-	public void nextMovement() {
+	public void nextMovement(int index) {
 		return;
 	}
 }

@@ -1,6 +1,7 @@
 package dkeep.logic;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 public class DungeonMap implements Map {
 
@@ -28,7 +29,7 @@ public class DungeonMap implements Map {
 		return tempMap;
 	}
 	
-	public boolean doMove(Point coords) {
+	public boolean doMove(Point coords, String entityType, int index) {
 		
 		char collision = dungeonMap[coords.y][coords.x];
 		
@@ -40,10 +41,24 @@ public class DungeonMap implements Map {
 			dungeonMap[6][0] = 'S';
 			return false;
 		case 'S':
-			Game.setState("Win");
+			nextMap();
 			return true;
 		default:
 			return false;
 		}
+	}
+
+	public void initMap() {
+		ArrayList<Entity> entities = Game.getEntities();
+		entities.clear();
+		entities.add(new Hero(new Point(1, 1), 'H'));
+		entities.add(new NormalGuard(new Point(8, 1), 'G'));
+		Game.setEntities(entities);
+		Game.setState("Playing");
+		Game.setHeroIndex(0);
+	}
+	
+	public void nextMap() {
+		Game.changeMap("Keep");
 	}
 }

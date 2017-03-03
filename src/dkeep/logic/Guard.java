@@ -20,5 +20,5 @@ public abstract class Guard extends Entity {
 		this.guardPath = guardPath;
 	}
 	
-	public abstract void nextMovement();
+	public abstract void nextMovement(int index);
 }

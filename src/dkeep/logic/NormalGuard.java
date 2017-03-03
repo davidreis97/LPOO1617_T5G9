@@ -12,7 +12,7 @@ public class NormalGuard extends Guard {
 		super(coords, representation, guardPath);
 	}
 	
-	public void nextMovement() {
+	public void nextMovement(int index) {
 		
 		char nextMove = guardPath[stepCounter];
 		
@@ -21,6 +21,6 @@ public class NormalGuard extends Guard {
 			stepCounter = 0;
 		}
 		
-		coords = Game.move(coords, nextMove);
+		coords = Game.move(coords, nextMove, "Guard", index);
 	}
 }
