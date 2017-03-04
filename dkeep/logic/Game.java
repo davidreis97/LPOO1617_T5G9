@@ -105,9 +105,6 @@ public class Game {
 			break;
 		case "Keep":
 			currMap = new KeepMap();
-			break;
-		default:
-			System.out.println("Error: no map initialized");
 		}
 		
 		currMap.initMap();
@@ -116,10 +113,6 @@ public class Game {
 	public static char[][] getMap() {
 		return currMap.getMap();
 	}
-	
-	public static Map getMapObject(){
-		return currMap;
-	};
 
 	public static ArrayList<Entity> getEntities() {
 		return entities;
@@ -127,10 +120,6 @@ public class Game {
 	
 	public static String getState() {
 		return state;
-	}
-	
-	public static int getHeroIndex() {
-		return heroIndex;
 	}
 	
 	public static void setEntities(ArrayList<Entity> entities) {
@@ -144,5 +133,4 @@ public class Game {
 	public static void setHeroIndex(int heroIndex) {
 		Game.heroIndex = heroIndex;
 	}
-	
 }
