@@ -50,14 +50,14 @@ public class KeepMap implements Map {
 			if(entityType.equals("Hero")) {
 				Game.getEntities().get(index).setRepresentation('K');
 				keepMap[1][8] = ' ';
-				heroHasKey = true;
+				setHeroHasKey(true);
 			} else if(entityType.equals("Ogre") || entityType.equals("Club")) {
 				Game.getEntities().get(index).setRepresentation('$');
 			}
 			return true;
 		case 'I':
 			if(entityType.equals("Hero")) {
-				if(heroHasKey) {
+				if(getHeroHasKey()) {
 					keepMap[coords.y][coords.x] = 'S';
 				}
 			}
@@ -83,5 +83,13 @@ public class KeepMap implements Map {
 
 	public void nextMap() {
 		Game.setState("Win");
+	}
+
+	public boolean getHeroHasKey() {
+		return heroHasKey;
+	}
+
+	public void setHeroHasKey(boolean heroHasKey) {
+		this.heroHasKey = heroHasKey;
 	}
 }

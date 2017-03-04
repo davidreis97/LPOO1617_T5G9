@@ -10,7 +10,7 @@ import dkeep.logic.Game;
 public class CLI {
 	
 	//Prints a game map to console, fills map with dynamic objects before printing
-	private static void printMap(char[][] map, ArrayList<Entity> entities) {
+	public static void printMap(char[][] map, ArrayList<Entity> entities) {
 		
 		//Fill map with dynamic objects (entities)
 		for(int i = entities.size() - 1; i >= 0; i--) {
@@ -50,7 +50,7 @@ public class CLI {
 				}
 			} while(!validInput.contains(kbdInput));
 		
-			Game.updateGame(kbdInput.charAt(0));
+			Game.updateGame(kbdInput.charAt(0),false);
 
 		} while(!(kbdInput.charAt(0) == 'q') && Game.getState().equals("Playing"));
 

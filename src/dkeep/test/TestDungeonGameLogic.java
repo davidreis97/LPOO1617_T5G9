@@ -4,6 +4,7 @@ package dkeep.test;
 import static org.junit.Assert.*;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 import dkeep.cli.CLI;
 import dkeep.logic.*;
@@ -26,7 +27,7 @@ public class TestDungeonGameLogic {
 		Point initialPoint = new Point(1,1);
 		Point finalPoint = new Point(2,1);
 		assertEquals(initialPoint,game.getEntities().get(game.getHeroIndex()).getCoords());
-		game.updateGame('d');
+		game.updateGame('d',true);
 		assertEquals(finalPoint,game.getEntities().get(game.getHeroIndex()).getCoords());
 	}
 	
@@ -34,7 +35,7 @@ public class TestDungeonGameLogic {
 	public void heroMovesToWall() {
 		Point initialPoint = new Point(1,1);
 		assertEquals(initialPoint,game.getEntities().get(game.getHeroIndex()).getCoords());
-		game.updateGame('w');
+		game.updateGame('w',true);
 		assertEquals(initialPoint,game.getEntities().get(game.getHeroIndex()).getCoords());
 	}
 	
@@ -43,7 +44,7 @@ public class TestDungeonGameLogic {
 		Point initialPoint = new Point(7,3);
 		game.getEntities().get(game.getHeroIndex()).setCoords(initialPoint);
 		assertNotEquals("Lose",game.getState());
-		game.updateGame('w');
+		game.updateGame('w',true);
 		assertEquals("Lose",game.getState());
 	}
 	
@@ -51,7 +52,7 @@ public class TestDungeonGameLogic {
 	public void heroMovesToClosedExitDoor() {
 		Point initialPoint = new Point(1,5);
 		game.getEntities().get(game.getHeroIndex()).setCoords(initialPoint);
-		game.updateGame('a');
+		game.updateGame('a',true);
 		assertEquals(initialPoint,game.getEntities().get(game.getHeroIndex()).getCoords());
 	}
 	
@@ -62,7 +63,7 @@ public class TestDungeonGameLogic {
 		assertEquals('I',game.getMap()[5][0]);
 		assertEquals('I',game.getMap()[6][0]);
 		assertEquals('I',game.getMap()[3][2]);
-		game.updateGame('a');
+		game.updateGame('a',true);
 		assertEquals('S',game.getMap()[5][0]);
 		assertEquals('S',game.getMap()[6][0]);
 		assertEquals('I',game.getMap()[3][2]);
@@ -74,8 +75,8 @@ public class TestDungeonGameLogic {
 		game.getMap()[5][0] = 'S';
 		game.getMap()[6][0] = 'S';
 		game.getEntities().get(game.getHeroIndex()).setCoords(initialPoint);
-		assertEquals(initialPoint,game.getEntities().get(game.getHeroIndex()).getCoords());
-		game.updateGame('a');
+		game.updateGame('a',true);
+		CLI.printMap(game.getMap(), game.getEntities());
 		assertEquals("KeepMap",game.getMapObject().getClass().getSimpleName());
 	}
 

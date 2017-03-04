@@ -71,7 +71,7 @@ public class Game {
 		return false;
 	}
 	
-	public static void updateGame(char userInput) {
+	public static void updateGame(char userInput, boolean debugging) {
 
 		entities.get(heroIndex).coords = move(entities.get(heroIndex).coords, userInput, "Hero", heroIndex);
 
@@ -86,7 +86,9 @@ public class Game {
 //		entities.get(2).coords = move(entities.get(2).coords, 'w', "Club", 2);
 		
 		for(int i = 0; i < entities.size(); i++) {
-			if(heroIndex != i) {
+			if(heroIndex != i 
+					&& !(entities.get(i).getClass().getSimpleName().equals("Ogre") && debugging) 
+					&& !(entities.get(i).getClass().getSimpleName().equals("Club") && debugging)) {
 				entities.get(i).nextMovement(i);
 			}
 		}
@@ -119,7 +121,15 @@ public class Game {
 	
 	public static Map getMapObject(){
 		return currMap;
-	};
+	}
+	
+	public static void setMapObject(DungeonMap map){
+		currMap = map;
+	}
+	
+	public static void setMapObject(KeepMap map){
+		currMap = map;
+	}
 
 	public static ArrayList<Entity> getEntities() {
 		return entities;
