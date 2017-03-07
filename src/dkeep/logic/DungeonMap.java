@@ -4,7 +4,8 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 public class DungeonMap implements Map {
-
+	
+	
 	private char dungeonMap[][] =
         {{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
 			{'X', ' ', ' ', ' ', 'I', ' ', 'X', ' ', ' ', 'X'},
@@ -37,8 +38,7 @@ public class DungeonMap implements Map {
 		case ' ':
 			return true;
 		case 'k':
-			dungeonMap[5][0] = 'S';
-			dungeonMap[6][0] = 'S';
+			openDoors();
 			return false;
 		case 'S':
 			nextMap();
@@ -46,6 +46,12 @@ public class DungeonMap implements Map {
 		default:
 			return false;
 		}
+	}
+	
+	@Override
+	public void openDoors(){
+		dungeonMap[5][0] = 'S';
+		dungeonMap[6][0] = 'S';
 	}
 
 	public void initMap() {

@@ -11,4 +11,6 @@ public interface Map {
 	public void initMap();
 	
 	public void nextMap();
+	
+	public void openDoors();
 }

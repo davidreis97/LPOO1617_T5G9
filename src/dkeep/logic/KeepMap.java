@@ -58,7 +58,7 @@ public class KeepMap implements Map {
 		case 'I':
 			if(entityType.equals("Hero")) {
 				if(getHeroHasKey()) {
-					keepMap[coords.y][coords.x] = 'S';
+					openDoors();
 				}
 			}
 			return false;
@@ -91,5 +91,10 @@ public class KeepMap implements Map {
 
 	public void setHeroHasKey(boolean heroHasKey) {
 		this.heroHasKey = heroHasKey;
+	}
+
+	@Override
+	public void openDoors() {
+		keepMap[1][0] = 'S';
 	}
 }

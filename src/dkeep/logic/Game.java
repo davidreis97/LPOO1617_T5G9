@@ -123,11 +123,7 @@ public class Game {
 		return currMap;
 	}
 	
-	public static void setMapObject(DungeonMap map){
-		currMap = map;
-	}
-	
-	public static void setMapObject(KeepMap map){
+	public static void setMapObject(Map map){
 		currMap = map;
 	}
 
