@@ -100,12 +100,6 @@ public class GUI {
 		frame.getContentPane().add(btnRight);
 		
 		JButton btnDown = new JButton("Down");
-		btnDown.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Game.updateGame('s', false);
-				updateGUIStatus( btnDown,btnUp,btnLeft,btnRight, textArea,lblStatus);
-			}
-		});
 		btnDown.setBounds(464, 196, 88, 29);
 		frame.getContentPane().add(btnDown);
 		
@@ -142,6 +136,13 @@ public class GUI {
 		btnStartNewGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new Game("Dungeon");
+				updateGUIStatus( btnDown,btnUp,btnLeft,btnRight, textArea,lblStatus);
+			}
+		});
+		
+		btnDown.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Game.updateGame('s', false);
 				updateGUIStatus( btnDown,btnUp,btnLeft,btnRight, textArea,lblStatus);
 			}
 		});
