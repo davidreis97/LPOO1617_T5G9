@@ -105,8 +105,6 @@ public class TestKeepGameLogic {
 				outcomes += temp + " ";
 			}
 			
-			System.out.println("Outcomes: " + outcomes);
-			System.out.println("Temp: " + temp);
 		}
 	}
 
