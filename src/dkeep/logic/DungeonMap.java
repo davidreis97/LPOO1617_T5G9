@@ -58,7 +58,7 @@ public class DungeonMap implements Map {
 		ArrayList<Entity> entities = Game.getEntities();
 		entities.clear();
 		entities.add(new Hero(new Point(1, 1), 'H'));
-		entities.add(new DrunkenGuard(new Point(8, 1), 'G'));
+		entities.add(new SuspiciousGuard(new Point(8, 1), 'G'));
 		Game.setEntities(entities);
 		Game.setState("Playing");
 		Game.setHeroIndex(0);

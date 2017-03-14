@@ -3,16 +3,15 @@ package dkeep.logic;
 import java.awt.Point;
 import java.util.Random;
 
-public class DrunkenGuard extends Guard {
+public class SuspiciousGuard extends Guard {
 	
 	private boolean isReversed = false;
-	private boolean isSleeping = false;
 	
-	public DrunkenGuard(Point coords, char representation) {
+	public SuspiciousGuard(Point coords, char representation) {
 		super(coords, representation);
 	}
 	
-	public DrunkenGuard(Point coords, char representation, char[] guardPath) {
+	public SuspiciousGuard(Point coords, char representation, char[] guardPath) {
 		super(coords, representation, guardPath);
 	}
 	
@@ -20,35 +19,19 @@ public class DrunkenGuard extends Guard {
 		
 		Random rand = new Random();
 		int reverse = rand.nextInt(4);
-		int sleep = rand.nextInt(4);
 		
-		switch(sleep) {
+		switch(reverse) {
 		case 1:
-			if(isSleeping) {
-				isSleeping = false;
-				representation = 'G';
-				
-				if(reverse == 1) {
-					if(isReversed) {
-						stepCounter++;
-					} else stepCounter--;
-					
-					stepCounter = clamp(stepCounter, 0, guardPath.length - 1);
-
-					isReversed = !isReversed;
-				}
-				
-			} else {
-				isSleeping = true;
-				representation = 'g';
-			}
+			if(isReversed) {
+				stepCounter++;
+			} else stepCounter--;
+			
+			stepCounter = clamp(stepCounter, 0, guardPath.length - 1);
+			
+			isReversed = !isReversed;
 			break;
 		default:
 			break;
-		}
-		
-		if(isSleeping) {
-			return;
 		}
 		
 		char nextMove = 'w';

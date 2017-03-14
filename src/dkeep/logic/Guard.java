@@ -7,6 +7,14 @@ public abstract class Guard extends Entity {
 	protected int stepCounter;
 	protected char guardPath[];
 
+	protected static int clamp(int val, int min, int max) {
+	    if(val < min) {
+	    	return max;
+	    } else if(val > max) {
+	    	return min;
+	    } else return val;
+	}
+	
 	public Guard(Point coords, char representation) {
 		super(coords, representation);
 		this.stepCounter = 0;
