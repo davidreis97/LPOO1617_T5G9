@@ -13,14 +13,23 @@ import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import javax.swing.JPanel;
 
 public class GUI {
 
 	private JFrame frame;
-	private JTextField textField;
+	private static JButton btnDown;
+	private static JButton btnUp;
+	private static JButton btnLeft;
+	private static JButton btnRight;
+	private static JLabel lblStatus;
+	private static JPanel panel;
+	
 
 	/**
 	 * Launch the application.
@@ -52,55 +61,33 @@ public class GUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 604, 417);
+		frame.setResizable(false);
+		frame.setBounds(100, 100, 556, 402);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Number of Ogres");
-		lblNewLabel.setBounds(16, 23, 113, 16);
-		frame.getContentPane().add(lblNewLabel);
-		
-		textField = new JTextField();
-		textField.setBounds(141, 18, 44, 26);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
-		
-		JLabel lblNewLabel_1 = new JLabel("Guard Personality");
-		lblNewLabel_1.setBounds(16, 51, 118, 16);
-		frame.getContentPane().add(lblNewLabel_1);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(141, 47, 113, 27);
-		frame.getContentPane().add(comboBox);
-		
-		JTextArea textArea = new JTextArea();
-		textArea.setEditable(false);
-		textArea.setFont(new Font("Courier New", Font.PLAIN, 13));
-		textArea.setBounds(16, 88, 397, 276);
-		frame.getContentPane().add(textArea);
-		
-		JLabel lblStatus = new JLabel("Status");
-		lblStatus.setBounds(26, 373, 390, 16);
+		lblStatus = new JLabel("Status");
+		lblStatus.setBounds(16, 354, 390, 16);
 		frame.getContentPane().add(lblStatus);
 		
 		JButton btnStartNewGame = new JButton("Start New Game");
-		btnStartNewGame.setBounds(440, 83, 141, 29);
+		btnStartNewGame.setBounds(370, 22, 141, 29);
 		frame.getContentPane().add(btnStartNewGame);
 		
-		JButton btnUp = new JButton("Up");
-		btnUp.setBounds(464, 150, 88, 29);
+		btnUp = new JButton("Up");
+		btnUp.setBounds(396, 136, 88, 29);
 		frame.getContentPane().add(btnUp);
 		
-		JButton btnLeft = new JButton("Left");
-		btnLeft.setBounds(425, 173, 83, 29);
+		btnLeft = new JButton("Left");
+		btnLeft.setBounds(360, 162, 83, 29);
 		frame.getContentPane().add(btnLeft);
 		
-		JButton btnRight = new JButton("Right");
-		btnRight.setBounds(510, 173, 88, 29);
+		btnRight = new JButton("Right");
+		btnRight.setBounds(436, 162, 88, 29);
 		frame.getContentPane().add(btnRight);
 		
-		JButton btnDown = new JButton("Down");
-		btnDown.setBounds(464, 196, 88, 29);
+		btnDown = new JButton("Down");
+		btnDown.setBounds(396, 190, 88, 29);
 		frame.getContentPane().add(btnDown);
 		
 		JButton btnExit = new JButton("Exit");
@@ -109,47 +96,52 @@ public class GUI {
 				System.exit(0);
 			}
 		});
-		btnExit.setBounds(450, 335, 117, 29);
+		btnExit.setBounds(382, 307, 117, 29);
 		frame.getContentPane().add(btnExit);
+		
+		panel = new SimpleGraphicsPanel();
+		panel.setBounds(16, 22, 320, 320);
+		frame.getContentPane().add(panel);
+		panel.repaint();
+		
 		
 		btnRight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Game.updateGame('d', false);
-				updateGUIStatus( btnDown,btnUp,btnLeft,btnRight, textArea,lblStatus);
+				updateGUIStatus();
 			}
 		});
 		
 		btnUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Game.updateGame('w', false);
-				updateGUIStatus( btnDown,btnUp,btnLeft,btnRight, textArea,lblStatus);
+				updateGUIStatus();
 			}
 		});
 		
 		btnLeft.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Game.updateGame('a', false);
-				updateGUIStatus( btnDown,btnUp,btnLeft,btnRight, textArea,lblStatus);
+				updateGUIStatus();
 			}
 		});
 		
 		btnStartNewGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new Game("Dungeon");
-				updateGUIStatus( btnDown,btnUp,btnLeft,btnRight, textArea,lblStatus);
+				startNewGame.launch();
 			}
 		});
 		
 		btnDown.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Game.updateGame('s', false);
-				updateGUIStatus( btnDown,btnUp,btnLeft,btnRight, textArea,lblStatus);
+				updateGUIStatus();
 			}
 		});
+		updateGUIStatus();
 	}
 	
-	private void updateGUIStatus(JButton btnDown,JButton btnUp,JButton btnLeft,JButton btnRight, JTextArea textArea, JLabel lblStatus) {
-		textArea.setText(printMap(Game.getMap(),Game.getEntities()));
+	protected static void updateGUIStatus() {
 		lblStatus.setText(Game.getState());
 		if (!Game.getState().equals("Playing")){
 			btnDown.setEnabled(false);
@@ -162,6 +154,8 @@ public class GUI {
 			btnLeft.setEnabled(true);
 			btnRight.setEnabled(true);
 		}
+		panel.repaint();
+		panel.requestFocusInWindow();
 	}
 
 	public static String printMap(char[][] map, ArrayList<Entity> entities) {
