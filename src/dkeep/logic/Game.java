@@ -80,11 +80,6 @@ public class Game {
 			return;
 		}
 		
-		//TODO delete
-//		entities.get(1).coords = move(entities.get(1).coords, userInput, "Ogre", 1);
-//		entities.get(2).setCoords(entities.get(1).coords);
-//		entities.get(2).coords = move(entities.get(2).coords, 'w', "Club", 2);
-		
 		for(int i = 0; i < entities.size(); i++) {
 			if(heroIndex != i 
 					&& !(entities.get(i).getClass().getSimpleName().equals("Ogre") && debugging) 
