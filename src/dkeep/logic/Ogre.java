@@ -1,6 +1,7 @@
 package dkeep.logic;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Ogre extends Entity {
@@ -28,6 +29,10 @@ public class Ogre extends Entity {
 			break;
 		}
 		
-		Game.getEntities().get(index + 1).setCoords(this.coords); //CAUTION assumes ogre's club is always the next entities element
+		try{
+			Game.getEntities().get(index + 1).setCoords(this.coords); //CAUTION assumes ogre's club is always the next entities element
+		}catch (Exception e){
+			Game.getEntities().add(new Ogre(new Point(this.coords), '*'));			
+		}
 	}
 }

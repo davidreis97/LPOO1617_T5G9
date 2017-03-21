@@ -32,6 +32,10 @@ public class KeepMap implements Map {
 	
 	public boolean doMove(Point coords, String entityType, int index) {
 		
+		if(coords.x >= 10 || coords.x < 0 || coords.y >= 10 || coords.y < 0){
+			return false;
+		}
+		
 		char collision = keepMap[coords.y][coords.x];
 		
 		switch(collision) {
@@ -95,6 +99,16 @@ public class KeepMap implements Map {
 
 	@Override
 	public void openDoors() {
-		keepMap[1][0] = 'S';
+		for(int x = 0; x < 10; x++){
+			for(int y = 0; y < 10; y++){
+				if(keepMap[x][y] == 'I'){
+					keepMap[x][y] = 'S';
+				}
+			}
+		}
+	}
+	
+	public void setMap(char newMap[][]){
+		keepMap = newMap;
 	}
 }

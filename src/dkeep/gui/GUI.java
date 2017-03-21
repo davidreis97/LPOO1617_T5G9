@@ -99,9 +99,18 @@ public class GUI {
 		btnExit.setBounds(382, 307, 117, 29);
 		frame.getContentPane().add(btnExit);
 		
-		panel = new SimpleGraphicsPanel();
+		panel = new SimpleGraphicsPanel(false);
 		panel.setBounds(16, 22, 320, 320);
 		frame.getContentPane().add(panel);
+		
+		JButton btnLevelEditor = new JButton("Level Editor");
+		btnLevelEditor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LevelEditor.start();
+			}
+		});
+		btnLevelEditor.setBounds(382, 246, 117, 29);
+		frame.getContentPane().add(btnLevelEditor);
 		panel.repaint();
 		
 		
@@ -128,7 +137,7 @@ public class GUI {
 		
 		btnStartNewGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				startNewGame.launch();
+				StartNewGame.launch();
 			}
 		});
 		
@@ -176,5 +185,37 @@ public class GUI {
 		}
 		
 		return output;
+	}
+
+	public static boolean validate() {
+		boolean hero = false,key = false,wall = false,door = false,ogre = false;
+		for(char []i: Game.getMap()){
+			for(char j: i){
+				if(j == 'k'){
+					key = true;
+				}else if(j == 'X'){
+					wall = true;
+				}else if(j == 'I'){
+					door = true;
+				}
+			}
+		}
+		for(Entity x: Game.getEntities()){
+			if (x.getRepresentation() == 'H'){
+				if(hero){
+					return false;
+				}else{
+					hero = true;
+				}
+			}else if (x.getRepresentation() == '0'){
+				ogre = true;
+			}
+		}
+		if (!hero || !key || !wall || !door || !ogre){
+			return false;
+		}else{
+			updateGUIStatus();
+			return true;
+		}
 	}
 }
