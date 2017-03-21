@@ -54,17 +54,23 @@ public class DungeonMap implements Map {
 		dungeonMap[6][0] = 'S';
 	}
 
-	public void initMap() {
+	public void initMap(String guardtype) {
 		ArrayList<Entity> entities = Game.getEntities();
 		entities.clear();
 		entities.add(new Hero(new Point(1, 1), 'H'));
-		entities.add(new SuspiciousGuard(new Point(8, 1), 'G'));
+		if (guardtype.equals("Suspicious")){
+			entities.add(new SuspiciousGuard(new Point(8, 1), 'G'));
+		}else if (guardtype.equals("Drunk")){
+			entities.add(new DrunkGuard(new Point(8, 1), 'G'));
+		}else{
+			entities.add(new NormalGuard(new Point(8, 1), 'G'));
+		}
 		Game.setEntities(entities);
 		Game.setState("Playing");
 		Game.setHeroIndex(0);
 	}
 	
 	public void nextMap() {
-		Game.changeMap("Keep");
+		Game.changeMap("Keep","");
 	}
 }

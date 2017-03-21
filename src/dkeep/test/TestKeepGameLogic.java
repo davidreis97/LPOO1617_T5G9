@@ -16,7 +16,7 @@ public class TestKeepGameLogic {
 
 	@Before
 	public void setUp() throws Exception {
-		game = new Game("Keep");
+		game = new Game("Keep","Normal",1);
 	}
 	
 

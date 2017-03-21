@@ -8,7 +8,7 @@ public interface Map {
 
 	public boolean doMove(Point coords, String entityType, int index);
 
-	public void initMap();
+	public void initMap(String guardtype);
 	
 	public void nextMap();
 	

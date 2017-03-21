@@ -8,9 +8,11 @@ public class Game {
 	private static ArrayList<Entity> entities = new ArrayList<Entity>();
 	private static String state; //ASK replace strings with enums overall
 	private static int heroIndex; //CAUTION assumes one Hero
+	private static int numOgres;
 	
-	public Game(String startingMap) {
-		changeMap(startingMap); //Starting map
+	public Game(String startingMap, String guardtype, int numOgres) {
+		this.setNumOgres(numOgres);
+		changeMap(startingMap, guardtype); //Starting map
 	}
 
 	//Returns new coords based on given coords and direction
@@ -94,7 +96,7 @@ public class Game {
 		}
 	}
 	
-	public static void changeMap(String mapType) { //ASK adding new maps considered extension or modification?
+	public static void changeMap(String mapType, String guardtype) { //ASK adding new maps considered extension or modification?
 		
 		switch(mapType) {
 		case "Dungeon":
@@ -107,7 +109,7 @@ public class Game {
 			System.out.println("Error: no map initialized");
 		}
 		
-		currMap.initMap();
+		currMap.initMap(guardtype);
 	}
 	
 	public static char[][] getMap() {
@@ -144,6 +146,14 @@ public class Game {
 
 	public static void setHeroIndex(int heroIndex) {
 		Game.heroIndex = heroIndex;
+	}
+
+	public static int getNumOgres() {
+		return numOgres;
+	}
+
+	public static void setNumOgres(int numOgres) {
+		Game.numOgres = numOgres;
 	}
 	
 }

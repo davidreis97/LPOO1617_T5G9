@@ -51,7 +51,7 @@ public class GUI {
 	 * Create the application.
 	 */
 	public GUI() {
-		new Game("Dungeon");
+		new Game("Dungeon","Normal",0);
 		Game.setState("You can start a new game");
 		initialize();
 	}
@@ -189,6 +189,7 @@ public class GUI {
 
 	public static boolean validate() {
 		boolean hero = false,key = false,wall = false,door = false,ogre = false;
+		int ogreToClub = 0;
 		for(char []i: Game.getMap()){
 			for(char j: i){
 				if(j == 'k'){
@@ -209,9 +210,12 @@ public class GUI {
 				}
 			}else if (x.getRepresentation() == '0'){
 				ogre = true;
+				ogreToClub++;
+			}else if (x.getRepresentation() == '*'){
+				ogreToClub--;
 			}
 		}
-		if (!hero || !key || !wall || !door || !ogre){
+		if (!hero || !key || !wall || !door || !ogre || ogreToClub != 0){
 			return false;
 		}else{
 			updateGUIStatus();

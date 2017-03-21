@@ -53,7 +53,7 @@ public class KeepMap implements Map {
 		case 'k':
 			if(entityType.equals("Hero")) {
 				Game.getEntities().get(index).setRepresentation('K');
-				keepMap[1][8] = ' ';
+				keepMap[coords.y][coords.x] = ' ';
 				setHeroHasKey(true);
 			} else if(entityType.equals("Ogre") || entityType.equals("Club")) {
 				Game.getEntities().get(index).setRepresentation('$');
@@ -74,12 +74,14 @@ public class KeepMap implements Map {
 		}
 	}
 
-	public void initMap() {
+	public void initMap(String guardtype) {
 		ArrayList<Entity> entities = Game.getEntities();
 		entities.clear();
 		entities.add(new Hero(new Point(1, 8), 'H'));
-		entities.add(new Ogre(new Point(4, 1), '0'));
-		entities.add(new Club(new Point(4, 2), '*'));
+		for(int i = 0; i < Game.getNumOgres(); i++){
+			entities.add(new Ogre(new Point(4, 1), '0'));
+			entities.add(new Club(new Point(4, 2), '*'));
+		}
 		Game.setEntities(entities);
 		Game.setState("Playing");
 		Game.setHeroIndex(0);

@@ -173,8 +173,12 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 			LevelEditor.askForMace();
 			break;
 		case '*':
-			Game.getEntities().add(new Club(new Point((int) (e.getX()/31), (int) (e.getY()/31)), '*'));
-			LevelEditor.finishedMacePlacement();
+			if(clubIsValid(e)){
+				Game.getEntities().add(new Club(new Point((int) (e.getX()/31), (int) (e.getY()/31)), '*'));
+				LevelEditor.finishedMacePlacement();
+			}else{
+				LevelEditor.setStatus("Invalid Mace Placement!");
+			}
 			break;
 		case ' ':
 			map = (KeepMap)Game.getMapObject();
@@ -184,6 +188,18 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 			break;
 		}
 		repaint();
+	}
+
+	private boolean clubIsValid(MouseEvent e) {
+		for(Entity ent: Game.getEntities()){
+			if(ent.getRepresentation() == '0'){
+				Point ogreCoords = ent.getCoords();
+				if(ogreCoords.distance((int)(e.getX()/31),(int)(e.getY()/31)) == 1){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override

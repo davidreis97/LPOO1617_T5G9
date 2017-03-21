@@ -18,7 +18,7 @@ public class TestDungeonGameLogic {
 
 	@Before
 	public void setUp() throws Exception {
-		game = new Game("Dungeon");
+		game = new Game("Dungeon","Normal",1);
 	}
 	
 

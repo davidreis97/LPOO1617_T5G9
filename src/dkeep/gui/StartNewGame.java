@@ -3,6 +3,7 @@ package dkeep.gui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -12,6 +13,7 @@ import dkeep.logic.Game;
 
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -37,9 +39,12 @@ public class StartNewGame extends JDialog {
 	 * Create the dialog.
 	 */
 	public StartNewGame() {
+		String[] guardtypes = new String[] {"Normal", "Suspicious",
+                "Drunk"};
+		
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 351, 109);
+		setBounds(100, 100, 402, 109);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -53,23 +58,30 @@ public class StartNewGame extends JDialog {
 		lblGuardType.setBounds(20, 45, 105, 16);
 		contentPanel.add(lblGuardType);
 		
-		JSpinner spinner = new JSpinner();
-		spinner.setBounds(141, 12, 33, 26);
+		SpinnerNumberModel model = new SpinnerNumberModel(1, 1, 10, 1);  
+		JSpinner spinner = new JSpinner(model);
+		spinner.setBounds(135, 12, 61, 26);
 		contentPanel.add(spinner);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(96, 41, 105, 27);
+		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<String>(guardtypes);
+		
+		JComboBox comboBox = new JComboBox(comboModel);
+		comboBox.setBounds(96, 41, 155, 27);
 		contentPanel.add(comboBox);
 		
 		JButton btnStart = new JButton("Start");
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new Game("Dungeon");
-				GUI.updateGUIStatus();
-				dispose();
+				try{
+					new Game("Dungeon",(String) comboBox.getSelectedItem(),(int) spinner.getValue());
+					GUI.updateGUIStatus();
+					dispose();
+				}catch (Exception excep){
+					spinner.setValue("NaN");
+				}
 			}
 		});
-		btnStart.setBounds(213, 12, 117, 29);
+		btnStart.setBounds(263, 12, 117, 29);
 		contentPanel.add(btnStart);
 		
 		JButton btnCancel = new JButton("Cancel");
@@ -79,7 +91,7 @@ public class StartNewGame extends JDialog {
 				dispose();
 			}
 		});
-		btnCancel.setBounds(213, 40, 117, 29);
+		btnCancel.setBounds(263, 40, 117, 29);
 		contentPanel.add(btnCancel);
 	}
 }

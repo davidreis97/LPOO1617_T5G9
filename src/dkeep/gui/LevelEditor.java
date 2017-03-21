@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.awt.event.ActionEvent;
 
 public class LevelEditor {
@@ -60,11 +61,14 @@ public class LevelEditor {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		Game.changeMap("Keep");
+		Game.changeMap("Keep","");
 		ArrayList<Entity> emptyList = new ArrayList<Entity>();
 		
 		KeepMap map = new KeepMap();
 		char emptyMap[][] = new char[10][10];
+		for(char []row : emptyMap){
+			Arrays.fill(row, ' ');
+		}
 		map.setMap(emptyMap);
 		
 		Game.setEntities(emptyList);
@@ -189,6 +193,7 @@ public class LevelEditor {
 			public void actionPerformed(ActionEvent e) {
 				KeepMap map = new KeepMap();
 				char emptyMap[][] = new char[10][10];
+				Arrays.fill(emptyMap, " ");
 				map.setMap(emptyMap);
 				nextChar = ' ';
 				lblOptions.setText("Cleared the map.");
