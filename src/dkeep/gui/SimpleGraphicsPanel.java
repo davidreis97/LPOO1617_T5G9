@@ -32,9 +32,13 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 	BufferedImage ogre;
 	BufferedImage mace;
 	
+	private boolean levelEditor;
+	
 	public SimpleGraphicsPanel(boolean levelEditor) {
 	       
-		   if (levelEditor){
+		   this.levelEditor = levelEditor;
+		   
+		   if (this.levelEditor){
 			   addMouseListener(this);
 			   addMouseMotionListener(this);
 		   }else{
@@ -231,22 +235,16 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 		}catch (NullPointerException npe){
 			return;
 		}
-		ArrayList<Entity> entities = Game.getEntities();
-		
-		//Fill map with dynamic objects (entities)
-		for(int i = entities.size() - 1; i >= 0; i--) {
-			mapCopy[entities.get(i).getCoords().y][entities.get(i).getCoords().x] = entities.get(i).getRepresentation();
-		}
 
-		//Prints map with static and dynamic objects
+		//Prints map with static objects
 		for(int i = 0; i< mapCopy.length; i++) {
 			for(int j = 0; j < mapCopy.length; j++) {
+				
+				if (levelEditor) g.drawRect(j*imagex, i*imagey, 31, 31);
+				
 				switch(mapCopy[i][j]){
 					case 'X':
 						g.drawImage(wall, j*imagex, i*imagey, null);
-						break;
-					case 'H':
-						g.drawImage(hero, j*imagex, i*imagey, null);
 						break;
 					case 'I':
 						g.drawImage(closedDoor, j*imagex, i*imagey, null);
@@ -254,22 +252,34 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 					case 'S':
 						g.drawImage(openDoor, j*imagex, i*imagey, null);
 						break;
-					case 'G':
-						g.drawImage(guard, j*imagex, i*imagey, null);
-						break;
 					case 'k':
 						g.drawImage(key, j*imagex, i*imagey, null);
 						break;
-					case '*':
-						g.drawImage(mace, j*imagex, i*imagey, null);
-						break;
-					case '0':
-						g.drawImage(ogre, j*imagex, i*imagey, null);
-						break;
 					case 'K':
-						g.drawImage(hero, j*imagex, i*imagey, null);
+						g.drawImage(key, j*imagex, i*imagey, null);
 						break;
 				};
+			}
+		}
+		
+		//Prints map with dynamic objects (entities)
+		for(Entity e : Game.getEntities()) {
+			switch(e.getRepresentation()){
+			case 'H':
+				g.drawImage(hero, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
+				break;
+			case 'K':
+				g.drawImage(hero, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
+				break;
+			case 'G':
+				g.drawImage(guard, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
+				break;
+			case '*':
+				g.drawImage(mace, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
+				break;
+			case '0':
+				g.drawImage(ogre, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
+				break;
 			}
 		}
 	}

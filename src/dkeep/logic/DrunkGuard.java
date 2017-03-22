@@ -21,32 +21,27 @@ public class DrunkGuard extends Guard {
 		Random rand = new Random();
 		int reverse = rand.nextInt(4);
 		int sleep = rand.nextInt(4);
-		
-		switch(sleep) {
-		case 1:
-			if(isSleeping) {
-				isSleeping = false;
-				representation = 'G';
-				
-				if(reverse == 1) {
-					if(isReversed) {
-						stepCounter++;
-					} else stepCounter--;
-					
-					stepCounter = clamp(stepCounter, 0, guardPath.length - 1);
 
-					isReversed = !isReversed;
-				}
+		if(isSleeping && sleep == 1) {
+			isSleeping = false;
+			representation = 'G';
+
+			if(reverse == 1 && isReversed) {
+				stepCounter++;
+				stepCounter = clamp(stepCounter, 0, guardPath.length - 1);
+
+				isReversed = !isReversed;
+			}else if(reverse == 1 && !isReversed){
+				stepCounter--;
+				stepCounter = clamp(stepCounter, 0, guardPath.length - 1);
 				
-			} else {
-				isSleeping = true;
-				representation = 'g';
+				isReversed = !isReversed;
 			}
-			break;
-		default:
-			break;
+		} else if(!isSleeping && sleep == 1){
+			isSleeping = true;
+			representation = 'g';
 		}
-		
+
 		if(isSleeping) {
 			return;
 		}

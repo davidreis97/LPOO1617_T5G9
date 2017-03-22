@@ -74,21 +74,7 @@ public class GUI {
 		btnStartNewGame.setBounds(370, 22, 141, 29);
 		frame.getContentPane().add(btnStartNewGame);
 		
-		btnUp = new JButton("Up");
-		btnUp.setBounds(396, 136, 88, 29);
-		frame.getContentPane().add(btnUp);
-		
-		btnLeft = new JButton("Left");
-		btnLeft.setBounds(360, 162, 83, 29);
-		frame.getContentPane().add(btnLeft);
-		
-		btnRight = new JButton("Right");
-		btnRight.setBounds(436, 162, 88, 29);
-		frame.getContentPane().add(btnRight);
-		
-		btnDown = new JButton("Down");
-		btnDown.setBounds(396, 190, 88, 29);
-		frame.getContentPane().add(btnDown);
+		initializeDirectionalButtons();
 		
 		JButton btnExit = new JButton("Exit");
 		btnExit.addActionListener(new ActionListener() {
@@ -114,6 +100,32 @@ public class GUI {
 		panel.repaint();
 		
 		
+		btnStartNewGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StartNewGame.launch();
+			}
+		});
+		
+		updateGUIStatus();
+	}
+	
+	private void initializeDirectionalButtons() {
+		btnUp = new JButton("Up");
+		btnUp.setBounds(396, 136, 88, 29);
+		frame.getContentPane().add(btnUp);
+		
+		btnLeft = new JButton("Left");
+		btnLeft.setBounds(360, 162, 83, 29);
+		frame.getContentPane().add(btnLeft);
+		
+		btnRight = new JButton("Right");
+		btnRight.setBounds(436, 162, 88, 29);
+		frame.getContentPane().add(btnRight);
+		
+		btnDown = new JButton("Down");
+		btnDown.setBounds(396, 190, 88, 29);
+		frame.getContentPane().add(btnDown);
+		
 		btnRight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Game.updateGame('d', false);
@@ -135,21 +147,14 @@ public class GUI {
 			}
 		});
 		
-		btnStartNewGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				StartNewGame.launch();
-			}
-		});
-		
 		btnDown.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Game.updateGame('s', false);
 				updateGUIStatus();
 			}
 		});
-		updateGUIStatus();
 	}
-	
+
 	protected static void updateGUIStatus() {
 		lblStatus.setText(Game.getState());
 		if (!Game.getState().equals("Playing")){
@@ -202,12 +207,10 @@ public class GUI {
 			}
 		}
 		for(Entity x: Game.getEntities()){
-			if (x.getRepresentation() == 'H'){
-				if(hero){
-					return false;
-				}else{
-					hero = true;
-				}
+			if (x.getRepresentation() == 'H' && hero){
+				return false;
+			}else if(x.getRepresentation() == 'H' && !hero){
+				hero = true;
 			}else if (x.getRepresentation() == '0'){
 				ogre = true;
 				ogreToClub++;

@@ -21,7 +21,7 @@ import java.awt.event.ActionEvent;
 public class LevelEditor {
 
 	private static char nextChar = ' ';
-	private JFrame frame;
+	private static JFrame frame;
 	private static JLabel lblOptions;
 	private static JButton btnHero;
 	private static JButton btnOgre;
@@ -32,6 +32,8 @@ public class LevelEditor {
 	private static JButton btnEmpty;
 	private static JButton btnClearAllEntities;
 	private static JButton btnClearAll;
+	private static JPanel panel;
+	private static JLabel lblEntities;
 
 	/**
 	 * Launch the application.
@@ -61,6 +63,137 @@ public class LevelEditor {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
+		initializeGame();
+		
+		frame = new JFrame();
+		frame.setResizable(false);
+		frame.setBounds(100, 100, 477, 398);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		lblOptions = new JLabel("Ready to edit");
+		lblOptions.setBounds(16, 354, 556, 16);
+		frame.getContentPane().add(lblOptions);
+		
+		panel = new SimpleGraphicsPanel(true);
+		panel.setBounds(16, 22, 320, 320);
+		frame.getContentPane().add(panel);
+		
+		lblEntities = new JLabel("Press to add:");
+		lblEntities.setBounds(348, 22, 100, 16);
+		frame.getContentPane().add(lblEntities);
+		
+		initializePlacementButtons();
+		
+		initializeOptionsButtons();
+		
+		JLabel lblDestructiveOptions = new JLabel("Options:");
+		lblDestructiveOptions.setBounds(348, 228, 123, 16);
+		frame.getContentPane().add(lblDestructiveOptions);
+		
+		JLabel lblFinalize = new JLabel("Finalize:");
+		lblFinalize.setBounds(348, 315, 61, 16);
+		frame.getContentPane().add(lblFinalize);
+		
+		panel.repaint();
+		panel.requestFocusInWindow();
+	}
+
+	private static void initializeOptionsButtons() {
+		btnValidatePlay = new JButton("Validate & Play");
+		btnValidatePlay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (GUI.validate()){
+					frame.dispose();
+				}else{
+					lblOptions.setText("ERROR: Invalid Map!");
+					nextChar = ' ';
+					panel.requestFocusInWindow();
+				}
+				
+			}
+		});
+		btnValidatePlay.setBounds(344, 333, 127, 29);
+		frame.getContentPane().add(btnValidatePlay);
+		
+		
+		btnClearAllEntities = new JButton("Clear all Entities");
+		btnClearAllEntities.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<Entity> emptyList = new ArrayList<Entity>();
+				Game.setEntities(emptyList);
+				nextChar = ' ';
+				lblOptions.setText("Cleared all entities.");
+				panel.repaint();
+				panel.requestFocusInWindow();
+			}
+		});
+		btnClearAllEntities.setBounds(344, 248, 127, 29);
+		frame.getContentPane().add(btnClearAllEntities);
+		
+		btnClearAll = new JButton("Clear all Map");
+		btnClearAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				KeepMap map = new KeepMap();
+				char emptyMap[][] = new char[10][10];
+				for(char []row : emptyMap){
+					Arrays.fill(row, ' ');
+				}
+				map.setMap(emptyMap);
+				nextChar = ' ';
+				lblOptions.setText("Cleared the map.");
+				Game.setMapObject(map);
+				panel.repaint();
+				panel.requestFocusInWindow();
+			}
+		});
+		btnClearAll.setBounds(344, 276, 127, 29);
+		frame.getContentPane().add(btnClearAll);
+		
+	}
+
+	public static char getNextChar() {
+		return nextChar;
+	}
+
+	public static void setNextChar(char nextChar) {
+		LevelEditor.nextChar = nextChar;
+	}
+	
+	public static void setStatus(String status){
+		lblOptions.setText(status);
+	}
+
+	public static void askForMace() {
+		btnHero.setEnabled(false);
+		btnOgre.setEnabled(false);
+		btnKey.setEnabled(false);
+		btnDoor.setEnabled(false);
+		btnWall.setEnabled(false);
+		btnValidatePlay.setEnabled(false);
+		btnEmpty.setEnabled(false);
+		btnClearAllEntities.setEnabled(false);
+		btnClearAll.setEnabled(false);
+		lblOptions.setText("Current Entity: Mace (Please place the mace before doing anything else)");
+		nextChar = '*';
+	}
+	
+	public static void finishedMacePlacement() {
+		btnHero.setEnabled(true);
+		btnOgre.setEnabled(true);
+		btnKey.setEnabled(true);
+		btnDoor.setEnabled(true);
+		btnWall.setEnabled(true);
+		btnValidatePlay.setEnabled(true);
+		btnEmpty.setEnabled(true);
+		btnClearAllEntities.setEnabled(true);
+		btnClearAll.setEnabled(true);
+		lblOptions.setText("Current Entity: Ogre");
+		nextChar = '0';
+	}
+	
+	private static void initializeGame(){
 		Game.changeMap("Keep","");
 		ArrayList<Entity> emptyList = new ArrayList<Entity>();
 		
@@ -73,25 +206,9 @@ public class LevelEditor {
 		
 		Game.setEntities(emptyList);
 		Game.setMapObject(map);
-		
-		frame = new JFrame();
-		frame.setResizable(false);
-		frame.setBounds(100, 100, 477, 398);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		
-		lblOptions = new JLabel("Ready to edit");
-		lblOptions.setBounds(16, 354, 556, 16);
-		frame.getContentPane().add(lblOptions);
-		
-		JPanel panel = new SimpleGraphicsPanel(true);
-		panel.setBounds(16, 22, 320, 320);
-		frame.getContentPane().add(panel);
-		
-		JLabel lblEntities = new JLabel("Press to add:");
-		lblEntities.setBounds(348, 22, 100, 16);
-		frame.getContentPane().add(lblEntities);
-		
+	}
+	
+	private static void initializePlacementButtons(){
 		btnHero = new JButton("Hero");
 		btnHero.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -147,22 +264,6 @@ public class LevelEditor {
 		btnWall.setBounds(344, 100, 127, 29);
 		frame.getContentPane().add(btnWall);
 		
-		btnValidatePlay = new JButton("Validate & Play");
-		btnValidatePlay.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (GUI.validate()){
-					frame.dispose();
-				}else{
-					lblOptions.setText("ERROR: Invalid Map!");
-					nextChar = ' ';
-					panel.requestFocusInWindow();
-				}
-				
-			}
-		});
-		btnValidatePlay.setBounds(344, 333, 127, 29);
-		frame.getContentPane().add(btnValidatePlay);
-		
 		btnEmpty = new JButton("Empty");
 		btnEmpty.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -173,88 +274,6 @@ public class LevelEditor {
 		});
 		btnEmpty.setBounds(344, 187, 127, 29);
 		frame.getContentPane().add(btnEmpty);
-		
-		btnClearAllEntities = new JButton("Clear all Entities");
-		btnClearAllEntities.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ArrayList<Entity> emptyList = new ArrayList<Entity>();
-				Game.setEntities(emptyList);
-				nextChar = ' ';
-				lblOptions.setText("Cleared all entities.");
-				panel.repaint();
-				panel.requestFocusInWindow();
-			}
-		});
-		btnClearAllEntities.setBounds(344, 248, 127, 29);
-		frame.getContentPane().add(btnClearAllEntities);
-		
-		btnClearAll = new JButton("Clear all Map");
-		btnClearAll.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				KeepMap map = new KeepMap();
-				char emptyMap[][] = new char[10][10];
-				Arrays.fill(emptyMap, " ");
-				map.setMap(emptyMap);
-				nextChar = ' ';
-				lblOptions.setText("Cleared the map.");
-				Game.setMapObject(map);
-				panel.repaint();
-				panel.requestFocusInWindow();
-			}
-		});
-		btnClearAll.setBounds(344, 276, 127, 29);
-		frame.getContentPane().add(btnClearAll);
-		
-		JLabel lblDestructiveOptions = new JLabel("Options:");
-		lblDestructiveOptions.setBounds(348, 228, 123, 16);
-		frame.getContentPane().add(lblDestructiveOptions);
-		
-		JLabel lblFinalize = new JLabel("Finalize:");
-		lblFinalize.setBounds(348, 315, 61, 16);
-		frame.getContentPane().add(lblFinalize);
-		
-		panel.repaint();
-		panel.requestFocusInWindow();
-	}
-
-	public static char getNextChar() {
-		return nextChar;
-	}
-
-	public static void setNextChar(char nextChar) {
-		LevelEditor.nextChar = nextChar;
-	}
-	
-	public static void setStatus(String status){
-		lblOptions.setText(status);
-	}
-
-	public static void askForMace() {
-		btnHero.setEnabled(false);
-		btnOgre.setEnabled(false);
-		btnKey.setEnabled(false);
-		btnDoor.setEnabled(false);
-		btnWall.setEnabled(false);
-		btnValidatePlay.setEnabled(false);
-		btnEmpty.setEnabled(false);
-		btnClearAllEntities.setEnabled(false);
-		btnClearAll.setEnabled(false);
-		lblOptions.setText("Current Entity: Mace (Please place the mace before doing anything else)");
-		nextChar = '*';
-	}
-	
-	public static void finishedMacePlacement() {
-		btnHero.setEnabled(true);
-		btnOgre.setEnabled(true);
-		btnKey.setEnabled(true);
-		btnDoor.setEnabled(true);
-		btnWall.setEnabled(true);
-		btnValidatePlay.setEnabled(true);
-		btnEmpty.setEnabled(true);
-		btnClearAllEntities.setEnabled(true);
-		btnClearAll.setEnabled(true);
-		lblOptions.setText("Current Entity: Ogre");
-		nextChar = '0';
 	}
 
 }

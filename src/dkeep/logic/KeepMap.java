@@ -40,14 +40,10 @@ public class KeepMap implements Map {
 		
 		switch(collision) {
 		case ' ':
-			if(Game.getEntities().get(index).getRepresentation() == '$') { //TODO use flags?
-				switch(entityType) {
-				case "Ogre":
-					Game.getEntities().get(index).setRepresentation('0');
-					break;
-				case "Club":
-					Game.getEntities().get(index).setRepresentation('*');
-				}
+			if(Game.getEntities().get(index).getRepresentation() == '$' && entityType == "Ogre") { //TODO use flags?
+				Game.getEntities().get(index).setRepresentation('0');
+			}else if(Game.getEntities().get(index).getRepresentation() == '$' && entityType == "Club"){
+				Game.getEntities().get(index).setRepresentation('*');
 			}
 			return true;
 		case 'k':
