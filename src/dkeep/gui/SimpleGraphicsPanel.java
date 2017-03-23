@@ -31,6 +31,8 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 	BufferedImage key;
 	BufferedImage ogre;
 	BufferedImage mace;
+	BufferedImage sleepingGuard;
+	BufferedImage armedHero;
 	
 	private boolean levelEditor;
 	
@@ -92,6 +94,18 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 	       } catch (IOException e) {
 	    	   System.out.println("Error loading mace");
 	       }
+	       
+	       try {
+	    	   sleepingGuard = ImageIO.read(new File("resources/crawl-tiles/player/base/kenku_winged_m_sleeping.png"));
+	       } catch (IOException e) {
+	    	   System.out.println("Error loading sleepingGuard");
+	       }
+	       
+	       try {
+	    	   armedHero = ImageIO.read(new File("resources/crawl-tiles/UNUSED/weapons/two_handed_sword.png"));
+	       } catch (IOException e) {
+	    	   System.out.println("Error loading armedHero");
+	       }  
 	}
 	
 	@Override
@@ -271,8 +285,15 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 			case 'K':
 				g.drawImage(hero, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
 				break;
+			case 'A':
+				g.drawImage(hero, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
+				g.drawImage(armedHero, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
+				break;
 			case 'G':
 				g.drawImage(guard, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
+				break;
+			case 'g':
+				g.drawImage(sleepingGuard, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
 				break;
 			case '*':
 				g.drawImage(mace, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
