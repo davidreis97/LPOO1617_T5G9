@@ -77,5 +77,57 @@ public class TestDungeonGameLogic {
 		game.updateGame('a',true);
 		assertEquals("KeepMap",game.getMapObject().getClass().getSimpleName());
 	}
+	
+	@Test(timeout=1000)
+	public void drunkGuardSleepsReverses(){
+		game = new Game("Dungeon","Drunk",1);
+		
+		int currentStep, oldStep;
+		boolean walksForward = false, walksBackwards = false, sleeps = false;
+		
+		Guard guard = (Guard) game.getEntities().get(game.getHeroIndex()+1);
+		oldStep = guard.getStepCounter();
+		
+		while (!walksForward || !walksBackwards || !sleeps){
+			game.updateGame('a', true);
+			currentStep = guard.getStepCounter();
+			
+			if (oldStep < currentStep){
+				walksForward = true;
+			}else if(oldStep > currentStep){
+				walksBackwards = true;
+			}else{ //oldStep == currentStep
+				sleeps = true;
+			}
+			
+			oldStep = currentStep;
+		}
+	}
+	
+	@Test(timeout=1000)
+	public void suspiciousGuardReverses(){
+		game = new Game("Dungeon","Suspicious",1);
+		
+		int currentStep, oldStep;
+		boolean walksForward = false, walksBackwards = false;
+		
+		Guard guard = (Guard) game.getEntities().get(game.getHeroIndex()+1);
+		oldStep = guard.getStepCounter();
+		
+		while (!walksForward || !walksBackwards){
+			game.updateGame('a', true);
+			currentStep = guard.getStepCounter();
+			
+			if (oldStep < currentStep){
+				walksForward = true;
+			}else if(oldStep > currentStep){
+				walksBackwards = true;
+			}else{
+				fail("Suspicious guard stopped");
+			}
+			
+			oldStep = currentStep;
+		}
+	}
 
 }

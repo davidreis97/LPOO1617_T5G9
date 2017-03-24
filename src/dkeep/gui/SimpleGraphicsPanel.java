@@ -33,6 +33,7 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 	BufferedImage mace;
 	BufferedImage sleepingGuard;
 	BufferedImage armedHero;
+	BufferedImage knockedOutOgre;
 	
 	private boolean levelEditor;
 	
@@ -106,6 +107,12 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 	       } catch (IOException e) {
 	    	   System.out.println("Error loading armedHero");
 	       }  
+	       
+	       try {
+	    	   knockedOutOgre = ImageIO.read(new File("resources/crawl-tiles/player/base/troll_m_knocked_out.png"));
+	       } catch (IOException e) {
+	    	   System.out.println("Error loading knocked out ogre");
+	       }
 	}
 	
 	@Override
@@ -164,6 +171,10 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 		KeepMap map;
 		char [][] charMap;
 		switch(LevelEditor.getNextChar()){
+		case 'A':
+			Game.setHeroIndex(Game.getEntities().size());
+			Game.getEntities().add(new Hero(new Point((int) (e.getX()/31), (int) (e.getY()/31)), 'A', true));
+			break;
 		case 'H':
 			Game.setHeroIndex(Game.getEntities().size());
 			Game.getEntities().add(new Hero(new Point((int) (e.getX()/31), (int) (e.getY()/31)), 'H'));
@@ -269,9 +280,6 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 					case 'k':
 						g.drawImage(key, j*imagex, i*imagey, null);
 						break;
-					case 'K':
-						g.drawImage(key, j*imagex, i*imagey, null);
-						break;
 				};
 			}
 		}
@@ -283,7 +291,12 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 				g.drawImage(hero, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
 				break;
 			case 'K':
-				g.drawImage(hero, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
+				if(((Hero)e).isArmed()){
+					g.drawImage(hero, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
+					g.drawImage(armedHero, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
+				}else{
+					g.drawImage(hero, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
+				}
 				break;
 			case 'A':
 				g.drawImage(hero, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
@@ -300,6 +313,9 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 				break;
 			case '0':
 				g.drawImage(ogre, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
+				break;
+			case '8':
+				g.drawImage(knockedOutOgre, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
 				break;
 			}
 		}

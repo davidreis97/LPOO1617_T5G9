@@ -7,6 +7,7 @@ import java.awt.Point;
 import org.junit.Before;
 import org.junit.Test;
 
+import dkeep.logic.Entity;
 import dkeep.logic.Game;
 import dkeep.logic.KeepMap;
 
@@ -107,6 +108,5 @@ public class TestKeepGameLogic {
 			
 		}
 	}
-
 
 }

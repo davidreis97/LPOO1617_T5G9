@@ -25,7 +25,7 @@ public class Hero extends Entity {
 		
 		if(adjacent == -1) {
 			return false;
-		}
+		} 
 		
 		if(stage == 1) {
 			if(Game.getEntities().get(adjacent) instanceof Ogre) {
@@ -67,5 +67,10 @@ public class Hero extends Entity {
 
 	public void setArmed(boolean isArmed) {
 		this.isArmed = isArmed;
+		if (isArmed){
+			this.representation = 'A';
+		}else{
+			this.representation = 'H';
+		}
 	}
 }

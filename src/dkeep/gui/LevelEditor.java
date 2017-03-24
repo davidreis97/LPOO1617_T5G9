@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import dkeep.logic.Entity;
 import dkeep.logic.Game;
+import dkeep.logic.Hero;
 import dkeep.logic.KeepMap;
 import dkeep.logic.Map;
 
@@ -17,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.awt.event.ActionEvent;
+import javax.swing.JCheckBox;
 
 public class LevelEditor {
 
@@ -34,6 +36,7 @@ public class LevelEditor {
 	private static JButton btnClearAll;
 	private static JPanel panel;
 	private static JLabel lblEntities;
+	private static JCheckBox chckbxArmedHero;
 
 	/**
 	 * Launch the application.
@@ -73,7 +76,7 @@ public class LevelEditor {
 		frame.getContentPane().setLayout(null);
 		
 		lblOptions = new JLabel("Ready to edit");
-		lblOptions.setBounds(16, 354, 556, 16);
+		lblOptions.setBounds(16, 354, 209, 16);
 		frame.getContentPane().add(lblOptions);
 		
 		panel = new SimpleGraphicsPanel(true);
@@ -95,6 +98,30 @@ public class LevelEditor {
 		JLabel lblFinalize = new JLabel("Finalize:");
 		lblFinalize.setBounds(348, 315, 61, 16);
 		frame.getContentPane().add(lblFinalize);
+		
+		chckbxArmedHero = new JCheckBox("Armed Hero");
+		chckbxArmedHero.setBounds(224, 350, 112, 23);
+		frame.getContentPane().add(chckbxArmedHero);
+		chckbxArmedHero.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (Entity ent : Game.getEntities()){
+					if (ent.getRepresentation() == 'A' && !chckbxArmedHero.isSelected()){
+						((Hero) ent).setArmed(false);
+					}else if (ent.getRepresentation() == 'H' && chckbxArmedHero.isSelected()){
+						((Hero) ent).setArmed(true);
+					}
+				}
+				if(nextChar == 'A'){
+					setStatus("Current Entity: Hero");
+					nextChar = 'H';
+				}else if (nextChar == 'H'){
+					setStatus("Current Entity: Armed Hero");
+					nextChar = 'A';
+				}
+				panel.repaint();
+				panel.requestFocusInWindow();
+			}
+		});
 		
 		panel.repaint();
 		panel.requestFocusInWindow();
@@ -175,7 +202,7 @@ public class LevelEditor {
 		btnEmpty.setEnabled(false);
 		btnClearAllEntities.setEnabled(false);
 		btnClearAll.setEnabled(false);
-		lblOptions.setText("Current Entity: Mace (Please place the mace before doing anything else)");
+		lblOptions.setText("Current Entity: Mace");
 		nextChar = '*';
 	}
 	
@@ -212,8 +239,13 @@ public class LevelEditor {
 		btnHero = new JButton("Hero");
 		btnHero.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nextChar = 'H';
-				lblOptions.setText("Current Entity: Hero");
+				if(chckbxArmedHero.isSelected()){
+					nextChar = 'A';
+					lblOptions.setText("Current Entity: Armed Hero");
+				}else{
+					nextChar = 'H';
+					lblOptions.setText("Current Entity: Hero");
+				}
 				panel.requestFocusInWindow();
 			}
 		});
@@ -275,5 +307,4 @@ public class LevelEditor {
 		btnEmpty.setBounds(344, 187, 127, 29);
 		frame.getContentPane().add(btnEmpty);
 	}
-
 }

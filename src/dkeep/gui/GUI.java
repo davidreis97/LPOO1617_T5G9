@@ -207,9 +207,9 @@ public class GUI {
 			}
 		}
 		for(Entity x: Game.getEntities()){
-			if (x.getRepresentation() == 'H' && hero){
+			if ((x.getRepresentation() == 'H' || x.getRepresentation() == 'A') && hero){
 				return false;
-			}else if(x.getRepresentation() == 'H' && !hero){
+			}else if((x.getRepresentation() == 'H' || x.getRepresentation() == 'A') && !hero){
 				hero = true;
 			}else if (x.getRepresentation() == '0'){
 				ogre = true;

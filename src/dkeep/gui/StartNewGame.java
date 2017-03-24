@@ -8,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
 import dkeep.logic.Game;
 
@@ -17,6 +19,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JSlider;
 
 public class StartNewGame extends JDialog {
 
@@ -44,44 +47,43 @@ public class StartNewGame extends JDialog {
 		
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 402, 109);
+		setBounds(100, 100, 402, 126);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
 		JLabel lblOgreNumber = new JLabel("Number of Ogres:");
-		lblOgreNumber.setBounds(20, 17, 122, 16);
+		lblOgreNumber.setBounds(20, 58, 122, 16);
 		contentPanel.add(lblOgreNumber);
 		
 		JLabel lblGuardType = new JLabel("Guard Type:");
-		lblGuardType.setBounds(20, 45, 105, 16);
+		lblGuardType.setBounds(20, 23, 105, 16);
 		contentPanel.add(lblGuardType);
 		
-		SpinnerNumberModel model = new SpinnerNumberModel(1, 1, 10, 1);  
-		JSpinner spinner = new JSpinner(model);
-		spinner.setBounds(135, 12, 61, 26);
-		contentPanel.add(spinner);
+		JSlider slider = new JSlider(1,5,1);
+		slider.setBounds(137, 53, 113, 44);
+		slider.setMajorTickSpacing(1);
+		slider.setPaintLabels(true);
+		slider.setMinorTickSpacing(1);
+		slider.setSnapToTicks(true);
+		slider.setPaintTicks(true);
+		contentPanel.add(slider);
 		
 		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<String>(guardtypes);
-		
 		JComboBox comboBox = new JComboBox(comboModel);
-		comboBox.setBounds(96, 41, 155, 27);
+		comboBox.setBounds(100, 19, 172, 27);
 		contentPanel.add(comboBox);
 		
 		JButton btnStart = new JButton("Start");
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try{
-					new Game("Dungeon",(String) comboBox.getSelectedItem(),(int) spinner.getValue());
-					GUI.updateGUIStatus();
-					dispose();
-				}catch (Exception excep){
-					spinner.setValue("NaN");
-				}
+				new Game("Dungeon",(String) comboBox.getSelectedItem(), slider.getValue());
+				GUI.updateGUIStatus();
+				dispose();
 			}
 		});
-		btnStart.setBounds(263, 12, 117, 29);
+		btnStart.setBounds(279, 18, 117, 29);
 		contentPanel.add(btnStart);
 		
 		JButton btnCancel = new JButton("Cancel");
@@ -91,7 +93,7 @@ public class StartNewGame extends JDialog {
 				dispose();
 			}
 		});
-		btnCancel.setBounds(263, 40, 117, 29);
+		btnCancel.setBounds(279, 53, 117, 29);
 		contentPanel.add(btnCancel);
 	}
 }
