@@ -3,10 +3,20 @@
 
 
 ## TODO
-* [ ] - Improve code to at least 7/10 on bettercodehub
-* [x] - Add missing sprites (hero with weapon, guard sleeping, maybe more...)
+* [ ] - Improve code to at least 7 / 10 on bettercodehub <---- Refactor GUI?
 * [ ] - Check coverage of unit testing and mutations in dkeep.game (at least 80% and at least 60% respectively)
-* [ ] - Multiple Ogres (Ogres can overlap, Clubs can't)
-* [ ] - Entity collision (Hero can't move into Ogre, Club spawning inside Hero is loss)
-* [ ] - Javadoc documentation
 * [ ] - Generate HTML documentation
+
+
+* [ ] - Multiple entity collisions in one move (Hero stunning multiple Ogres)
+* [ ] - Club can stomp Hero (if placed on same location as Hero, currently Game doesn't allow this)
+* [ ] - Entity collision (All done except Ogre)
+* [ ] - Javadoc documentation
+* [ ] - Ask user type of guard and number of ogres in CLI mode
+* [ ] - Change Guard names, Normal to Rookie and Drunk to Drunken, to match Iteration 2 requirements
+* [ ] - Random coords for Ogres
+
+
+EXTRAS
+* [ ] - Console play by play
+* [ ] - https://www.gamedev.net/resources/_/technical/game-programming/introduction-to-isometric-engines-r744
