@@ -51,7 +51,7 @@ public class GUI {
 	 * Create the application.
 	 */
 	public GUI() {
-		new Game("Dungeon","Normal",0);
+		new Game("Dungeon", "Normal", 0);
 		Game.setState("You can start a new game");
 		initialize();
 	}

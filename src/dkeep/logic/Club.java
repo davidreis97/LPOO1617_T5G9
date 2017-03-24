@@ -15,16 +15,24 @@ public class Club extends Entity {
 		
 		switch(nextMove) {
 		case 0:
-			this.coords = Game.move(this.coords, 'w', "Club", index);
+			if(Game.entityCol(index, 'w') == -1) {
+				this.coords = Game.move(this.coords, 'w', "Club", index);
+			}
 			break;
 		case 1:
-			this.coords = Game.move(this.coords, 's', "Club", index);
+			if(Game.entityCol(index, 's') == -1) {
+				this.coords = Game.move(this.coords, 's', "Club", index);
+			}
 			break;
 		case 2:
-			this.coords = Game.move(this.coords, 'a', "Club", index);
+			if(Game.entityCol(index, 'a') == -1) {
+				this.coords = Game.move(this.coords, 'a', "Club", index);
+			}
 			break;
 		case 3:
-			this.coords = Game.move(this.coords, 'd', "Club", index);
+			if(Game.entityCol(index, 'd') == -1) {
+				this.coords = Game.move(this.coords, 'd', "Club", index);
+			}
 			break;
 		}
 	}

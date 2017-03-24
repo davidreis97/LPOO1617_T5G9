@@ -83,11 +83,34 @@ public class Game {
 		} else return -1;
 	}
 	
+	public static int entityCol(int index, char direction) {
+		
+		Point testCoords = calcNewCoords(entities.get(index).coords, direction);
+		
+		boolean found = false;
+		
+		int i = 0;
+		for(i = 0; i < entities.size(); i++) {
+			if(index != i) {
+				if(entities.get(i).coords.equals(testCoords)) {
+					found = true;
+					break;
+				}
+			}
+		}
+		
+		if(found) {
+			return i;
+		} else return -1;
+	}
+	
 	public static void updateGame(char userInput, boolean debugging) {
 
-		entities.get(heroIndex).coords = move(entities.get(heroIndex).coords, userInput, "Hero", heroIndex);
-
 		Hero hero = (Hero) entities.get(heroIndex);
+		
+		if(entityCol(heroIndex, userInput) == -1) {
+			hero.coords = move(hero.coords, userInput, "Hero", heroIndex);
+		}
 		
 		if(hero.doCollision(heroIndex, 1)) {
 			state = "Lose";
