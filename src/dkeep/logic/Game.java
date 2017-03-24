@@ -11,7 +11,7 @@ public class Game {
 	private static int numOgres;
 	
 	public Game(String startingMap, String guardtype, int numOgres) {
-		this.setNumOgres(numOgres);
+		setNumOgres(numOgres);
 		changeMap(startingMap, guardtype); //Starting map
 	}
 
@@ -47,8 +47,9 @@ public class Game {
 		} else return coords;
 	}
 	
-	//Checks adjacency (no diagonals) to Guard, Ogre and Ogre's club
-	private static boolean isAdjacent(int index) {
+	//TODO return int array
+	//Returns index of adjacent entities to "index" entity
+	public static int isAdjacentTo(int index) {
 		
 		Point checkCoords = entities.get(index).coords;
 		Point adj_1 = calcNewCoords(checkCoords, 'w');
@@ -56,28 +57,39 @@ public class Game {
 		Point adj_3 = calcNewCoords(checkCoords, 's');
 		Point adj_4 = calcNewCoords(checkCoords, 'd');
 		
-		for(int i = 0; i < entities.size(); i++) {
+		boolean found = false;
+		
+		int i = 0;
+		for(i = 0; i < entities.size(); i++) {
 			if(index != i) {
 				if(entities.get(i).coords.equals(adj_1)) {
-					return true;
+					found = true;
+					break;
 				} else if(entities.get(i).coords.equals(adj_2)) {
-					return true;
+					found = true;
+					break;
 				} else if(entities.get(i).coords.equals(adj_3)) {
-					return true;
+					found = true;
+					break;
 				} else if(entities.get(i).coords.equals(adj_4)) {
-					return true;
+					found = true;
+					break;
 				}
 			}
 		}
 		
-		return false;
+		if(found) {
+			return i;
+		} else return -1;
 	}
 	
 	public static void updateGame(char userInput, boolean debugging) {
 
 		entities.get(heroIndex).coords = move(entities.get(heroIndex).coords, userInput, "Hero", heroIndex);
 
-		if(isAdjacent(heroIndex)) {
+		Hero hero = (Hero) entities.get(heroIndex);
+		
+		if(hero.doCollision(heroIndex, 1)) {
 			state = "Lose";
 			return;
 		}
@@ -90,13 +102,13 @@ public class Game {
 			}
 		}
 		
-		if(isAdjacent(heroIndex)) {
+		if(hero.doCollision(heroIndex, 2)) {
 			state = "Lose";
 			return;
 		}
 	}
 	
-	public static void changeMap(String mapType, String guardtype) { //ASK adding new maps considered extension or modification?
+	public static void changeMap(String mapType, String guardtype) { //TODO try to remove changemap from Game.java
 		
 		switch(mapType) {
 		case "Dungeon":

@@ -19,7 +19,7 @@ public class DungeonMap implements Map {
 			{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}};
 	
 	//Copies map so the original isn't modified
-	public char[][] getMap() { //ASK how to make immutable
+	public char[][] getMap() {
 		
 		char[][] tempMap = new char[dungeonMap.length][dungeonMap.length]; //CAUTION assumes map is square
 		

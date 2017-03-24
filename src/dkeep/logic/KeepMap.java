@@ -19,7 +19,7 @@ public class KeepMap implements Map {
 			{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}};
 
 	//Copies map so the original isn't modified
-	public char[][] getMap() { //ASK how to make immutable
+	public char[][] getMap() {
 		
 		char[][] tempMap = new char[keepMap.length][keepMap.length]; //CAUTION assumes map is square
 		
@@ -73,7 +73,7 @@ public class KeepMap implements Map {
 	public void initMap(String guardtype) {
 		ArrayList<Entity> entities = Game.getEntities();
 		entities.clear();
-		entities.add(new Hero(new Point(1, 8), 'H'));
+		entities.add(new Hero(new Point(1, 8), 'A', true));
 		for(int i = 0; i < Game.getNumOgres(); i++){
 			entities.add(new Ogre(new Point(4, 1), '0'));
 			entities.add(new Club(new Point(4, 2), '*'));

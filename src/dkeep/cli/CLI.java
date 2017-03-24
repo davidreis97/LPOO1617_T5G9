@@ -30,7 +30,7 @@ public class CLI {
 	//Entry point and game loop, processes input until game is over
 	public static void main(String[] args) {
 
-		new Game("Dungeon","Normal",1); //ASK quality?
+		new Game("Dungeon", "Normal", 1);
 		
 		Scanner keyboard = new Scanner(System.in);
 		String kbdInput;
