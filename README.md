@@ -14,6 +14,7 @@
 * [ ] - Ask user type of guard and number of ogres in CLI mode
 * [ ] - Change Guard names, Normal to Rookie and Drunk to Drunken, to match Iteration 2 requirements
 * [ ] - Random coords for Ogres
+
 EXTRAS
 * [ ] - Console play by play
 * [ ] - https://www.gamedev.net/resources/_/technical/game-programming/introduction-to-isometric-engines-r744
