@@ -3,11 +3,10 @@
 
 
 ## TODO
-* [ ] - Improve code to atleast 7/10 on bettercodehub
-* [ ] - Add weapon to hero
+* [ ] - Improve code to at least 7/10 on bettercodehub
 * [x] - Add missing sprites (hero with weapon, guard sleeping, maybe more...)
-* [ ] - Add javadoc documentation and generate html documentation
-* [ ] - Check coverage of unit testing and mutations (at least 80% of dkeep.game code and at least 60% of mutations, also on dkeep.game)
-
-
-
+* [ ] - Check coverage of unit testing and mutations in dkeep.game (at least 80% and at least 60% respectively)
+* [ ] - Multiple Ogres (Ogres can overlap, Clubs can't)
+* [ ] - Entity collision (Hero can't move into Ogre, Club spawning inside Hero is loss)
+* [ ] - Javadoc documentation
+* [ ] - Generate HTML documentation
