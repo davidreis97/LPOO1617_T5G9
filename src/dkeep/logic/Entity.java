@@ -1,8 +1,9 @@
 package dkeep.logic;
 
 import java.awt.Point;
+import java.io.Serializable;
 
-public abstract class Entity {
+public abstract class Entity implements Serializable{
 	protected Point coords;
 	protected char representation;
 	

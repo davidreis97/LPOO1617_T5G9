@@ -2,7 +2,7 @@ package dkeep.logic;
 
 import java.awt.Point;
 
-public interface Map {
+public interface Map{
 	
 	public char[][] getMap();
 

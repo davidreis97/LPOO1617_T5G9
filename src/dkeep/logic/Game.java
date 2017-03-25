@@ -1,16 +1,19 @@
 package dkeep.logic;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Game {
+public class Game{
 	private static Map currMap;
 	private static ArrayList<Entity> entities = new ArrayList<Entity>();
 	private static String state; //TODO replace state with enums
 	private static int heroIndex;
 	private static int numOgres;
+	private static String guardType;
 	
 	public Game(String startingMap, String guardtype, int numOgres) {
+		setGuardType(guardtype);
 		setNumOgres(numOgres);
 		changeMap(startingMap, guardtype); //Starting map
 	}
@@ -189,6 +192,18 @@ public class Game {
 
 	public static void setNumOgres(int numOgres) {
 		Game.numOgres = numOgres;
+	}
+	
+	public static void saveState(String path){
+		
+	}
+
+	public static String getGuardType() {
+		return guardType;
+	}
+
+	public static void setGuardType(String guardType) {
+		Game.guardType = guardType;
 	}
 	
 }

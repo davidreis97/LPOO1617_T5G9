@@ -1,9 +1,10 @@
 package dkeep.logic;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class KeepMap implements Map {
+public class KeepMap implements Map,Serializable {
 	
 	private boolean heroHasKey = false;
 	private char keepMap[][] =

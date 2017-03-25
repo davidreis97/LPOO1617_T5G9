@@ -16,7 +16,7 @@ import dkeep.logic.*;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
+public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyListener {
 	
 	int imagex = 32, imagey = 32;
 	
@@ -40,7 +40,6 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 		   
 		   if (this.levelEditor){
 			   addMouseListener(this);
-			   addMouseMotionListener(this);
 		   }else{
 			   addKeyListener(this);
 		   }
@@ -112,11 +111,6 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 	       }
 	}
 	
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -142,18 +136,6 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -316,6 +298,13 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, MouseM
 				break;
 			}
 		}
+	}
+
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

@@ -1,9 +1,10 @@
 package dkeep.logic;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class DungeonMap implements Map {
+public class DungeonMap implements Map, Serializable {
 	
 	
 	private char dungeonMap[][] =

@@ -7,9 +7,18 @@ import javax.swing.JLabel;
 
 import dkeep.logic.Entity;
 import dkeep.logic.Game;
+import dkeep.logic.GameSaveHelper;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
@@ -23,6 +32,8 @@ public class GUI {
 	private static JButton btnRight;
 	private static JLabel lblStatus;
 	private static JPanel panel;
+	private static JButton btnSaveGame;
+	private static final JFileChooser fc = new JFileChooser();
 	
 
 	/**
@@ -91,6 +102,64 @@ public class GUI {
 		});
 		btnLevelEditor.setBounds(382, 246, 117, 29);
 		frame.getContentPane().add(btnLevelEditor);
+		
+		btnSaveGame = new JButton("Save Game");
+		btnSaveGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int returnVal = fc.showSaveDialog(frame);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					try {
+						File file = fc.getSelectedFile();
+						FileOutputStream fileOut = new FileOutputStream(file);
+						ObjectOutputStream out = new ObjectOutputStream(fileOut);
+						GameSaveHelper gsh = new GameSaveHelper();
+						gsh.gameToObject();
+						out.writeObject(gsh);
+						out.close();
+						fileOut.close();
+						lblStatus.setText("Game saved");
+					}catch(IOException i) {
+						i.printStackTrace();
+						lblStatus.setText("Error saving game");
+					}
+				}
+				updateGUIStatus();
+			}
+		});
+		btnSaveGame.setBounds(380, 63, 119, 29);
+		frame.getContentPane().add(btnSaveGame);
+		
+		JButton btnLoadGame = new JButton("Load Game");
+		btnLoadGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int returnVal = fc.showOpenDialog(frame);
+				
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+		            File file = fc.getSelectedFile();
+		            try {
+		                FileInputStream fileIn = new FileInputStream(file);
+		                ObjectInputStream in = new ObjectInputStream(fileIn);
+		                GameSaveHelper gsh = new GameSaveHelper();
+		                gsh = (GameSaveHelper) in.readObject();
+		                gsh.objectToGame();
+		                in.close();
+		                fileIn.close();
+		                lblStatus.setText("Game loaded");
+		             }catch(IOException i) {
+		                i.printStackTrace();
+		            	lblStatus.setText("Error loading game");
+		             }catch(ClassNotFoundException c) {
+		            	lblStatus.setText("Game class not found");
+		                c.printStackTrace();
+		             }
+		        } else {
+		            lblStatus.setText("Load Game cancelled by user.");
+		        }
+				updateGUIStatus();
+			}
+		});
+		btnLoadGame.setBounds(380, 90, 119, 29);
+		frame.getContentPane().add(btnLoadGame);
 		panel.repaint();
 		
 		
@@ -156,11 +225,13 @@ public class GUI {
 			btnUp.setEnabled(false);
 			btnLeft.setEnabled(false);
 			btnRight.setEnabled(false);
+			btnSaveGame.setEnabled(false);
 		}else{
 			btnDown.setEnabled(true);
 			btnUp.setEnabled(true);
 			btnLeft.setEnabled(true);
 			btnRight.setEnabled(true);
+			btnSaveGame.setEnabled(true);
 		}
 		panel.repaint();
 		panel.requestFocusInWindow();

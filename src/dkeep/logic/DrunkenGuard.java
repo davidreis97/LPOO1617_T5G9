@@ -3,7 +3,7 @@ package dkeep.logic;
 import java.awt.Point;
 import java.util.Random;
 
-public class DrunkenGuard extends Guard {
+public class DrunkenGuard extends Guard { 
 	
 	private boolean isReversed = false;
 	private boolean isSleeping = false;
