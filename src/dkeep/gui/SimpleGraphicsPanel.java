@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -121,16 +120,16 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 		}
 		switch(e.getKeyCode()){
 		case KeyEvent.VK_UP:
-			Game.updateGame('w', false);
+			Game.updateGame('w', true);
 			break;
 		case KeyEvent.VK_DOWN:
-			Game.updateGame('s', false);
+			Game.updateGame('s', true);
 			break;
 		case KeyEvent.VK_LEFT:
-			Game.updateGame('a', false);
+			Game.updateGame('a', true);
 			break;
 		case KeyEvent.VK_RIGHT:
-			Game.updateGame('d', false);
+			Game.updateGame('d', true);
 			break;
 		};
 		GUI.updateGUIStatus();
@@ -138,8 +137,7 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -214,20 +212,17 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+
 	}
 	
 	@Override
@@ -247,9 +242,8 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 		printDynamicObjects(g);
 	}
 
-
+	//Prints map with dynamic objects (entities)
 	private void printDynamicObjects(Graphics g) {
-		//Prints map with dynamic objects (entities)
 
 		for(Entity e : Game.getEntities()) {
 			switch(e.getRepresentation()){
@@ -287,7 +281,6 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 		}
 	}
 
-
 	private void printStaticObjects(Graphics g, char[][] mapCopy) {
 		for(int i = 0; i< mapCopy.length; i++) {
 			for(int j = 0; j < mapCopy.length; j++) {
@@ -315,8 +308,6 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 	
+	}
 }
