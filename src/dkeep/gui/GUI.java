@@ -83,7 +83,10 @@ public class GUI {
 		panel.setBounds(16, 22, 320, 320);
 		frame.getContentPane().add(panel);
 		
-		initializeDirectionalButtons();
+		initializeDownButton();
+		initializeUpButton();
+		initializeLeftButton();
+		initializeRightButton();
 		
 		initializeSaveButton();		
 		initializeLoadButton();
@@ -183,43 +186,10 @@ public class GUI {
 		frame.getContentPane().add(btnLoadGame);
 	}
 
-	private void initializeDirectionalButtons() {
-		btnUp = new JButton("Up");
-		btnUp.setBounds(396, 136, 88, 29);
-		frame.getContentPane().add(btnUp);
-		
-		btnLeft = new JButton("Left");
-		btnLeft.setBounds(360, 162, 83, 29);
-		frame.getContentPane().add(btnLeft);
-		
-		btnRight = new JButton("Right");
-		btnRight.setBounds(436, 162, 88, 29);
-		frame.getContentPane().add(btnRight);
-		
+	private void initializeDownButton() {
 		btnDown = new JButton("Down");
 		btnDown.setBounds(396, 190, 88, 29);
 		frame.getContentPane().add(btnDown);
-		
-		btnRight.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) {
-				Game.updateGame('d', true);
-				updateGUIStatus();
-			}
-		});
-		
-		btnUp.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Game.updateGame('w', true);
-				updateGUIStatus();
-			}
-		});
-		
-		btnLeft.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Game.updateGame('a', true);
-				updateGUIStatus();
-			}
-		});
 		
 		btnDown.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -228,7 +198,43 @@ public class GUI {
 			}
 		});
 	}
+	
+	private void initializeUpButton(){
+		btnUp = new JButton("Up");
+		btnUp.setBounds(396, 136, 88, 29);
+		btnUp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Game.updateGame('w', true);
+				updateGUIStatus();
+			}
+		});
+		frame.getContentPane().add(btnUp);
+	}
 
+	private void initializeLeftButton(){
+		btnLeft = new JButton("Left");
+		btnLeft.setBounds(360, 162, 83, 29);
+		frame.getContentPane().add(btnLeft);
+		btnLeft.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Game.updateGame('a', true);
+				updateGUIStatus();
+			}
+		});
+	}
+	
+	private void initializeRightButton(){
+		btnRight = new JButton("Right");
+		btnRight.setBounds(436, 162, 88, 29);
+		frame.getContentPane().add(btnRight);
+		btnRight.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				Game.updateGame('d', true);
+				updateGUIStatus();
+			}
+		});
+	}
+	
 	protected static void updateGUIStatus() {
 		lblStatus.setText(Game.getState());
 		if (!Game.getState().equals("Playing")){

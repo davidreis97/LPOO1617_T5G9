@@ -44,7 +44,9 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 		   }
 	       
 		   
-		   loadEntityTextures();
+		   loadOgreTextures();
+		   loadGuardTextures();
+		   loadHeroTextures();
 		   
 		   loadMapTextures();
 	}
@@ -74,12 +76,7 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 	}
 
 
-	private void loadEntityTextures() {
-		try {
-			hero = ImageIO.read(new File("resources/centaur_brown_f.png"));
-		} catch (IOException e) {
-			System.out.println("Error loading hero");
-		}
+	private void loadOgreTextures() {
 		try {
 			ogre = ImageIO.read(new File("resources/troll_m.png"));
 		} catch (IOException e) {
@@ -91,20 +88,31 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 			System.out.println("Error loading mace");
 		}
 		try {
-			sleepingGuard = ImageIO.read(new File("resources/kenku_winged_m_sleeping.png"));
+			knockedOutOgre = ImageIO.read(new File("resources/troll_m_knocked_out.png"));
 		} catch (IOException e) {
-			System.out.println("Error loading sleepingGuard");
+			System.out.println("Error loading knocked out ogre");
+		}
+	}
+	
+	private void loadHeroTextures(){
+		try {
+			hero = ImageIO.read(new File("resources/centaur_brown_f.png"));
+		} catch (IOException e) {
+			System.out.println("Error loading hero");
 		}
 		try {
 			armedHero = ImageIO.read(new File("resources/two_handed_sword.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading armedHero");
-		}  
+		} 
+	}
+	
+	private void loadGuardTextures(){
 		try {
-			knockedOutOgre = ImageIO.read(new File("resources/troll_m_knocked_out.png"));
+			sleepingGuard = ImageIO.read(new File("resources/kenku_winged_m_sleeping.png"));
 		} catch (IOException e) {
-			System.out.println("Error loading knocked out ogre");
-		}
+			System.out.println("Error loading sleepingGuard");
+		} 
 		try {
 			guard = ImageIO.read(new File("resources/kenku_winged_m.png"));
 		} catch (IOException e) {
@@ -252,12 +260,13 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 
 		printStaticObjects(g,mapCopy);
 		
-		printDynamicObjects(g);
+		printHeroObjects(g);
+		printGuardObjects(g);
+		printOgreObjects(g);
 	}
 
 	//Prints map with dynamic objects (entities)
-	private void printDynamicObjects(Graphics g) {
-
+	private void printHeroObjects(Graphics g) {
 		for(Entity e : Game.getEntities()) {
 			switch(e.getRepresentation()){
 			case 'H':
@@ -275,12 +284,26 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 				g.drawImage(hero, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
 				g.drawImage(armedHero, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
 				break;
+			}
+		}
+	}
+	
+	private void printGuardObjects(Graphics g){
+		for(Entity e : Game.getEntities()){
+			switch(e.getRepresentation()){
 			case 'G':
 				g.drawImage(guard, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
 				break;
 			case 'g':
 				g.drawImage(sleepingGuard, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
 				break;
+			}
+		}
+	}
+	
+	private void printOgreObjects(Graphics g){
+		for(Entity e : Game.getEntities()){
+			switch(e.getRepresentation()){
 			case '*':
 				g.drawImage(mace, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
 				break;
