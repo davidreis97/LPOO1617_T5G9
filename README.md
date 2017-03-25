@@ -9,9 +9,6 @@
 * [ ] - Level editor - user can specify width/height of Keep map (current implementation forces square maps)
 * [ ] - "Allow the user to save/load a game state into/from a file. Explore the Java I/O API, specially the Serialization part" 
 ---------------------------------------------------------------------------------------------------------------
-* [ ] - Multiple entity collisions in one move (Hero stunning multiple Ogres)
-* [ ] - Club can stomp Hero (if placed on same location as Hero, currently Game doesn't allow this)
-* [ ] - Entity collision (All done except Ogre)
 * [ ] - dkeep.logic Javadoc documentation
 * [ ] - Random coords for Ogres
 * [ ] - Partition CLI.java so BCH doesn't complain
