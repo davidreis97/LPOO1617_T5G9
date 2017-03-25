@@ -189,7 +189,7 @@ public class GUI {
 		btnDown.setBounds(396, 190, 88, 29);
 		frame.getContentPane().add(btnDown);
 		
-		btnRight.addActionListener(new ActionListener() {
+		btnRight.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
 				Game.updateGame('d', false);
 				updateGUIStatus();

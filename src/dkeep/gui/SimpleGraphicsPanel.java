@@ -45,67 +45,67 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 		   }
 	       
 	       try {
-	    	   hero = ImageIO.read(new File("resources/crawl-tiles/player/base/centaur_brown_f.png"));
+	    	   hero = ImageIO.read(new File("resources/centaur_brown_f.png"));
 	       } catch (IOException e) {
 	    	   System.out.println("Error loading hero");
 	       }
 	       
 	       try {
-	    	   wall = ImageIO.read(new File("resources/crawl-tiles/dc-dngn/wall/brick_dark2.png"));
+	    	   wall = ImageIO.read(new File("resources/brick_dark2.png"));
 	       } catch (IOException e) {
 	    	   System.out.println("Error loading wall");
 	       }
 	       
 	       try {
-	    	   guard = ImageIO.read(new File("resources/crawl-tiles/player/base/kenku_winged_m.png"));
+	    	   guard = ImageIO.read(new File("resources/kenku_winged_m.png"));
 	       } catch (IOException e) {
 	    	   System.out.println("Error loading guard");
 	       }
 	       
 	       try {
-	    	   openDoor = ImageIO.read(new File("resources/crawl-tiles/dc-dngn/dngn_open_door.png"));
+	    	   openDoor = ImageIO.read(new File("resources/dngn_open_door.png"));
 	       } catch (IOException e) {
 	    	   System.out.println("Error loading open door");
 	       }
 	       
 	       try {
-	    	   closedDoor = ImageIO.read(new File("resources/crawl-tiles/dc-dngn/dngn_closed_door.png"));
+	    	   closedDoor = ImageIO.read(new File("resources/dngn_closed_door.png"));
 	       } catch (IOException e) {
 	    	   System.out.println("Error loading closed door");
 	       }
 	       
 	       try {
-	    	   key = ImageIO.read(new File("resources/crawl-tiles/UNUSED/other/key.png"));
+	    	   key = ImageIO.read(new File("resources/key.png"));
 	       } catch (IOException e) {
 	    	   System.out.println("Error loading key");
 	       }
 	       
 	       try {
-	    	   ogre = ImageIO.read(new File("resources/crawl-tiles/player/base/troll_m.png"));
+	    	   ogre = ImageIO.read(new File("resources/troll_m.png"));
 	       } catch (IOException e) {
 	    	   System.out.println("Error loading ogre");
 	       }
 	       
 	       try {
-	    	   mace = ImageIO.read(new File("resources/crawl-tiles/item/weapon/giant_spiked_club.png"));
+	    	   mace = ImageIO.read(new File("resources/giant_spiked_club.png"));
 	       } catch (IOException e) {
 	    	   System.out.println("Error loading mace");
 	       }
 	       
 	       try {
-	    	   sleepingGuard = ImageIO.read(new File("resources/crawl-tiles/player/base/kenku_winged_m_sleeping.png"));
+	    	   sleepingGuard = ImageIO.read(new File("resources/kenku_winged_m_sleeping.png"));
 	       } catch (IOException e) {
 	    	   System.out.println("Error loading sleepingGuard");
 	       }
 	       
 	       try {
-	    	   armedHero = ImageIO.read(new File("resources/crawl-tiles/UNUSED/weapons/two_handed_sword.png"));
+	    	   armedHero = ImageIO.read(new File("resources/two_handed_sword.png"));
 	       } catch (IOException e) {
 	    	   System.out.println("Error loading armedHero");
 	       }  
 	       
 	       try {
-	    	   knockedOutOgre = ImageIO.read(new File("resources/crawl-tiles/player/base/troll_m_knocked_out.png"));
+	    	   knockedOutOgre = ImageIO.read(new File("resources/troll_m_knocked_out.png"));
 	       } catch (IOException e) {
 	    	   System.out.println("Error loading knocked out ogre");
 	       }
