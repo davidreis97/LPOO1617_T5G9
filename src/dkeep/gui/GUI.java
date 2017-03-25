@@ -33,6 +33,10 @@ public class GUI {
 	private static JLabel lblStatus;
 	private static JPanel panel;
 	private static JButton btnSaveGame;
+	private static JButton btnLoadGame;
+	private static JButton btnExit;
+	private static JButton btnStartNewGame;
+	private static JButton btnLevelEditor;
 	private static final JFileChooser fc = new JFileChooser();
 	
 
@@ -75,26 +79,21 @@ public class GUI {
 		lblStatus.setBounds(16, 354, 390, 16);
 		frame.getContentPane().add(lblStatus);
 		
-		JButton btnStartNewGame = new JButton("Start New Game");
-		btnStartNewGame.setBounds(370, 22, 141, 29);
-		frame.getContentPane().add(btnStartNewGame);
-		
-		initializeDirectionalButtons();
-		
-		JButton btnExit = new JButton("Exit");
-		btnExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		btnExit.setBounds(382, 307, 117, 29);
-		frame.getContentPane().add(btnExit);
-		
 		panel = new SimpleGraphicsPanel(false);
 		panel.setBounds(16, 22, 320, 320);
 		frame.getContentPane().add(panel);
 		
-		JButton btnLevelEditor = new JButton("Level Editor");
+		initializeDirectionalButtons();
+		
+		initializeSaveLoadButtons();		
+		
+		initializeStartExitEditorButtons();
+		
+		updateGUIStatus();
+	}
+	
+	private void initializeStartExitEditorButtons() {
+		btnLevelEditor = new JButton("Level Editor");
 		btnLevelEditor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LevelEditor.start();
@@ -103,6 +102,26 @@ public class GUI {
 		btnLevelEditor.setBounds(382, 246, 117, 29);
 		frame.getContentPane().add(btnLevelEditor);
 		
+		btnStartNewGame = new JButton("Start New Game");
+		btnStartNewGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StartNewGame.launch();
+			}
+		});
+		btnStartNewGame.setBounds(370, 22, 141, 29);
+		frame.getContentPane().add(btnStartNewGame);
+		
+		btnExit = new JButton("Exit");
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		btnExit.setBounds(382, 307, 117, 29);
+		frame.getContentPane().add(btnExit);
+	}
+
+	private void initializeSaveLoadButtons() {
 		btnSaveGame = new JButton("Save Game");
 		btnSaveGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -117,19 +136,19 @@ public class GUI {
 						out.writeObject(gsh);
 						out.close();
 						fileOut.close();
+						updateGUIStatus();
 						lblStatus.setText("Game saved");
 					}catch(IOException i) {
 						i.printStackTrace();
-						lblStatus.setText("Error saving game");
+						lblStatus.setText("Error saving game" + i.getMessage());
 					}
 				}
-				updateGUIStatus();
 			}
 		});
 		btnSaveGame.setBounds(380, 63, 119, 29);
 		frame.getContentPane().add(btnSaveGame);
 		
-		JButton btnLoadGame = new JButton("Load Game");
+		btnLoadGame = new JButton("Load Game");
 		btnLoadGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int returnVal = fc.showOpenDialog(frame);
@@ -144,34 +163,23 @@ public class GUI {
 		                gsh.objectToGame();
 		                in.close();
 		                fileIn.close();
+		                updateGUIStatus();
 		                lblStatus.setText("Game loaded");
 		             }catch(IOException i) {
 		                i.printStackTrace();
-		            	lblStatus.setText("Error loading game");
+		                lblStatus.setText("Error loading game: " + i.getMessage());
 		             }catch(ClassNotFoundException c) {
 		            	lblStatus.setText("Game class not found");
 		                c.printStackTrace();
+		                lblStatus.setText("Error loading game: " + c.getMessage());
 		             }
-		        } else {
-		            lblStatus.setText("Load Game cancelled by user.");
 		        }
-				updateGUIStatus();
 			}
 		});
 		btnLoadGame.setBounds(380, 90, 119, 29);
 		frame.getContentPane().add(btnLoadGame);
-		panel.repaint();
-		
-		
-		btnStartNewGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				StartNewGame.launch();
-			}
-		});
-		
-		updateGUIStatus();
 	}
-	
+
 	private void initializeDirectionalButtons() {
 		btnUp = new JButton("Up");
 		btnUp.setBounds(396, 136, 88, 29);

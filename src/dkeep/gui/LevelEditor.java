@@ -86,8 +86,10 @@ public class LevelEditor {
 		lblEntities.setBounds(348, 22, 100, 16);
 		frame.getContentPane().add(lblEntities);
 		
-		initializePlacementButtons();
+		initializePlacementMapButtons();
 		
+		initializePlacementEntityButtons();
+
 		initializeOptionsButtons();
 		
 		JLabel lblDestructiveOptions = new JLabel("Options:");
@@ -234,34 +236,7 @@ public class LevelEditor {
 		Game.setMapObject(map);
 	}
 	
-	private static void initializePlacementButtons(){
-		btnHero = new JButton("Hero");
-		btnHero.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(chckbxArmedHero.isSelected()){
-					nextChar = 'A';
-					lblOptions.setText("Current Entity: Armed Hero");
-				}else{
-					nextChar = 'H';
-					lblOptions.setText("Current Entity: Hero");
-				}
-				panel.requestFocusInWindow();
-			}
-		});
-		btnHero.setBounds(344, 45, 127, 29);
-		frame.getContentPane().add(btnHero);
-		
-		btnOgre = new JButton("Ogre");
-		btnOgre.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				nextChar = '0';
-				lblOptions.setText("Current Entity: Ogre");
-				panel.requestFocusInWindow();
-			}
-		});
-		btnOgre.setBounds(344, 159, 127, 29);
-		frame.getContentPane().add(btnOgre);
-		
+	private static void initializePlacementMapButtons(){
 		btnKey = new JButton("Key");
 		btnKey.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -305,5 +280,34 @@ public class LevelEditor {
 		});
 		btnEmpty.setBounds(344, 187, 127, 29);
 		frame.getContentPane().add(btnEmpty);
+	}
+	
+	private static void initializePlacementEntityButtons(){
+		btnHero = new JButton("Hero");
+		btnHero.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(chckbxArmedHero.isSelected()){
+					nextChar = 'A';
+					lblOptions.setText("Current Entity: Armed Hero");
+				}else{
+					nextChar = 'H';
+					lblOptions.setText("Current Entity: Hero");
+				}
+				panel.requestFocusInWindow();
+			}
+		});
+		btnHero.setBounds(344, 45, 127, 29);
+		frame.getContentPane().add(btnHero);
+		
+		btnOgre = new JButton("Ogre");
+		btnOgre.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nextChar = '0';
+				lblOptions.setText("Current Entity: Ogre");
+				panel.requestFocusInWindow();
+			}
+		});
+		btnOgre.setBounds(344, 159, 127, 29);
+		frame.getContentPane().add(btnOgre);
 	}
 }

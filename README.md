@@ -7,7 +7,7 @@
 * [ ] - Generate HTML documentation
 * [x] - Check TODO Auto-generated method stub in SimpleGraphicsPanel.java (unused functions?)
 * [ ] - Level editor - user can specify width/height of Keep map (current implementation forces square maps)
-* [x] - "Allow the user to save/load a game state into/from a file. Explore the Java I/O API, specially the Serialization part" 
+* [x] - "Allow the user to save/load a game state into/from a file. Explore the Java I/O API, specially the Serialization part"
 ---------------------------------------------------------------------------------------------------------------
 * [ ] - dkeep.logic Javadoc documentation
 * [ ] - Random coords for Ogres

@@ -44,73 +44,75 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 			   addKeyListener(this);
 		   }
 	       
-	       try {
-	    	   hero = ImageIO.read(new File("resources/centaur_brown_f.png"));
-	       } catch (IOException e) {
-	    	   System.out.println("Error loading hero");
-	       }
-	       
-	       try {
-	    	   wall = ImageIO.read(new File("resources/brick_dark2.png"));
-	       } catch (IOException e) {
-	    	   System.out.println("Error loading wall");
-	       }
-	       
-	       try {
-	    	   guard = ImageIO.read(new File("resources/kenku_winged_m.png"));
-	       } catch (IOException e) {
-	    	   System.out.println("Error loading guard");
-	       }
-	       
-	       try {
-	    	   openDoor = ImageIO.read(new File("resources/dngn_open_door.png"));
-	       } catch (IOException e) {
-	    	   System.out.println("Error loading open door");
-	       }
-	       
-	       try {
-	    	   closedDoor = ImageIO.read(new File("resources/dngn_closed_door.png"));
-	       } catch (IOException e) {
-	    	   System.out.println("Error loading closed door");
-	       }
-	       
-	       try {
-	    	   key = ImageIO.read(new File("resources/key.png"));
-	       } catch (IOException e) {
-	    	   System.out.println("Error loading key");
-	       }
-	       
-	       try {
-	    	   ogre = ImageIO.read(new File("resources/troll_m.png"));
-	       } catch (IOException e) {
-	    	   System.out.println("Error loading ogre");
-	       }
-	       
-	       try {
-	    	   mace = ImageIO.read(new File("resources/giant_spiked_club.png"));
-	       } catch (IOException e) {
-	    	   System.out.println("Error loading mace");
-	       }
-	       
-	       try {
-	    	   sleepingGuard = ImageIO.read(new File("resources/kenku_winged_m_sleeping.png"));
-	       } catch (IOException e) {
-	    	   System.out.println("Error loading sleepingGuard");
-	       }
-	       
-	       try {
-	    	   armedHero = ImageIO.read(new File("resources/two_handed_sword.png"));
-	       } catch (IOException e) {
-	    	   System.out.println("Error loading armedHero");
-	       }  
-	       
-	       try {
-	    	   knockedOutOgre = ImageIO.read(new File("resources/troll_m_knocked_out.png"));
-	       } catch (IOException e) {
-	    	   System.out.println("Error loading knocked out ogre");
-	       }
+		   
+		   loadEntityTextures();
+		   
+		   loadMapTextures();
 	}
 	
+
+	private void loadMapTextures() {
+		try {
+			wall = ImageIO.read(new File("resources/brick_dark2.png"));
+		} catch (IOException e) {
+			System.out.println("Error loading wall");
+		}
+		try {
+			openDoor = ImageIO.read(new File("resources/dngn_open_door.png"));
+		} catch (IOException e) {
+			System.out.println("Error loading open door");
+		}
+		try {
+			closedDoor = ImageIO.read(new File("resources/dngn_closed_door.png"));
+		} catch (IOException e) {
+			System.out.println("Error loading closed door");
+		}
+		try {
+			key = ImageIO.read(new File("resources/key.png"));
+		} catch (IOException e) {
+			System.out.println("Error loading key");
+		}
+	}
+
+
+	private void loadEntityTextures() {
+		try {
+			hero = ImageIO.read(new File("resources/centaur_brown_f.png"));
+		} catch (IOException e) {
+			System.out.println("Error loading hero");
+		}
+		try {
+			ogre = ImageIO.read(new File("resources/troll_m.png"));
+		} catch (IOException e) {
+			System.out.println("Error loading ogre");
+		}
+		try {
+			mace = ImageIO.read(new File("resources/giant_spiked_club.png"));
+		} catch (IOException e) {
+			System.out.println("Error loading mace");
+		}
+		try {
+			sleepingGuard = ImageIO.read(new File("resources/kenku_winged_m_sleeping.png"));
+		} catch (IOException e) {
+			System.out.println("Error loading sleepingGuard");
+		}
+		try {
+			armedHero = ImageIO.read(new File("resources/two_handed_sword.png"));
+		} catch (IOException e) {
+			System.out.println("Error loading armedHero");
+		}  
+		try {
+			knockedOutOgre = ImageIO.read(new File("resources/troll_m_knocked_out.png"));
+		} catch (IOException e) {
+			System.out.println("Error loading knocked out ogre");
+		}
+		try {
+			guard = ImageIO.read(new File("resources/kenku_winged_m.png"));
+		} catch (IOException e) {
+			System.out.println("Error loading guard");
+		}
+	}
+
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -240,30 +242,15 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 			return;
 		}
 
-		//Prints map with static objects
-		for(int i = 0; i< mapCopy.length; i++) {
-			for(int j = 0; j < mapCopy.length; j++) {
-				
-				if (levelEditor) g.drawRect(j*imagex, i*imagey, 31, 31);
-				
-				switch(mapCopy[i][j]){
-					case 'X':
-						g.drawImage(wall, j*imagex, i*imagey, null);
-						break;
-					case 'I':
-						g.drawImage(closedDoor, j*imagex, i*imagey, null);
-						break;
-					case 'S':
-						g.drawImage(openDoor, j*imagex, i*imagey, null);
-						break;
-					case 'k':
-						g.drawImage(key, j*imagex, i*imagey, null);
-						break;
-				};
-			}
-		}
+		printStaticObjects(g,mapCopy);
 		
+		printDynamicObjects(g);
+	}
+
+
+	private void printDynamicObjects(Graphics g) {
 		//Prints map with dynamic objects (entities)
+
 		for(Entity e : Game.getEntities()) {
 			switch(e.getRepresentation()){
 			case 'H':
@@ -298,6 +285,31 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 				break;
 			}
 		}
+	}
+
+
+	private void printStaticObjects(Graphics g, char[][] mapCopy) {
+		for(int i = 0; i< mapCopy.length; i++) {
+			for(int j = 0; j < mapCopy.length; j++) {
+				
+				if (levelEditor) g.drawRect(j*imagex, i*imagey, 31, 31);
+				
+				switch(mapCopy[i][j]){
+					case 'X':
+						g.drawImage(wall, j*imagex, i*imagey, null);
+						break;
+					case 'I':
+						g.drawImage(closedDoor, j*imagex, i*imagey, null);
+						break;
+					case 'S':
+						g.drawImage(openDoor, j*imagex, i*imagey, null);
+						break;
+					case 'k':
+						g.drawImage(key, j*imagex, i*imagey, null);
+						break;
+				};
+			}
+		}	
 	}
 
 
