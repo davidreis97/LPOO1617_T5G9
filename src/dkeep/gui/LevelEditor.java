@@ -9,7 +9,6 @@ import dkeep.logic.Entity;
 import dkeep.logic.Game;
 import dkeep.logic.Hero;
 import dkeep.logic.KeepMap;
-import dkeep.logic.Map;
 
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -45,9 +44,9 @@ public class LevelEditor {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LevelEditor window = new LevelEditor();
-					window.frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					window.frame.setVisible(true);
+					new LevelEditor();
+					frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

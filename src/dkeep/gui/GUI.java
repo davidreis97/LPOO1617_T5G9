@@ -4,20 +4,14 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
 
 import dkeep.logic.Entity;
 import dkeep.logic.Game;
 
-import javax.swing.JComboBox;
-import javax.swing.JTextArea;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
-import java.awt.Font;
 import javax.swing.JPanel;
 
 public class GUI {
@@ -51,7 +45,7 @@ public class GUI {
 	 * Create the application.
 	 */
 	public GUI() {
-		new Game("Dungeon", "Normal", 0);
+		new Game("Dungeon", "Rookie", 0);
 		Game.setState("You can start a new game");
 		initialize();
 	}

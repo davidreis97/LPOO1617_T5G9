@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class Game {
 	private static Map currMap;
 	private static ArrayList<Entity> entities = new ArrayList<Entity>();
-	private static String state; //ASK replace strings with enums overall
-	private static int heroIndex; //CAUTION assumes one Hero
+	private static String state; //TODO replace state with enums
+	private static int heroIndex;
 	private static int numOgres;
 	
 	public Game(String startingMap, String guardtype, int numOgres) {
@@ -131,7 +131,7 @@ public class Game {
 		}
 	}
 	
-	public static void changeMap(String mapType, String guardtype) { //TODO try to remove changemap from Game.java
+	public static void changeMap(String mapType, String guardtype) { //TODO try to remove changeMap from Game.java
 		
 		switch(mapType) {
 		case "Dungeon":

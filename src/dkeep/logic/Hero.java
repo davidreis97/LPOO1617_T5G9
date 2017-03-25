@@ -31,7 +31,7 @@ public class Hero extends Entity {
 			if(Game.getEntities().get(adjacent) instanceof Ogre) {
 				
 				Ogre ogre = (Ogre) Game.getEntities().get(adjacent);
-				if(!ogre.isStunned) {
+				if(!ogre.isStunned && this.isArmed) {
 					ogre.setStunned(true);
 				}
 				return false;

@@ -27,12 +27,57 @@ public class CLI {
 		}
 	}
 
+	//TODO user input to separate function
+	public static void gameSetup(Scanner keyboard) {
+		String guardInput, ogreInput;
+		String validGuard = "abc";
+		String validOgre = "12345";
+		
+		System.out.println("Input type of guard to use:");
+		System.out.println("a - Rookie");
+		System.out.println("b - Drunken (falls asleep, reverses direction");
+		System.out.println("c - Suspicious (reverses direction)");
+		
+		do {
+			
+			guardInput = keyboard.nextLine();
+			
+			if(guardInput.length() != 1) {
+				guardInput = " "; //Reset input
+			}
+		} while(!validGuard.contains(guardInput));
+		
+		System.out.println("Input number of ogres (1-5):");
+		
+		do {
+			
+			ogreInput = keyboard.nextLine();
+			
+			if(ogreInput.length() != 1) {
+				ogreInput = " "; //Reset input
+			}
+		} while(!validOgre.contains(ogreInput));
+	
+		switch(guardInput) {
+		case "a":
+			new Game("Dungeon", "Rookie", Integer.parseInt(ogreInput));
+			break;
+		case "b":
+			new Game("Dungeon", "Drunken", Integer.parseInt(ogreInput));
+			break;
+		case "c":
+			new Game("Dungeon", "Suspicious", Integer.parseInt(ogreInput));
+			break;
+		}
+	}
+	
 	//Entry point and game loop, processes input until game is over
 	public static void main(String[] args) {
 
-		new Game("Dungeon", "Normal", 1);
-		
 		Scanner keyboard = new Scanner(System.in);
+		
+		gameSetup(keyboard);
+		
 		String kbdInput;
 		String validInput = "wasdq"; //Valid user input
 

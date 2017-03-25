@@ -3,16 +3,16 @@ package dkeep.logic;
 import java.awt.Point;
 import java.util.Random;
 
-public class DrunkGuard extends Guard {
+public class DrunkenGuard extends Guard {
 	
 	private boolean isReversed = false;
 	private boolean isSleeping = false;
 	
-	public DrunkGuard(Point coords, char representation) {
+	public DrunkenGuard(Point coords, char representation) {
 		super(coords, representation);
 	}
 	
-	public DrunkGuard(Point coords, char representation, char[] guardPath) {
+	public DrunkenGuard(Point coords, char representation, char[] guardPath) {
 		super(coords, representation, guardPath);
 	}
 	

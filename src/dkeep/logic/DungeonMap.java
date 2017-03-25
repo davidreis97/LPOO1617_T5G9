@@ -60,10 +60,10 @@ public class DungeonMap implements Map {
 		entities.add(new Hero(new Point(1, 1), 'H'));
 		if (guardtype.equals("Suspicious")){
 			entities.add(new SuspiciousGuard(new Point(8, 1), 'G'));
-		}else if (guardtype.equals("Drunk")){
-			entities.add(new DrunkGuard(new Point(8, 1), 'G'));
+		}else if (guardtype.equals("Drunken")){
+			entities.add(new DrunkenGuard(new Point(8, 1), 'G'));
 		}else{
-			entities.add(new NormalGuard(new Point(8, 1), 'G'));
+			entities.add(new RookieGuard(new Point(8, 1), 'G'));
 		}
 		Game.setEntities(entities);
 		Game.setState("Playing");

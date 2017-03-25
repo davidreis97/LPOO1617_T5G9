@@ -1,25 +1,18 @@
 package dkeep.gui;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
-
-import dkeep.logic.Game;
-
 import javax.swing.JLabel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JSlider;
+
+import dkeep.logic.Game;
 
 public class StartNewGame extends JDialog {
 
@@ -42,8 +35,8 @@ public class StartNewGame extends JDialog {
 	 * Create the dialog.
 	 */
 	public StartNewGame() {
-		String[] guardtypes = new String[] {"Normal", "Suspicious",
-                "Drunk"};
+		String[] guardtypes = new String[] {"Rookie", "Drunken",
+                "Suspicious"};
 		
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -71,7 +64,7 @@ public class StartNewGame extends JDialog {
 		contentPanel.add(slider);
 		
 		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<String>(guardtypes);
-		JComboBox comboBox = new JComboBox(comboModel);
+		JComboBox<String> comboBox = new JComboBox<>(comboModel);
 		comboBox.setBounds(100, 19, 172, 27);
 		contentPanel.add(comboBox);
 		

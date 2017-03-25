@@ -2,13 +2,13 @@ package dkeep.logic;
 
 import java.awt.Point;
 
-public class NormalGuard extends Guard {
+public class RookieGuard extends Guard {
 	
-	public NormalGuard(Point coords, char representation) {
+	public RookieGuard(Point coords, char representation) {
 		super(coords, representation);
 	}
 	
-	public NormalGuard(Point coords, char representation, char[] guardPath) {
+	public RookieGuard(Point coords, char representation, char[] guardPath) {
 		super(coords, representation, guardPath);
 	}
 	
