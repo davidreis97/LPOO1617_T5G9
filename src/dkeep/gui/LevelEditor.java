@@ -14,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.awt.event.ActionEvent;
@@ -73,8 +75,16 @@ public class LevelEditor {
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(100, 100, 477, 398);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		frame.addWindowListener(new WindowAdapter()
+		{
+		    public void windowClosing(WindowEvent e)
+		    {
+		    	new Game("Dungeon", "Rookie", 0);
+				Game.setState("You can start a new game");
+		        GUI.updateGUIStatus();
+		    }
+		});
 		
 		panel = new SimpleGraphicsPanel(true);
 		panel.setBounds(16, 22, 320, 320);
@@ -244,7 +254,7 @@ public class LevelEditor {
 		nextChar = '0';
 	}
 	
-	private static void initializeGame(){
+	private void initializeGame(){
 		Game.changeMap("Keep","");
 		ArrayList<Entity> emptyList = new ArrayList<Entity>();
 		
