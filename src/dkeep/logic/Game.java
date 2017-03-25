@@ -47,9 +47,10 @@ public class Game {
 		} else return coords;
 	}
 	
-	//TODO return int array
 	//Returns index of adjacent entities to "index" entity
-	public static int isAdjacentTo(int index) {
+	public static ArrayList<Integer> isAdjacentTo(int index) {
+		
+		ArrayList<Integer> adjacencies = new ArrayList<Integer>();
 		
 		Point checkCoords = entities.get(index).coords;
 		Point adj_1 = calcNewCoords(checkCoords, 'w');
@@ -57,30 +58,17 @@ public class Game {
 		Point adj_3 = calcNewCoords(checkCoords, 's');
 		Point adj_4 = calcNewCoords(checkCoords, 'd');
 		
-		boolean found = false;
-		
 		int i = 0;
 		for(i = 0; i < entities.size(); i++) {
 			if(index != i) {
-				if(entities.get(i).coords.equals(adj_1)) {
-					found = true;
-					break;
-				} else if(entities.get(i).coords.equals(adj_2)) {
-					found = true;
-					break;
-				} else if(entities.get(i).coords.equals(adj_3)) {
-					found = true;
-					break;
-				} else if(entities.get(i).coords.equals(adj_4)) {
-					found = true;
-					break;
+				if(entities.get(i).coords.equals(adj_1) || entities.get(i).coords.equals(adj_2) ||
+						entities.get(i).coords.equals(adj_3) || entities.get(i).coords.equals(adj_4)) {
+					adjacencies.add(i);
 				}
 			}
 		}
 		
-		if(found) {
-			return i;
-		} else return -1;
+		return adjacencies;
 	}
 	
 	public static int entityCol(int index, char direction) {
