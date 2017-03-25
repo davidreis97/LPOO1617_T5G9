@@ -71,7 +71,7 @@ public class StartNewGame extends JDialog {
 		JButton btnStart = new JButton("Start");
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new Game("Dungeon",(String) comboBox.getSelectedItem(), slider.getValue());
+				new Game("Dungeon", (String) comboBox.getSelectedItem(), slider.getValue());
 				GUI.updateGUIStatus();
 				dispose();
 			}
