@@ -9,10 +9,9 @@
 ---------------------------------------------------------------------------------------------------------------
 * [ ] - CLI Save/Load
 * [ ] - dkeep.logic Javadoc documentation
-* [ ] - Random coords for Ogres
-* [ ] - Try to remove changeMap from Game.java (not open-closed design)
 
 EXTRAS
+* [ ] - Try to remove changeMap from Game.java (not open-closed design)
 * [ ] - Replace Game states with enums
 * [ ] - Console play by play
 * [ ] - Level editor - non-square maps
