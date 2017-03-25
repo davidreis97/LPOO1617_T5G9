@@ -85,7 +85,8 @@ public class GUI {
 		
 		initializeDirectionalButtons();
 		
-		initializeSaveLoadButtons();		
+		initializeSaveButton();		
+		initializeLoadButton();
 		
 		initializeStartExitEditorButtons();
 		
@@ -121,7 +122,7 @@ public class GUI {
 		frame.getContentPane().add(btnExit);
 	}
 
-	private void initializeSaveLoadButtons() {
+	private void initializeSaveButton() {
 		btnSaveGame = new JButton("Save Game");
 		btnSaveGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -147,7 +148,9 @@ public class GUI {
 		});
 		btnSaveGame.setBounds(380, 63, 119, 29);
 		frame.getContentPane().add(btnSaveGame);
-		
+	}
+	
+	private void initializeLoadButton(){
 		btnLoadGame = new JButton("Load Game");
 		btnLoadGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

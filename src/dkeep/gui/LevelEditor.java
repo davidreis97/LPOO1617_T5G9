@@ -36,6 +36,8 @@ public class LevelEditor {
 	private static JPanel panel;
 	private static JLabel lblEntities;
 	private static JCheckBox chckbxArmedHero;
+	private static JLabel lblDestructiveOptions;
+	private static JLabel lblFinalize;
 
 	/**
 	 * Launch the application.
@@ -74,17 +76,9 @@ public class LevelEditor {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		lblOptions = new JLabel("Ready to edit");
-		lblOptions.setBounds(16, 354, 209, 16);
-		frame.getContentPane().add(lblOptions);
-		
 		panel = new SimpleGraphicsPanel(true);
 		panel.setBounds(16, 22, 320, 320);
 		frame.getContentPane().add(panel);
-		
-		lblEntities = new JLabel("Press to add:");
-		lblEntities.setBounds(348, 22, 100, 16);
-		frame.getContentPane().add(lblEntities);
 		
 		initializePlacementMapButtons();
 		
@@ -92,14 +86,33 @@ public class LevelEditor {
 
 		initializeOptionsButtons();
 		
-		JLabel lblDestructiveOptions = new JLabel("Options:");
+		initializeLabels();
+		
+		initializeArmoredHeroCheckbox();
+		
+		panel.repaint();
+		panel.requestFocusInWindow();
+	}
+	
+	private void initializeLabels(){
+		lblOptions = new JLabel("Ready to edit");
+		lblOptions.setBounds(16, 354, 209, 16);
+		frame.getContentPane().add(lblOptions);
+		
+		lblEntities = new JLabel("Press to add:");
+		lblEntities.setBounds(348, 22, 100, 16);
+		frame.getContentPane().add(lblEntities);
+		
+		lblDestructiveOptions = new JLabel("Options:");
 		lblDestructiveOptions.setBounds(348, 228, 123, 16);
 		frame.getContentPane().add(lblDestructiveOptions);
 		
-		JLabel lblFinalize = new JLabel("Finalize:");
+		lblFinalize = new JLabel("Finalize:");
 		lblFinalize.setBounds(348, 315, 61, 16);
 		frame.getContentPane().add(lblFinalize);
-		
+	}
+
+	private void initializeArmoredHeroCheckbox() {
 		chckbxArmedHero = new JCheckBox("Armed Hero");
 		chckbxArmedHero.setBounds(224, 350, 112, 23);
 		frame.getContentPane().add(chckbxArmedHero);
@@ -123,9 +136,6 @@ public class LevelEditor {
 				panel.requestFocusInWindow();
 			}
 		});
-		
-		panel.repaint();
-		panel.requestFocusInWindow();
 	}
 
 	private static void initializeOptionsButtons() {

@@ -149,17 +149,16 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		addEntity(e);
+		addStaticObject(e);
+		repaint();
+	}
+
+	private void addStaticObject(MouseEvent e) {
 		KeepMap map;
 		char [][] charMap;
+		
 		switch(LevelEditor.getNextChar()){
-		case 'A':
-			Game.setHeroIndex(Game.getEntities().size());
-			Game.getEntities().add(new Hero(new Point((int) (e.getX()/31), (int) (e.getY()/31)), 'A', true));
-			break;
-		case 'H':
-			Game.setHeroIndex(Game.getEntities().size());
-			Game.getEntities().add(new Hero(new Point((int) (e.getX()/31), (int) (e.getY()/31)), 'H'));
-			break;
 		case 'k':
 			map = (KeepMap)Game.getMapObject();
 			charMap = Game.getMapObject().getMap();
@@ -178,6 +177,26 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 			charMap[(int)(e.getY()/31)][(int)(e.getX()/31)] = 'I';
 			map.setMap(charMap);
 			break;
+		case ' ':
+			map = (KeepMap)Game.getMapObject();
+			charMap = Game.getMapObject().getMap();
+			charMap[(int)(e.getY()/31)][(int)(e.getX()/31)] = ' ';
+			map.setMap(charMap);
+			break;
+		}
+	}
+
+
+	private void addEntity(MouseEvent e) {
+		switch(LevelEditor.getNextChar()){
+		case 'A':
+			Game.setHeroIndex(Game.getEntities().size());
+			Game.getEntities().add(new Hero(new Point((int) (e.getX()/31), (int) (e.getY()/31)), 'A', true));
+			break;
+		case 'H':
+			Game.setHeroIndex(Game.getEntities().size());
+			Game.getEntities().add(new Hero(new Point((int) (e.getX()/31), (int) (e.getY()/31)), 'H'));
+			break;
 		case '0':
 			Game.getEntities().add(new Ogre(new Point((int) (e.getX()/31), (int) (e.getY()/31)), '0'));
 			LevelEditor.askForMace();
@@ -190,15 +209,9 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 				LevelEditor.setStatus("Invalid Mace Placement!");
 			}
 			break;
-		case ' ':
-			map = (KeepMap)Game.getMapObject();
-			charMap = Game.getMapObject().getMap();
-			charMap[(int)(e.getY()/31)][(int)(e.getX()/31)] = ' ';
-			map.setMap(charMap);
-			break;
 		}
-		repaint();
 	}
+
 
 	private boolean clubIsValid(MouseEvent e) {
 		for(Entity ent: Game.getEntities()){
