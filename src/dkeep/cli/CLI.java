@@ -27,7 +27,20 @@ public class CLI {
 		}
 	}
 
-	//TODO user input to separate function
+	private static String userInput(String validInput, Scanner keyboard) {
+		
+		String userInput;
+		
+		do {
+			userInput = keyboard.nextLine();
+			
+			if(userInput.length() != 1)	userInput = " "; //Reset input
+			
+		} while(!validInput.contains(userInput));
+		
+		return userInput;
+	}
+	
 	public static void gameSetup(Scanner keyboard) {
 		String guardInput, ogreInput;
 		String validGuard = "abc";
@@ -38,25 +51,11 @@ public class CLI {
 		System.out.println("b - Drunken (falls asleep, reverses direction");
 		System.out.println("c - Suspicious (reverses direction)");
 		
-		do {
-			
-			guardInput = keyboard.nextLine();
-			
-			if(guardInput.length() != 1) {
-				guardInput = " "; //Reset input
-			}
-		} while(!validGuard.contains(guardInput));
+		guardInput = userInput(validGuard, keyboard);
 		
 		System.out.println("Input number of ogres (1-5):");
 		
-		do {
-			
-			ogreInput = keyboard.nextLine();
-			
-			if(ogreInput.length() != 1) {
-				ogreInput = " "; //Reset input
-			}
-		} while(!validOgre.contains(ogreInput));
+		ogreInput = userInput(validOgre, keyboard);
 	
 		switch(guardInput) {
 		case "a":
@@ -79,25 +78,19 @@ public class CLI {
 		gameSetup(keyboard);
 		
 		String kbdInput;
-		String validInput = "wasdq"; //Valid user input
+		String validInput = "wasd";
 
 		do {
 
 			printMap(Game.getMap(), Game.getEntities());
 			
 			System.out.println("Input a direction (WASD):");
-			do {
-				
-				kbdInput = keyboard.nextLine();
-				
-				if(kbdInput.length() != 1) {
-					kbdInput = " "; //Reset input
-				}
-			} while(!validInput.contains(kbdInput));
+			
+			kbdInput = userInput(validInput, keyboard);
 		
-			Game.updateGame(kbdInput.charAt(0),false);
+			Game.updateGame(kbdInput.charAt(0), true);
 
-		} while(!(kbdInput.charAt(0) == 'q') && Game.getState().equals("Playing"));
+		} while(Game.getState().equals("Playing"));
 
 		printMap(Game.getMap(), Game.getEntities());
 		keyboard.close();

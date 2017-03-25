@@ -202,28 +202,28 @@ public class GUI {
 		
 		btnRight.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
-				Game.updateGame('d', false);
+				Game.updateGame('d', true);
 				updateGUIStatus();
 			}
 		});
 		
 		btnUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Game.updateGame('w', false);
+				Game.updateGame('w', true);
 				updateGUIStatus();
 			}
 		});
 		
 		btnLeft.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Game.updateGame('a', false);
+				Game.updateGame('a', true);
 				updateGUIStatus();
 			}
 		});
 		
 		btnDown.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Game.updateGame('s', false);
+				Game.updateGame('s', true);
 				updateGUIStatus();
 			}
 		});

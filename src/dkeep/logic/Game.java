@@ -1,10 +1,9 @@
 package dkeep.logic;
 
 import java.awt.Point;
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Game{
+public class Game {
 	private static Map currMap;
 	private static ArrayList<Entity> entities = new ArrayList<Entity>();
 	private static String state; //TODO replace state with enums
@@ -95,7 +94,7 @@ public class Game{
 		} else return -1;
 	}
 	
-	public static void updateGame(char userInput, boolean debugging) {
+	public static void updateGame(char userInput, boolean doEntityMove) {
 
 		Hero hero = (Hero) entities.get(heroIndex);
 		
@@ -108,21 +107,21 @@ public class Game{
 			return;
 		}
 		
-		for(int i = 0; i < entities.size(); i++) {
-			if(heroIndex != i 
-					&& !(entities.get(i).getClass().getSimpleName().equals("Ogre") && debugging) 
-					&& !(entities.get(i).getClass().getSimpleName().equals("Club") && debugging)) {
-				entities.get(i).nextMovement(i);
+		if(doEntityMove) {
+			for(int i = 0; i < entities.size(); i++) {
+				if(heroIndex != i) {
+					entities.get(i).nextMovement(i);
+				}
 			}
 		}
-		
+
 		if(hero.doCollision(heroIndex, 2)) {
 			state = "Lose";
 			return;
 		}
 	}
 	
-	public static void changeMap(String mapType, String guardtype) { //TODO try to remove changeMap from Game.java
+	public static void changeMap(String mapType, String guardtype) {
 		
 		switch(mapType) {
 		case "Dungeon":

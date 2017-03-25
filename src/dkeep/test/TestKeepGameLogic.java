@@ -27,7 +27,7 @@ public class TestKeepGameLogic {
 		hero.setCoords(new Point(5, 1));
 		hero.setArmed(false);
 		assertNotEquals("Lose", Game.getState());
-		Game.updateGame('a', true);
+		Game.updateGame('a', false);
 		assertEquals("Lose", Game.getState());
 	}
 	
@@ -37,7 +37,7 @@ public class TestKeepGameLogic {
 		Game.getEntities().get(Game.getHeroIndex()).setCoords(initialPoint);
 		assertEquals('k', Game.getMap()[1][8]);
 		assertEquals(false,((KeepMap) Game.getMapObject()).getHeroHasKey());
-		Game.updateGame('d',true);
+		Game.updateGame('d', false);
 		assertEquals(true,((KeepMap) Game.getMapObject()).getHeroHasKey());
 	}
 	
@@ -46,7 +46,7 @@ public class TestKeepGameLogic {
 		Point initialPoint = new Point(1,1);
 		assertEquals(false,((KeepMap) Game.getMapObject()).getHeroHasKey());
 		Game.getEntities().get(Game.getHeroIndex()).setCoords(initialPoint);
-		Game.updateGame('a',true);
+		Game.updateGame('a', false);
 		assertEquals(initialPoint, Game.getEntities().get(Game.getHeroIndex()).getCoords());
 		assertEquals('I', Game.getMap()[1][0]);
 	}
@@ -57,11 +57,11 @@ public class TestKeepGameLogic {
 		Game.getEntities().get(Game.getHeroIndex()).setCoords(initialPoint);
 		assertEquals('k', Game.getMap()[1][8]);
 		assertEquals(false,((KeepMap) Game.getMapObject()).getHeroHasKey());
-		Game.updateGame('d',true);
+		Game.updateGame('d', false);
 		assertEquals(true,((KeepMap) Game.getMapObject()).getHeroHasKey());
 		initialPoint = new Point(1,1);
 		Game.getEntities().get(Game.getHeroIndex()).setCoords(initialPoint);
-		Game.updateGame('a',true);
+		Game.updateGame('a', false);
 		assertEquals(initialPoint, Game.getEntities().get(Game.getHeroIndex()).getCoords());
 		assertEquals('S', Game.getMap()[1][0]);
 	}
@@ -74,13 +74,13 @@ public class TestKeepGameLogic {
 		Game.setMapObject(temp);
 		Game.getEntities().get(Game.getHeroIndex()).setCoords(initialPoint);
 		assertEquals(initialPoint,Game.getEntities().get(Game.getHeroIndex()).getCoords());
-		Game.updateGame('a', true);
-		Game.updateGame('a', true);
+		Game.updateGame('a', false);
+		Game.updateGame('a', false);
 		assertEquals("Win", Game.getState());
 	}
 	
 	@Test(timeout = 1000)
-	public void ogreRandomMovement(){ //TODO remove hero from game
+	public void ogreRandomMovement() {
 		String outcomes = "";
 		String eligible = "RR RL RU RD LR LL LU LD UU UD UR UL DD DU DR DL ";
 		

@@ -3,7 +3,7 @@ package dkeep.logic;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GameSaveHelper implements Serializable{
+public class GameSaveHelper implements Serializable {
 	
 	private Map map;
 	private ArrayList<Entity> entities;
@@ -11,7 +11,7 @@ public class GameSaveHelper implements Serializable{
 	private String state;
 	private int heroIndex;
 		
-	public void gameToObject(){
+	public void gameToObject() {
 		map = Game.getMapObject();
 		entities = Game.getEntities();
 		heroIndex = Game.getHeroIndex();
@@ -19,8 +19,8 @@ public class GameSaveHelper implements Serializable{
 		guardType = Game.getGuardType();
 	}
 	
-	public void objectToGame(){
-		new Game("Dungeon",guardType,1);
+	public void objectToGame() {
+		new Game("Dungeon", guardType, 1);
 		Game.setEntities(entities);
 		Game.setMapObject(map);
 		Game.setHeroIndex(heroIndex);
