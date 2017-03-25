@@ -42,21 +42,24 @@ public class Hero extends Entity {
 					return true;
 				} else if(Game.getEntities().get(adjacent.get(i)) instanceof Guard) {
 					
-					return true;
+					Guard guard = (Guard) Game.getEntities().get(adjacent.get(i));
+					if(!guard.isSleeping())	return true;
 				}
 				
 			} else if(stage == 2) {
 				if(Game.getEntities().get(adjacent.get(i)) instanceof Ogre) {
+					
 					Ogre ogre = (Ogre) Game.getEntities().get(adjacent.get(i));
 					if(!ogre.isStunned()) {
 						return true;
 					}
-					
 				} else if(Game.getEntities().get(adjacent.get(i)) instanceof Club) {
-					return true;
 					
-				} else if(Game.getEntities().get(adjacent.get(i)) instanceof Guard) {
 					return true;
+				} else if(Game.getEntities().get(adjacent.get(i)) instanceof Guard) {
+					
+					Guard guard = (Guard) Game.getEntities().get(adjacent.get(i));
+					if(!guard.isSleeping())	return true;
 				}
 			}
 		}

@@ -17,17 +17,19 @@ public class TestKeepGameLogic {
 
 	@Before
 	public void setUp() throws Exception {
-		game = new Game("Keep", "Rookie", 1);
+		new Game("Keep", "Rookie", 1);
 	}
 	
 
 	@Test
 	public void heroMovesAdjacentToOgre() {
 		Hero hero = (Hero) Game.getEntities().get(Game.getHeroIndex());
-		hero.setCoords(new Point(5, 1));
+		
+		//Set hero below Ogre
+		hero.setCoords(new Point(Game.getEntities().get(1).getCoords().x, Game.getEntities().get(1).getCoords().y + 2));
 		hero.setArmed(false);
 		assertNotEquals("Lose", Game.getState());
-		Game.updateGame('a', false);
+		Game.updateGame('w', false);
 		assertEquals("Lose", Game.getState());
 	}
 	
@@ -68,6 +70,9 @@ public class TestKeepGameLogic {
 	
 	@Test
 	public void heroMovesToOpenExitDoor() {
+		
+		new Game("Keep", "Rookie", 0);
+		
 		Point initialPoint = new Point(1, 1);
 		KeepMap temp = (KeepMap) Game.getMapObject();
 		temp.setHeroHasKey(true);

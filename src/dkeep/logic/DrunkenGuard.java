@@ -6,7 +6,6 @@ import java.util.Random;
 public class DrunkenGuard extends Guard { 
 	
 	private boolean isReversed = false;
-	private boolean isSleeping = false;
 	
 	public DrunkenGuard(Point coords, char representation) {
 		super(coords, representation);

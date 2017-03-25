@@ -6,6 +6,7 @@ public abstract class Guard extends Entity {
 	
 	protected int stepCounter;
 	protected char guardPath[];
+	protected boolean isSleeping = false;
 
 	protected static int clamp(int val, int min, int max) {
 	    if(val < min) {
@@ -28,9 +29,13 @@ public abstract class Guard extends Entity {
 		this.guardPath = guardPath;
 	}
 	
+	public abstract void nextMovement(int index);
+
 	public int getStepCounter(){
 		return stepCounter;
 	}
 	
-	public abstract void nextMovement(int index);
+	public boolean isSleeping() {
+		return isSleeping;
+	}
 }

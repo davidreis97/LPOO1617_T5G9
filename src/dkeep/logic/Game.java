@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Game {
 	private static Map currMap;
 	private static ArrayList<Entity> entities = new ArrayList<Entity>();
-	private static String state; //TODO replace state with enums
+	private static String state;
 	private static int heroIndex;
 	private static int numOgres;
 	private static String guardType;
