@@ -33,7 +33,7 @@ public class Hero extends Entity {
 
 				} else if(Game.getEntities().get(adjacent.get(i)) instanceof Club) {
 					
-					return true;
+					if(((Club) Game.getEntities().get(adjacent.get(i))).isActive()) return true;
 				} else if(Game.getEntities().get(adjacent.get(i)) instanceof Guard) {
 					
 					Guard guard = (Guard) Game.getEntities().get(adjacent.get(i));
@@ -55,7 +55,7 @@ public class Hero extends Entity {
 				}
 			} else if(Game.getEntities().get(adjacent.get(i)) instanceof Club) {
 				
-				return true;
+				if(((Club) Game.getEntities().get(adjacent.get(i))).isActive()) return true;
 			} else if(Game.getEntities().get(adjacent.get(i)) instanceof Guard) {
 				
 				Guard guard = (Guard) Game.getEntities().get(adjacent.get(i));
