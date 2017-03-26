@@ -54,17 +54,17 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 
 	private void loadMapTextures() {
 		try {
-			wall = ImageIO.read(new File("resources/brick_dark2.png"));
+			wall = ImageIO.read(new File("resources/wall.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading wall");
 		}
 		try {
-			openDoor = ImageIO.read(new File("resources/dngn_open_door.png"));
+			openDoor = ImageIO.read(new File("resources/doorOpen.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading open door");
 		}
 		try {
-			closedDoor = ImageIO.read(new File("resources/dngn_closed_door.png"));
+			closedDoor = ImageIO.read(new File("resources/doorClosed.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading closed door");
 		}
@@ -78,17 +78,17 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 
 	private void loadOgreTextures() {
 		try {
-			ogre = ImageIO.read(new File("resources/troll_m.png"));
+			ogre = ImageIO.read(new File("resources/ogre.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading ogre");
 		}
 		try {
-			mace = ImageIO.read(new File("resources/giant_spiked_club.png"));
+			mace = ImageIO.read(new File("resources/club.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading mace");
 		}
 		try {
-			knockedOutOgre = ImageIO.read(new File("resources/troll_m_knocked_out.png"));
+			knockedOutOgre = ImageIO.read(new File("resources/ogreStunned.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading knocked out ogre");
 		}
@@ -96,12 +96,12 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 	
 	private void loadHeroTextures(){
 		try {
-			hero = ImageIO.read(new File("resources/centaur_brown_f.png"));
+			hero = ImageIO.read(new File("resources/hero.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading hero");
 		}
 		try {
-			armedHero = ImageIO.read(new File("resources/two_handed_sword.png"));
+			armedHero = ImageIO.read(new File("resources/sword.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading armedHero");
 		} 
@@ -109,12 +109,12 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 	
 	private void loadGuardTextures(){
 		try {
-			sleepingGuard = ImageIO.read(new File("resources/kenku_winged_m_sleeping.png"));
+			sleepingGuard = ImageIO.read(new File("resources/guardSleeping.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading sleepingGuard");
 		} 
 		try {
-			guard = ImageIO.read(new File("resources/kenku_winged_m.png"));
+			guard = ImageIO.read(new File("resources/guard.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading guard");
 		}
