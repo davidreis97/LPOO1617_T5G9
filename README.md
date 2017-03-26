@@ -3,8 +3,8 @@
 
 ## TODO
 * [x] - 7 / 10 BetterCodeHub
-* [ ] - Current coverage: 77.4% (>= 80% needed)
-* [ ] - Current PIT mutations: 55% (>= 60% needed)
+* [x] - Current coverage: ~90% (>= 80% needed)
+* [ ] - Current PIT mutations: ~57% (>= 60% needed)
 * [ ] - dkeep.logic Javadoc -> Generate HTML documentation
 * [ ] - Nicer CLI Save/Load
 * [ ] - ogre/club on key has no graphics in GUI
