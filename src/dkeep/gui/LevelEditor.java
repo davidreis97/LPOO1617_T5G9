@@ -82,18 +82,24 @@ public class LevelEditor {
 		initializePanel();
 		initializeGame();
 		initializeFrame();
+		initializeButtons();
+		initializeLabels();
+		initializeArmoredHeroCheckbox();
+		
+		panel.repaint();
+		setStatus("Map Height: " + mapHeight + " Map Width: " + mapWidth);
+		frame.setVisible(true);
+	}
+	
+	private static void initializeButtons() {
 		initializePlacementMapButtons();
 		initializePlacementKeyButton();
 		initializePlacementEntityButtons();
 		initializeOptionsButtons();
 		initializeClearAllButton();
 		initializeClearAndEmptyButtons();
-		initializeLabels();
-		initializeArmoredHeroCheckbox();
-		panel.repaint();
-		setStatus("Map Height: " + mapHeight + " Map Width: " + mapWidth);
 	}
-	
+
 	private static void initializePanel() {
 		panel = new SimpleGraphicsPanel(true);
 		panel.setBounds(16, 22, 320, 320);
@@ -105,7 +111,6 @@ public class LevelEditor {
 		frame.setBounds(100, 100, 477, 398);
 		frame.getContentPane().setLayout(null);
 		frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		frame.setVisible(true);
 		frame.addWindowListener(new WindowAdapter()
 		{
 		    public void windowClosing(WindowEvent e)
