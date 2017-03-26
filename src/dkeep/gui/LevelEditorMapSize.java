@@ -1,21 +1,15 @@
 package dkeep.gui;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import dkeep.logic.Game;
-
 import javax.swing.JLabel;
 import javax.swing.JSlider;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.ActionEvent;
 
 public class LevelEditorMapSize extends JDialog {
 

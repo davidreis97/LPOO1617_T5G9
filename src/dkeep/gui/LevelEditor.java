@@ -276,8 +276,13 @@ public class LevelEditor {
 		Game.changeMap("Keep","");
 		ArrayList<Entity> emptyList = new ArrayList<Entity>();
 		
-		KeepMap map = new KeepMap();
-		char emptyMap[][] = new char[getMapWidth()][getMapWidth()];
+		KeepMap map = new KeepMap(getMapWidth(), getMapHeight());
+		char emptyMap[][] = new char[getMapHeight()][getMapWidth()];
+		
+		for(int y = 0; y < getMapHeight(); y++) {
+			Arrays.fill(emptyMap[y], ' ');
+		}
+		
 		for(char []row : emptyMap){
 			Arrays.fill(row, ' ');
 		}

@@ -25,8 +25,8 @@ public class CLI {
 		}
 		
 		//Prints map with static and dynamic objects
-		for(int i = 0; i< map.length; i++) {
-			for(int j = 0; j < map.length; j++) {
+		for(int i = 0; i < map.length; i++) {
+			for(int j = 0; j < map[i].length; j++) {
 				System.out.print(map[i][j]);
 				System.out.print(" ");
 			}

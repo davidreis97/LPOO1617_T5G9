@@ -7,7 +7,10 @@ import java.util.Random;
 
 public class KeepMap implements Map,Serializable {
 	
+	private int width;
+	private int height;
 	private boolean heroHasKey = false;
+	
 	private char keepMap[][] =
            {{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
 			{'I', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k', 'X'},
@@ -20,11 +23,21 @@ public class KeepMap implements Map,Serializable {
 			{'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
 			{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}};
 
+	public KeepMap() {
+		this.width = 10;
+		this.height = 10;
+	}
+	
+	public KeepMap(int width, int height) {
+		this.width = width;
+		this.height = height;
+	}
+	
 	//Copies map so the original isn't modified
 	public char[][] getMap() {
 		
-		char[][] tempMap = new char[keepMap.length][keepMap.length]; //CAUTION assumes map is square
-		
+		char[][] tempMap = new char[height][width];
+
 		for(int i = 0; i < keepMap.length; i++) {
 			tempMap[i] = keepMap[i].clone();
 		}
@@ -51,7 +64,7 @@ public class KeepMap implements Map,Serializable {
 	}
 	
 	private boolean outOfBounds(Point coords) {
-		if(coords.x >= 10 || coords.x < 0 || coords.y >= 10 || coords.y < 0){
+		if(coords.x >= width || coords.x < 0 || coords.y >= height || coords.y < 0){
 			return true;
 		}
 		
@@ -62,10 +75,10 @@ public class KeepMap implements Map,Serializable {
 	public void checkDoors(String entityType) {
 		
 		if(entityType.equals("Hero") && heroHasKey) {
-			for(int x = 0; x < 10; x++) {
-				for(int y = 0; y < 10; y++) {
-					if(keepMap[x][y] == 'I') {
-						keepMap[x][y] = 'S';
+			for(int x = 0; x < width; x++) {
+				for(int y = 0; y < height; y++) {
+					if(keepMap[y][x] == 'I') {
+						keepMap[y][x] = 'S';
 					}
 				}
 			}
