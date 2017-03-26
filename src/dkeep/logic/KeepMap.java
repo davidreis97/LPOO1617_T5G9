@@ -48,6 +48,13 @@ public class KeepMap implements Map,Serializable {
 				Game.getEntities().get(index).setRepresentation('*');
 			}
 			return true;
+		case 'I':
+			if(entityType.equals("Hero")) {
+				if(getHeroHasKey()) {
+					openDoors();
+				}
+			}
+			return false;
 		case 'k':
 			if(entityType.equals("Hero")) {
 				Game.getEntities().get(index).setRepresentation('K');
@@ -57,13 +64,6 @@ public class KeepMap implements Map,Serializable {
 				Game.getEntities().get(index).setRepresentation('$');
 			}
 			return true;
-		case 'I':
-			if(entityType.equals("Hero")) {
-				if(getHeroHasKey()) {
-					openDoors();
-				}
-			}
-			return false;
 		case 'S':
 			nextMap();
 			return true;

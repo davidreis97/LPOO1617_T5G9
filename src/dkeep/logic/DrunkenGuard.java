@@ -36,39 +36,6 @@ public class DrunkenGuard extends Guard {
 		}
 	}
 	
-	private char nextDirection() {
-		
-		char nextMove = 'w';
-		
-		if(isReversed) {
-			nextMove = guardPath[stepCounter];
-			
-			switch(nextMove) {
-			case 'w':
-				nextMove = 's';
-				break;
-			case 's':
-				nextMove = 'w';
-				break;
-			case 'a':
-				nextMove = 'd';
-				break;
-			case 'd':
-				nextMove = 'a';
-				break;
-			default:
-				break;
-			}
-		
-			stepCounter--;
-		} else {
-			nextMove = guardPath[stepCounter];
-			stepCounter++;
-		}
-		
-		return nextMove;
-	}
-	
 	public void nextMovement(int index) {
 
 		doLogic(generateChance(0.20f), generateChance(0.20f));
@@ -77,7 +44,7 @@ public class DrunkenGuard extends Guard {
 			return;
 		}
 		
-		char nextMove = nextDirection();
+		char nextMove = nextDirection(isReversed);
 
 		stepCounter = clamp(stepCounter, 0, guardPath.length - 1);
 		
