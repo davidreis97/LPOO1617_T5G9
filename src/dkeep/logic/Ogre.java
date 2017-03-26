@@ -32,37 +32,14 @@ public class Ogre extends Entity {
 	}
 	
 	public void nextMovement(int index) {
-		
-//		Random rand = new Random();
-//		int nextMove = rand.nextInt(4);
-		
+	
 		if(isStunned) {
 			stunCounter--;
 			if(stunCounter <= 0) {
 				isStunned = false;
 				representation = '0';
 			}
-			//nextMove = 4;
 		} else coords = Game.move(coords, nextDirection(), "Ogre", index);
-		
-
-
-//		switch(nextMove) {
-//		case 0:
-//			this.coords = Game.move(this.coords, 'w', "Ogre", index);
-//			break;
-//		case 1:
-//			this.coords = Game.move(this.coords, 's', "Ogre", index);
-//			break;
-//		case 2:
-//			this.coords = Game.move(this.coords, 'a', "Ogre", index);
-//			break;
-//		case 3:
-//			this.coords = Game.move(this.coords, 'd', "Ogre", index);
-//			break;
-//		default:
-//			break;
-//		}
 		
 		try{
 			Game.getEntities().get(index + 1).setCoords(coords); //CAUTION assumes ogre's club is always the next entities element

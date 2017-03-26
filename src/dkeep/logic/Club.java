@@ -9,52 +9,34 @@ public class Club extends Entity {
 		super(coords, representation);
 	}
 	
+	private char nextDirection() {
+		Random random = new Random();
+		int nextMove = random.nextInt(4);
+		
+		if(nextMove == 0) {
+			return 'w';
+		} else if(nextMove == 1) {
+			return 's';
+		} else if(nextMove == 2) {
+			return 'a';
+		} else if(nextMove == 3) {
+			return 'd';
+		}
+		
+		return 'w';
+	}
+	
 	public void nextMovement(int index) {
-		Random rand = new Random();
-		int nextMove = rand.nextInt(4);
 		int result;
 		
-		switch(nextMove) {
-		case 0:
-			result = Game.entityCol(index, 'w');
-			
-			if(result == -1) {
-				this.coords = Game.move(this.coords, 'w', "Club", index);
-			} else if(Game.getEntities().get(result) instanceof Hero) {
-				this.coords = Game.move(this.coords, 'w', "Club", index);
-				Game.setState("Lose");
-			}
-			break;
-		case 1:
-			result = Game.entityCol(index, 's');
-			
-			if(result == -1) {
-				this.coords = Game.move(this.coords, 's', "Club", index);
-			} else if(Game.getEntities().get(result) instanceof Hero) {
-				this.coords = Game.move(this.coords, 's', "Club", index);
-				Game.setState("Lose");
-			}
-			break;
-		case 2:
-			result = Game.entityCol(index, 'a');
-			
-			if(result == -1) {
-				this.coords = Game.move(this.coords, 'a', "Club", index);
-			} else if(Game.getEntities().get(result) instanceof Hero) {
-				this.coords = Game.move(this.coords, 'a', "Club", index);
-				Game.setState("Lose");
-			}
-			break;
-		case 3:
-			result = Game.entityCol(index, 'd');
-			
-			if(result == -1) {
-				this.coords = Game.move(this.coords, 'd', "Club", index);
-			} else if(Game.getEntities().get(result) instanceof Hero) {
-				this.coords = Game.move(this.coords, 'd', "Club", index);
-				Game.setState("Lose");
-			}
-			break;
+		char nextMove = nextDirection();
+		result = Game.entityCol(index, nextMove);
+		
+		if(result == -1) {
+			coords = Game.move(coords, nextMove, "Club", index);
+		} else if(Game.getEntities().get(result) instanceof Hero) {
+			coords = Game.move(coords, nextMove, "Club", index);
+			Game.setState("Lose");
 		}
 	}
 }
