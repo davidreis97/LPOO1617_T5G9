@@ -3,13 +3,9 @@
 
 ## TODO
 * [x] - 7 / 10 BetterCodeHub
-* [x] - Current coverage: 89.5% (>= 80% needed)
+* [ ] - Current coverage: 77.4% (>= 80% needed)
 * [ ] - Current PIT mutations: 55% (>= 60% needed)
 * [ ] - dkeep.logic Javadoc -> Generate HTML documentation
-* [ ] - Level editor - square width/height -> variable width/height
 * [ ] - Nicer CLI Save/Load
-
-EXTRAS
-* [ ] - Try to remove changeMap from Game.java (not open-closed design)
-* [ ] - Console play by play
-* [ ] - https://www.gamedev.net/resources/_/technical/game-programming/introduction-to-isometric-engines-r744
+* [ ] - ogre/club on key has no graphics in GUI
+* [ ] - hero stuns ogre -> ogre puts club on himself -> hero loses
