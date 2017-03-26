@@ -8,8 +8,10 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 
+import dkeep.logic.Club;
 import dkeep.logic.Game;
 import dkeep.logic.KeepMap;
+import dkeep.logic.Ogre;
 import dkeep.logic.Hero;
 
 public class TestKeepGameLogic {
@@ -122,6 +124,7 @@ public class TestKeepGameLogic {
 		}
 	}
 	
+	//Additional tests
 	@Test
 	public void keepMapConstruction() {
 		Random random = new Random();
@@ -132,5 +135,34 @@ public class TestKeepGameLogic {
 		
 		assertEquals(width, keep.getWidth());
 		assertEquals(height, keep.getHeight());
+	}
+	
+	@Test
+	public void heroTogglesArmed() {
+		Hero hero = (Hero) Game.getEntities().get(Game.getHeroIndex());
+		assertEquals(true, hero.isArmed());
+		assertEquals('A', hero.getRepresentation());
+		hero.setArmed(false);
+		assertEquals(false, hero.isArmed());
+		assertEquals('H', hero.getRepresentation());
+	}
+	
+	@Test
+	public void heroMovesToOgreAndStuns() {
+		new Game("Keep", "Rookie", 1);
+		
+		Hero hero = (Hero) Game.getEntities().get(Game.getHeroIndex());
+		Ogre ogre = (Ogre) Game.getEntities().get(1);
+		Club club = (Club) Game.getEntities().get(2);
+		
+		hero.setCoords(new Point(ogre.getCoords().x, ogre.getCoords().y + 2));
+		club.setCoords(new Point(ogre.getCoords().x - 1, ogre.getCoords().y));
+		
+		assertNotEquals("Lose", Game.getState());
+		assertEquals(false, ogre.isStunned());
+		
+		Game.updateGame('w', false);
+		assertEquals(true, ogre.isStunned());
+		assertNotEquals("Lose", Game.getState());
 	}
 }

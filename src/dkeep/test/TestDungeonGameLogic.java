@@ -75,6 +75,7 @@ public class TestDungeonGameLogic {
 		assertEquals("KeepMap",Game.getMapObject().getClass().getSimpleName());
 	}
 	
+	//Additional tests
 	@Test(timeout = 1000)
 	public void drunkGuardSleepsReverses(){
 		game = new Game("Dungeon", "Drunken", 1);

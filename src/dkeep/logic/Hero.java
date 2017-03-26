@@ -72,9 +72,9 @@ public class Hero extends Entity {
 
 	public void setArmed(boolean isArmed) {
 		this.isArmed = isArmed;
-		if (isArmed){
+		if (isArmed) {
 			this.representation = 'A';
-		}else{
+		} else {
 			this.representation = 'H';
 		}
 	}
