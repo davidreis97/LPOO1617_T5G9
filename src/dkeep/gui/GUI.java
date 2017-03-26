@@ -15,6 +15,7 @@ import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -133,13 +134,7 @@ public class GUI {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					try {
 						File file = fc.getSelectedFile();
-						FileOutputStream fileOut = new FileOutputStream(file);
-						ObjectOutputStream out = new ObjectOutputStream(fileOut);
-						GameSaveHelper gsh = new GameSaveHelper();
-						gsh.gameToObject();
-						out.writeObject(gsh);
-						out.close();
-						fileOut.close();
+						writeToFile(file);
 						updateGUIStatus();
 						lblStatus.setText("Game saved");
 					}catch(IOException i) {
@@ -153,6 +148,16 @@ public class GUI {
 		frame.getContentPane().add(btnSaveGame);
 	}
 	
+	protected void writeToFile(File file) throws IOException {
+		FileOutputStream fileOut = new FileOutputStream(file);
+		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+		GameSaveHelper gsh = new GameSaveHelper();
+		gsh.gameToObject();
+		out.writeObject(gsh);
+		out.close();
+		fileOut.close();
+	}
+
 	private void initializeLoadButton(){
 		btnLoadGame = new JButton("Load Game");
 		btnLoadGame.addActionListener(new ActionListener() {
@@ -162,13 +167,7 @@ public class GUI {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 		            File file = fc.getSelectedFile();
 		            try {
-		                FileInputStream fileIn = new FileInputStream(file);
-		                ObjectInputStream in = new ObjectInputStream(fileIn);
-		                GameSaveHelper gsh = new GameSaveHelper();
-		                gsh = (GameSaveHelper) in.readObject();
-		                gsh.objectToGame();
-		                in.close();
-		                fileIn.close();
+		            	readFromFile(file);
 		                updateGUIStatus();
 		                lblStatus.setText("Game loaded");
 		             }catch(IOException i) {
@@ -184,6 +183,16 @@ public class GUI {
 		});
 		btnLoadGame.setBounds(380, 90, 119, 29);
 		frame.getContentPane().add(btnLoadGame);
+	}
+
+	protected void readFromFile(File file) throws IOException, ClassNotFoundException {
+		FileInputStream fileIn = new FileInputStream(file);
+        ObjectInputStream in = new ObjectInputStream(fileIn);
+        GameSaveHelper gsh = new GameSaveHelper();
+        gsh = (GameSaveHelper) in.readObject();
+        gsh.objectToGame();
+        in.close();
+        fileIn.close();
 	}
 
 	private void initializeDownButton() {
@@ -288,6 +297,19 @@ public class GUI {
 				}
 			}
 		}
+		if (!checkEntity() || !key || !wall || !door){
+			return false;
+		}else{
+			updateGUIStatus();
+			return true;
+		}
+		
+	}
+
+	private static boolean checkEntity() {
+		boolean hero = false, ogre = false;
+		int ogreToClub = 0;
+		
 		for(Entity x: Game.getEntities()){
 			if ((x.getRepresentation() == 'H' || x.getRepresentation() == 'A') && hero){
 				return false;
@@ -300,11 +322,10 @@ public class GUI {
 				ogreToClub--;
 			}
 		}
-		if (!hero || !key || !wall || !door || !ogre || ogreToClub != 0){
+		
+		if (!hero || !ogre || ogreToClub != 0){
 			return false;
-		}else{
-			updateGUIStatus();
-			return true;
 		}
+		return true;
 	}
 }

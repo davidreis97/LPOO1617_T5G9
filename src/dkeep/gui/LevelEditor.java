@@ -98,11 +98,15 @@ public class LevelEditor {
 		
 		initializePlacementMapButtons();
 		
+		initializePlacementKeyButton();
+		
 		initializePlacementEntityButtons();
 
 		initializeOptionsButtons();
 		
-		initializeClearButtons();
+		initializeClearAllButton();
+		
+		initializeClearAndEmptyButtons();
 		
 		initializeLabels();
 		
@@ -111,21 +115,7 @@ public class LevelEditor {
 		panel.repaint();
 	}
 	
-	private static void initializeClearButtons() {
-		btnClearAllEntities = new JButton("Clear all Entities");
-		btnClearAllEntities.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ArrayList<Entity> emptyList = new ArrayList<Entity>();
-				Game.setEntities(emptyList);
-				nextChar = ' ';
-				lblOptions.setText("Cleared all entities.");
-				panel.repaint();
-				panel.requestFocusInWindow();
-			}
-		});
-		btnClearAllEntities.setBounds(344, 248, 127, 29);
-		frame.getContentPane().add(btnClearAllEntities);
-		
+	private static void initializeClearAllButton() {
 		btnClearAll = new JButton("Clear all Map");
 		btnClearAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -144,7 +134,9 @@ public class LevelEditor {
 		});
 		btnClearAll.setBounds(344, 276, 127, 29);
 		frame.getContentPane().add(btnClearAll);
-		
+	}
+	
+	private static void initializeClearAndEmptyButtons(){
 		btnEmpty = new JButton("Empty");
 		btnEmpty.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -155,6 +147,20 @@ public class LevelEditor {
 		});
 		btnEmpty.setBounds(344, 187, 127, 29);
 		frame.getContentPane().add(btnEmpty);
+		
+		btnClearAllEntities = new JButton("Clear all Entities");
+		btnClearAllEntities.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<Entity> emptyList = new ArrayList<Entity>();
+				Game.setEntities(emptyList);
+				nextChar = ' ';
+				lblOptions.setText("Cleared all entities.");
+				panel.repaint();
+				panel.requestFocusInWindow();
+			}
+		});
+		btnClearAllEntities.setBounds(344, 248, 127, 29);
+		frame.getContentPane().add(btnClearAllEntities);
 	}
 
 	private static void initializeLabels(){
@@ -275,17 +281,6 @@ public class LevelEditor {
 	}
 	
 	private static void initializePlacementMapButtons(){
-		btnKey = new JButton("Key");
-		btnKey.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				nextChar = 'k';
-				lblOptions.setText("Current Entity: Key");
-				panel.requestFocusInWindow();
-			}
-		});
-		btnKey.setBounds(344, 72, 127, 29);
-		frame.getContentPane().add(btnKey);
-		
 		btnDoor = new JButton("Door");
 		btnDoor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -307,6 +302,20 @@ public class LevelEditor {
 		});
 		btnWall.setBounds(344, 100, 127, 29);
 		frame.getContentPane().add(btnWall);
+	}
+	
+	private static void initializePlacementKeyButton(){
+		btnKey = new JButton("Key");
+		btnKey.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nextChar = 'k';
+				lblOptions.setText("Current Entity: Key");
+				panel.requestFocusInWindow();
+			}
+		});
+		btnKey.setBounds(344, 72, 127, 29);
+		frame.getContentPane().add(btnKey);
+		
 	}
 	
 	private static void initializePlacementEntityButtons(){

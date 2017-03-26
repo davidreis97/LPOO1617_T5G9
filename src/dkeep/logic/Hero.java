@@ -17,7 +17,7 @@ public class Hero extends Entity {
 		this.isArmed = isArmed;
 	}
 	
-	public void nextMovement(int index) {
+	public void nextMovement(int index) { 
 		return;
 	}
 	
