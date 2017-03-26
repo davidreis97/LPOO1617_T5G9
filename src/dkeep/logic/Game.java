@@ -98,9 +98,7 @@ public class Game {
 
 		Hero hero = (Hero) entities.get(heroIndex);
 		
-		if(entityCol(heroIndex, userInput) == -1) {
-			hero.coords = move(hero.coords, userInput, "Hero", heroIndex);
-		}
+		if(entityCol(heroIndex, userInput) == -1) hero.coords = move(hero.coords, userInput, "Hero", heroIndex);
 		
 		if(hero.doCollisionStage1(isAdjacentTo(heroIndex))) { 
 			state = "Lose";
@@ -109,9 +107,7 @@ public class Game {
 		
 		if(doEntityMove) {
 			for(int i = 0; i < entities.size(); i++) {
-				if(heroIndex != i) {
-					entities.get(i).nextMovement(i);
-				}
+				if(heroIndex != i) entities.get(i).nextMovement(i);
 			}
 		}
 
