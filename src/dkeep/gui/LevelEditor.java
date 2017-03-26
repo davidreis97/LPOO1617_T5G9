@@ -40,6 +40,8 @@ public class LevelEditor {
 	private static JCheckBox chckbxArmedHero;
 	private static JLabel lblDestructiveOptions;
 	private static JLabel lblFinalize;
+	private static int mapWidth;
+	private static int mapHeight;
 
 	/**
 	 * Launch the application.
@@ -49,8 +51,6 @@ public class LevelEditor {
 			public void run() {
 				try {
 					new LevelEditor();
-					frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -62,20 +62,26 @@ public class LevelEditor {
 	 * Create the application.
 	 */
 	public LevelEditor() {
-		initialize();
+		askMapLimits();
+	}
+	
+	private void askMapLimits(){
+		LevelEditorMapSize.start();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	public static void initialize() {
 		
 		initializeGame();
-		
+				
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(100, 100, 477, 398);
 		frame.getContentPane().setLayout(null);
+		frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		frame.setVisible(true);
 		frame.addWindowListener(new WindowAdapter()
 		{
 		    public void windowClosing(WindowEvent e)
@@ -103,10 +109,9 @@ public class LevelEditor {
 		initializeArmoredHeroCheckbox();
 		
 		panel.repaint();
-		panel.requestFocusInWindow();
 	}
 	
-	private void initializeClearButtons() {
+	private static void initializeClearButtons() {
 		btnClearAllEntities = new JButton("Clear all Entities");
 		btnClearAllEntities.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -125,7 +130,7 @@ public class LevelEditor {
 		btnClearAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				KeepMap map = new KeepMap();
-				char emptyMap[][] = new char[10][10];
+				char emptyMap[][] = new char[getMapWidth()][getMapHeight()];
 				for(char []row : emptyMap){
 					Arrays.fill(row, ' ');
 				}
@@ -152,7 +157,7 @@ public class LevelEditor {
 		frame.getContentPane().add(btnEmpty);
 	}
 
-	private void initializeLabels(){
+	private static void initializeLabels(){
 		lblOptions = new JLabel("Ready to edit");
 		lblOptions.setBounds(16, 354, 209, 16);
 		frame.getContentPane().add(lblOptions);
@@ -170,7 +175,7 @@ public class LevelEditor {
 		frame.getContentPane().add(lblFinalize);
 	}
 
-	private void initializeArmoredHeroCheckbox() {
+	private static void initializeArmoredHeroCheckbox() {
 		chckbxArmedHero = new JCheckBox("Armed Hero");
 		chckbxArmedHero.setBounds(224, 350, 112, 23);
 		frame.getContentPane().add(chckbxArmedHero);
@@ -254,12 +259,12 @@ public class LevelEditor {
 		nextChar = '0';
 	}
 	
-	private void initializeGame(){
+	private static void initializeGame(){
 		Game.changeMap("Keep","");
 		ArrayList<Entity> emptyList = new ArrayList<Entity>();
 		
 		KeepMap map = new KeepMap();
-		char emptyMap[][] = new char[10][10];
+		char emptyMap[][] = new char[getMapWidth()][getMapWidth()];
 		for(char []row : emptyMap){
 			Arrays.fill(row, ' ');
 		}
@@ -331,5 +336,29 @@ public class LevelEditor {
 		});
 		btnOgre.setBounds(344, 159, 127, 29);
 		frame.getContentPane().add(btnOgre);
+	}
+	
+	public static void setVisible(){
+		frame.setVisible(true);
+	}
+	
+	public static void dispose(){
+		frame.dispose();
+	}
+
+	public static int getMapWidth() {
+		return mapWidth;
+	}
+
+	public static void setMapWidth(int mapWidth_) {
+		mapWidth = mapWidth_;
+	}
+
+	public static int getMapHeight() {
+		return mapHeight;
+	}
+
+	public static void setMapHeight(int mapHeight_) {
+		mapHeight = mapHeight_;
 	}
 }

@@ -155,6 +155,11 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		if(e.getX()/31 > LevelEditor.getMapWidth() - 1 || e.getY()/31 > LevelEditor.getMapHeight() - 1){
+			LevelEditor.setStatus("Out of Bounds!");
+			return;
+		}
+		
 		addEntity(e);
 		addStaticObject(e);
 		repaint();
@@ -319,7 +324,7 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 
 	private void printStaticObjects(Graphics g, char[][] mapCopy) {
 		for(int i = 0; i< mapCopy.length; i++) {
-			for(int j = 0; j < mapCopy.length; j++) {
+			for(int j = 0; j < mapCopy[0].length; j++) {
 				
 				if (levelEditor) g.drawRect(j*imagex, i*imagey, 31, 31);
 				
