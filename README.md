@@ -6,4 +6,3 @@
 * [x] - Current coverage: ~90% (>= 80% needed)
 * [ ] - Current PIT mutations: ~57% (>= 60% needed)
 * [ ] - dkeep.logic Javadoc -> Generate HTML documentation
-* [ ] - ogre/club on key has no graphics in GUI
