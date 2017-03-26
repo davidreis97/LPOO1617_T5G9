@@ -3,6 +3,7 @@ package dkeep.test;
 import static org.junit.Assert.*;
 
 import java.awt.Point;
+import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +20,6 @@ public class TestKeepGameLogic {
 	public void setUp() throws Exception {
 		new Game("Keep", "Rookie", 0);
 	}
-	
 
 	@Test
 	public void heroMovesAdjacentToOgre() {
@@ -36,13 +36,15 @@ public class TestKeepGameLogic {
 	
 	@Test
 	public void heroMovesToKey() {
+		Hero hero = (Hero) Game.getEntities().get(Game.getHeroIndex());
 		
-		Point initialPoint = new Point(7,1);
-		Game.getEntities().get(Game.getHeroIndex()).setCoords(initialPoint);
+		hero.setCoords(new Point(7, 1));
+		
 		assertEquals('k', Game.getMap()[1][8]);
-		assertEquals(false,((KeepMap) Game.getMapObject()).getHeroHasKey());
+		assertEquals(false, ((KeepMap) Game.getMapObject()).getHeroHasKey());
 		Game.updateGame('d', false);
-		assertEquals(true,((KeepMap) Game.getMapObject()).getHeroHasKey());
+		assertEquals(true, ((KeepMap) Game.getMapObject()).getHeroHasKey());
+		assertEquals('K', hero.getRepresentation());
 	}
 	
 	@Test
@@ -118,5 +120,17 @@ public class TestKeepGameLogic {
 				outcomes += temp + " ";
 			}
 		}
+	}
+	
+	@Test
+	public void keepMapConstruction() {
+		Random random = new Random();
+		int width = random.nextInt(6) + 5;
+		int height = random.nextInt(6) + 5;
+		
+		KeepMap keep = new KeepMap(width, height);
+		
+		assertEquals(width, keep.getWidth());
+		assertEquals(height, keep.getHeight());
 	}
 }

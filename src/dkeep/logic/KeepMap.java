@@ -133,6 +133,14 @@ public class KeepMap implements Map,Serializable {
 	public void nextMap() {
 		Game.setState("Win");
 	}
+	
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
 
 	public boolean getHeroHasKey() {
 		return heroHasKey;

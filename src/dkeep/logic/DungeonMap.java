@@ -31,7 +31,7 @@ public class DungeonMap implements Map, Serializable {
 		return tempMap;
 	}
 	
-	public boolean doMove(Point coords, String entityType, int index) { //CAUTION Entity type and index are unused variables
+	public boolean doMove(Point coords, String entityType, int index) {
 		
 		char collision = dungeonMap[coords.y][coords.x];
 		
