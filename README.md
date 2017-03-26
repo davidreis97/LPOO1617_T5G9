@@ -4,5 +4,5 @@
 ## TODO
 * [x] - 7 / 10 BetterCodeHub
 * [x] - Current coverage: ~90% (>= 80% needed)
-* [ ] - Current PIT mutations: ~57% (>= 60% needed)
+* [x] - Current PIT mutations: ~60% (>= 60% needed)
 * [ ] - dkeep.logic Javadoc -> Generate HTML documentation
