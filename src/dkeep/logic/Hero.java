@@ -21,15 +21,9 @@ public class Hero extends Entity {
 		return;
 	}
 	
-	public boolean doCollision(int index, int stage) {
-		ArrayList<Integer> adjacent = Game.isAdjacentTo(index);
-		
-		if(adjacent.isEmpty()) {
-			return false;
-		}
+	public boolean doCollisionStage1(ArrayList<Integer> adjacent) {
 		
 		for(int i = 0; i < adjacent.size(); i++) {
-			if(stage == 1) {
 				if(Game.getEntities().get(adjacent.get(i)) instanceof Ogre) {
 					
 					Ogre ogre = (Ogre) Game.getEntities().get(adjacent.get(i));
@@ -45,28 +39,33 @@ public class Hero extends Entity {
 					Guard guard = (Guard) Game.getEntities().get(adjacent.get(i));
 					if(!guard.isSleeping())	return true;
 				}
+			}
+		
+		return false;
+	}
+	
+	public boolean doCollisionStage2(ArrayList<Integer> adjacent) {
+		
+		for(int i = 0; i < adjacent.size(); i++) {
+			if(Game.getEntities().get(adjacent.get(i)) instanceof Ogre) {
 				
-			} else if(stage == 2) {
-				if(Game.getEntities().get(adjacent.get(i)) instanceof Ogre) {
-					
-					Ogre ogre = (Ogre) Game.getEntities().get(adjacent.get(i));
-					if(!ogre.isStunned()) {
-						return true;
-					}
-				} else if(Game.getEntities().get(adjacent.get(i)) instanceof Club) {
-					
+				Ogre ogre = (Ogre) Game.getEntities().get(adjacent.get(i));
+				if(!ogre.isStunned()) {
 					return true;
-				} else if(Game.getEntities().get(adjacent.get(i)) instanceof Guard) {
-					
-					Guard guard = (Guard) Game.getEntities().get(adjacent.get(i));
-					if(!guard.isSleeping())	return true;
 				}
+			} else if(Game.getEntities().get(adjacent.get(i)) instanceof Club) {
+				
+				return true;
+			} else if(Game.getEntities().get(adjacent.get(i)) instanceof Guard) {
+				
+				Guard guard = (Guard) Game.getEntities().get(adjacent.get(i));
+				if(!guard.isSleeping())	return true;
 			}
 		}
 		
 		return false;
 	}
-
+		
 	public boolean isArmed() {
 		return isArmed;
 	}

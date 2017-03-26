@@ -102,7 +102,7 @@ public class Game {
 			hero.coords = move(hero.coords, userInput, "Hero", heroIndex);
 		}
 		
-		if(hero.doCollision(heroIndex, 1)) {
+		if(hero.doCollisionStage1(isAdjacentTo(heroIndex))) {
 			state = "Lose";
 			return;
 		}
@@ -115,7 +115,7 @@ public class Game {
 			}
 		}
 
-		if(hero.doCollision(heroIndex, 2)) {
+		if(hero.doCollisionStage2(isAdjacentTo(heroIndex))) {
 			state = "Lose";
 			return;
 		}
