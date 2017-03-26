@@ -35,33 +35,30 @@ public abstract class Guard extends Entity {
 		return random.nextFloat() < probability;
 	}
 	
+	private char reverseDirection(char nextMove) {
+		
+		switch(nextMove) {
+		case 'w':
+			return 's';
+		case 's':
+			return 'w';
+		case 'a':
+			return 'd';
+		case 'd':
+			return 'a';
+		default:
+			return 'w';
+		}
+	}
+	
 	protected char nextDirection(boolean isReversed) {
 		
-		char nextMove = 'w';
+		char nextMove = guardPath[stepCounter];
 		
 		if(isReversed) {
-			nextMove = guardPath[stepCounter];
-			
-			switch(nextMove) {
-			case 'w':
-				nextMove = 's';
-				break;
-			case 's':
-				nextMove = 'w';
-				break;
-			case 'a':
-				nextMove = 'd';
-				break;
-			case 'd':
-				nextMove = 'a';
-				break;
-			default:
-				break;
-			}
-		
+			nextMove = reverseDirection(nextMove);
 			stepCounter--;
 		} else {
-			nextMove = guardPath[stepCounter];
 			stepCounter++;
 		}
 		
