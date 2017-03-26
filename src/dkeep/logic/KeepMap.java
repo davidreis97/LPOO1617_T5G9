@@ -32,37 +32,61 @@ public class KeepMap implements Map,Serializable {
 		return tempMap;
 	}
 	
+	private void keyCollision(int index, String entityType, Point coords) {
+		if(entityType.equals("Hero")) {
+			Game.getEntities().get(index).setRepresentation('K');
+			keepMap[coords.y][coords.x] = ' ';
+			setHeroHasKey(true);
+		} else if(entityType.equals("Ogre") || entityType.equals("Club")) {
+			Game.getEntities().get(index).setRepresentation('$');
+		}
+	}
+	
+	private void revertRepresentation(int index, String entityType) {
+		if(Game.getEntities().get(index).getRepresentation() == '$' && entityType == "Ogre") {
+			Game.getEntities().get(index).setRepresentation('0');
+		}else if(Game.getEntities().get(index).getRepresentation() == '$' && entityType == "Club") {
+			Game.getEntities().get(index).setRepresentation('*');
+		}
+	}
+	
+	private boolean outOfBounds(Point coords) {
+		if(coords.x >= 10 || coords.x < 0 || coords.y >= 10 || coords.y < 0){
+			return true;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public void checkDoors(String entityType) {
+		
+		if(entityType.equals("Hero") && heroHasKey) {
+			for(int x = 0; x < 10; x++) {
+				for(int y = 0; y < 10; y++) {
+					if(keepMap[x][y] == 'I') {
+						keepMap[x][y] = 'S';
+					}
+				}
+			}
+		}
+	}
+	
 	public boolean doMove(Point coords, String entityType, int index) {
 		
-		if(coords.x >= 10 || coords.x < 0 || coords.y >= 10 || coords.y < 0){
-			return false;
-		}
+		if(outOfBounds(coords)) return false;
 		
 		char collision = keepMap[coords.y][coords.x];
 		
 		switch(collision) {
 		case ' ':
-			if(Game.getEntities().get(index).getRepresentation() == '$' && entityType == "Ogre") {
-				Game.getEntities().get(index).setRepresentation('0');
-			}else if(Game.getEntities().get(index).getRepresentation() == '$' && entityType == "Club") {
-				Game.getEntities().get(index).setRepresentation('*');
-			}
+			revertRepresentation(index, entityType);
 			return true;
 		case 'I':
-			if(entityType.equals("Hero")) {
-				if(getHeroHasKey()) {
-					openDoors();
-				}
-			}
+			checkDoors(entityType);
 			return false;
 		case 'k':
-			if(entityType.equals("Hero")) {
-				Game.getEntities().get(index).setRepresentation('K');
-				keepMap[coords.y][coords.x] = ' ';
-				setHeroHasKey(true);
-			} else if(entityType.equals("Ogre") || entityType.equals("Club")) {
-				Game.getEntities().get(index).setRepresentation('$');
-			}
+			keyCollision(index, entityType, coords);
 			return true;
 		case 'S':
 			nextMap();
@@ -82,7 +106,7 @@ public class KeepMap implements Map,Serializable {
 		
 		for(int i = 0; i < Game.getNumOgres(); i++) {
 			
-			Point ogreRandCoords = new Point(ogreCoords.nextInt(8) + 1, ogreCoords.nextInt(6) + 1);
+			Point ogreRandCoords = new Point(ogreCoords.nextInt(8) + 1, ogreCoords.nextInt(5) + 1);
 			
 			entities.add(new Ogre(ogreRandCoords, '0'));
 			entities.add(new Club(ogreRandCoords, '*'));
@@ -103,17 +127,6 @@ public class KeepMap implements Map,Serializable {
 
 	public void setHeroHasKey(boolean heroHasKey) {
 		this.heroHasKey = heroHasKey;
-	}
-
-	@Override
-	public void openDoors() {
-		for(int x = 0; x < 10; x++){
-			for(int y = 0; y < 10; y++){
-				if(keepMap[x][y] == 'I'){
-					keepMap[x][y] = 'S';
-				}
-			}
-		}
 	}
 	
 	public void setMap(char newMap[][]){

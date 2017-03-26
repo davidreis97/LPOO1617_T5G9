@@ -69,7 +69,7 @@ public class TestDungeonGameLogic {
 	@Test
 	public void heroMovesToOpenExitDoor() {
 		Point initialPoint = new Point(1,5);
-		Game.getMapObject().openDoors();
+		Game.getMapObject().checkDoors("Hero");
 		Game.getEntities().get(Game.getHeroIndex()).setCoords(initialPoint);
 		Game.updateGame('a', true);
 		assertEquals("KeepMap",Game.getMapObject().getClass().getSimpleName());

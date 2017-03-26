@@ -39,7 +39,7 @@ public class DungeonMap implements Map, Serializable {
 		case ' ':
 			return true;
 		case 'k':
-			openDoors();
+			checkDoors(entityType);
 			return false;
 		case 'S':
 			nextMap();
@@ -50,7 +50,7 @@ public class DungeonMap implements Map, Serializable {
 	}
 	
 	@Override
-	public void openDoors(){
+	public void checkDoors(String entityType) {
 		dungeonMap[5][0] = 'S';
 		dungeonMap[6][0] = 'S';
 	}

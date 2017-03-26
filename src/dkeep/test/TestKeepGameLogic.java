@@ -17,15 +17,16 @@ public class TestKeepGameLogic {
 
 	@Before
 	public void setUp() throws Exception {
-		new Game("Keep", "Rookie", 1);
+		new Game("Keep", "Rookie", 0);
 	}
 	
 
 	@Test
 	public void heroMovesAdjacentToOgre() {
-		Hero hero = (Hero) Game.getEntities().get(Game.getHeroIndex());
 		
-		//Set hero below Ogre
+		new Game("Keep", "Rookie", 1);
+		
+		Hero hero = (Hero) Game.getEntities().get(Game.getHeroIndex());
 		hero.setCoords(new Point(Game.getEntities().get(1).getCoords().x, Game.getEntities().get(1).getCoords().y + 2));
 		hero.setArmed(false);
 		assertNotEquals("Lose", Game.getState());
@@ -35,6 +36,7 @@ public class TestKeepGameLogic {
 	
 	@Test
 	public void heroMovesToKey() {
+		
 		Point initialPoint = new Point(7,1);
 		Game.getEntities().get(Game.getHeroIndex()).setCoords(initialPoint);
 		assertEquals('k', Game.getMap()[1][8]);
@@ -46,8 +48,6 @@ public class TestKeepGameLogic {
 	@Test
 	public void heroMovesToDoorWithoutKey() {
 		
-		new Game("Keep", "Rookie", 0);
-		
 		Point initialPoint = new Point(1,1);
 		assertEquals(false,((KeepMap) Game.getMapObject()).getHeroHasKey());
 		Game.getEntities().get(Game.getHeroIndex()).setCoords(initialPoint);
@@ -58,8 +58,6 @@ public class TestKeepGameLogic {
 	
 	@Test
 	public void heroMovesToDoorWithKey() {
-		
-		new Game("Keep", "Rookie", 0);
 		
 		Point initialPoint = new Point(7, 1);
 		Game.getEntities().get(Game.getHeroIndex()).setCoords(initialPoint);
@@ -77,8 +75,6 @@ public class TestKeepGameLogic {
 	@Test
 	public void heroMovesToOpenExitDoor() {
 		
-		new Game("Keep", "Rookie", 0);
-		
 		Point initialPoint = new Point(1, 1);
 		KeepMap temp = (KeepMap) Game.getMapObject();
 		temp.setHeroHasKey(true);
@@ -92,6 +88,9 @@ public class TestKeepGameLogic {
 	
 	@Test(timeout = 1000)
 	public void ogreRandomMovement() {
+		
+		new Game("Keep", "Rookie", 1);
+		
 		String outcomes = "";
 		String eligible = "RR RL RU RD LR LL LU LD UU UD UR UL DD DU DR DL ";
 		

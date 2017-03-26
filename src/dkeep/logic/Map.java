@@ -12,5 +12,5 @@ public interface Map{
 	
 	public void nextMap();
 	
-	public void openDoors();
+	public void checkDoors(String entityType);
 }
