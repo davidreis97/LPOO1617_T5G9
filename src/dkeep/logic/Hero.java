@@ -3,24 +3,52 @@ package dkeep.logic;
 import java.awt.Point;
 import java.util.ArrayList;
 
+/**
+ * Class that implements Hero object functionality, considered the Player character.
+ */
 public class Hero extends Entity {
 
 	boolean isArmed;
 	
+	/**
+	 * Class constructor, assumes Hero is not armed.
+	 *
+	 * @param  coords         coords for Hero
+	 * @param  representation char representation of Hero
+	 */
 	public Hero(Point coords, char representation) {
 		super(coords, representation);
 		this.isArmed = false;
 	}
 	
+	/**
+	 * Class constructor, allows setting if Hero is armed.
+	 *
+	 * @param  coords         coords for Hero
+	 * @param  representation char representation of Hero
+	 * @param  isArmed        whether Hero is armed
+	 */
 	public Hero(Point coords, char representation, boolean isArmed) {
 		super(coords, representation);
 		this.isArmed = isArmed;
 	}
 	
+	/**
+	 * Stub implementation. Game implements Hero movement in updateGame method.
+	 * 
+	 * @param  index index of current Entity from entities array
+	 */
+	@Override
 	public void nextMovement(int index) { 
 		return;
 	}
 	
+	/**
+	 * Handles collision between Hero and adjacent entities. Stage 1 (Hero moves) has the Hero attacking with the sword.
+	 * 
+	 * @param  adjacent array of indices of adjacent entities from entities array
+	 * @return          whether Hero has collided and as such lost the game
+	 */
 	public boolean doCollisionStage1(ArrayList<Integer> adjacent) {
 		
 		for(int i = 0; i < adjacent.size(); i++) {
@@ -44,6 +72,12 @@ public class Hero extends Entity {
 		return false;
 	}
 	
+	/**
+	 * Handles collision between Hero and adjacent entities. Stage 2 (other entities move) has no Hero attack so more entities can defeat the Hero.
+	 * 
+	 * @param  adjacent array of indices of adjacent entities from entities array
+	 * @return          whether Hero has collided and as such lost the game
+	 */
 	public boolean doCollisionStage2(ArrayList<Integer> adjacent) {
 		
 		for(int i = 0; i < adjacent.size(); i++) {
@@ -65,11 +99,19 @@ public class Hero extends Entity {
 		
 		return false;
 	}
-		
+	
+	/**
+	 * @return whether Hero is armed
+	 */
 	public boolean isArmed() {
 		return isArmed;
 	}
 
+	/**
+	 * Set whether Hero is armed, also changes representation.
+	 * 
+	 * @param  isArmed whether Hero is armed
+	 */
 	public void setArmed(boolean isArmed) {
 		this.isArmed = isArmed;
 		if (isArmed) {

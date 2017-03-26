@@ -4,8 +4,10 @@ import java.awt.Point;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Class implementing Map interface with Dungeon specific behavior.
+ */
 public class DungeonMap implements Map, Serializable {
-	
 	
 	private char dungeonMap[][] =
         {{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
@@ -19,10 +21,10 @@ public class DungeonMap implements Map, Serializable {
 			{'X', ' ', 'I', ' ', 'I', ' ', 'X', 'k', ' ', 'X'},
 			{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}};
 	
-	//Copies map so the original isn't modified
+	@Override
 	public char[][] getMap() {
 		
-		char[][] tempMap = new char[dungeonMap.length][dungeonMap.length]; //CAUTION assumes map is square
+		char[][] tempMap = new char[dungeonMap.length][dungeonMap.length];
 		
 		for(int i = 0; i < dungeonMap.length; i++) {
 			tempMap[i] = dungeonMap[i].clone();
@@ -31,6 +33,7 @@ public class DungeonMap implements Map, Serializable {
 		return tempMap;
 	}
 	
+	@Override
 	public boolean doMove(Point coords, String entityType, int index) {
 		
 		char collision = dungeonMap[coords.y][coords.x];
@@ -55,13 +58,14 @@ public class DungeonMap implements Map, Serializable {
 		dungeonMap[6][0] = 'S';
 	}
 
-	public void initMap(String guardtype) {
+	@Override
+	public void initMap(String guardType) {
 		ArrayList<Entity> entities = Game.getEntities();
 		entities.clear();
 		entities.add(new Hero(new Point(1, 1), 'H'));
-		if (guardtype.equals("Suspicious")){
+		if (guardType.equals("Suspicious")){
 			entities.add(new SuspiciousGuard(new Point(8, 1), 'G'));
-		}else if (guardtype.equals("Drunken")){
+		}else if (guardType.equals("Drunken")){
 			entities.add(new DrunkenGuard(new Point(8, 1), 'G'));
 		}else{
 			entities.add(new RookieGuard(new Point(8, 1), 'G'));
@@ -71,6 +75,7 @@ public class DungeonMap implements Map, Serializable {
 		Game.setHeroIndex(0);
 	}
 	
+	@Override
 	public void nextMap() {
 		Game.changeMap("Keep","");
 	}
