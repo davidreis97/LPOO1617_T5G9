@@ -48,15 +48,29 @@ public class CLI {
 		return userInput;
 	}
 	
-	public static void gameSetup(Scanner keyboard) {
+	private static void constructGame(String guardType, int numOgres) {
+		switch(guardType) {
+		case "a":
+			new Game("Dungeon", "Rookie", numOgres);
+			break;
+		case "b":
+			new Game("Dungeon", "Drunken", numOgres);
+			break;
+		case "c":
+			new Game("Dungeon", "Suspicious", numOgres);
+			break;
+		}
+	}
+	
+	private static void gameSetup(Scanner keyboard) {
 		String guardInput, ogreInput;
 		String validGuard = "abc";
 		String validOgre = "12345";
 		
 		System.out.println("Input type of guard to use:");
-		System.out.println("a - Rookie");
-		System.out.println("b - Drunken (falls asleep, reverses direction");
-		System.out.println("c - Suspicious (reverses direction)");
+		System.out.println("  a - Rookie");
+		System.out.println("  b - Drunken (falls asleep, reverses direction");
+		System.out.println("  c - Suspicious (reverses direction)");
 		
 		guardInput = userInput(validGuard, keyboard);
 		
@@ -64,17 +78,7 @@ public class CLI {
 		
 		ogreInput = userInput(validOgre, keyboard);
 	
-		switch(guardInput) {
-		case "a":
-			new Game("Dungeon", "Rookie", Integer.parseInt(ogreInput));
-			break;
-		case "b":
-			new Game("Dungeon", "Drunken", Integer.parseInt(ogreInput));
-			break;
-		case "c":
-			new Game("Dungeon", "Suspicious", Integer.parseInt(ogreInput));
-			break;
-		}
+		constructGame(guardInput, Integer.parseInt(ogreInput));
 	}
 	
 	private static void saveGame(Scanner keyboard) {
@@ -106,10 +110,11 @@ public class CLI {
 	    File folder = new File(savePath);
 	    File[] filenames = folder.listFiles();
 	    
+	    System.out.println("Insert savefile to load:");
 	    
 	    if(!(filenames == null)) {
 		    for(int i = 0; i < filenames.length; i++) {
-		    	System.out.println(filenames[i].getName());
+		    	System.out.println("- " + filenames[i].getName());
 		    }
 	    }
 	}
@@ -119,8 +124,7 @@ public class CLI {
 		printSaves();
 		
 		String savePath = System.getProperty("user.dir") + "/saves";
-		
-		System.out.println("Insert savefile to load:");
+
 		String filename = keyboard.nextLine();
 		
         try {
@@ -139,37 +143,36 @@ public class CLI {
          }
 	}
 	
+	private static void gameLoop(Scanner keyboard) {
+		
+		String kbdInput;
+		String validInput = "wasdtf";
+		
+		do {
+
+			printMap(Game.getMap(), Game.getEntities());
+			
+			System.out.println("Controls: (WASD) moves | (T)o file saves | (F)rom file loads:");
+			
+			kbdInput = userInput(validInput, keyboard);
+		
+			if(kbdInput.charAt(0) == 't') {
+				saveGame(keyboard);
+			} else if(kbdInput.charAt(0) == 'f') {
+				loadGame(keyboard);
+			} else Game.updateGame(kbdInput.charAt(0), true);
+			
+		} while(Game.getState().equals("Playing"));
+	}
+	
 	//Entry point and game loop, processes input until game is over
 	public static void main(String[] args) {
 
 		Scanner keyboard = new Scanner(System.in);
 		
 		gameSetup(keyboard);
+		gameLoop(keyboard);
 		
-		String kbdInput;
-		String validInput = "wasdtf";
-
-		do {
-
-			printMap(Game.getMap(), Game.getEntities());
-			
-			System.out.println("Input a direction (WASD):");
-			
-			kbdInput = userInput(validInput, keyboard);
-		
-			switch(kbdInput) {
-			case "t":
-				saveGame(keyboard);
-				break;
-			case "f":
-				loadGame(keyboard);
-				break;
-			default:
-				Game.updateGame(kbdInput.charAt(0), true);
-			}
-			
-		} while(Game.getState().equals("Playing"));
-
 		printMap(Game.getMap(), Game.getEntities());
 		keyboard.close();
 		
