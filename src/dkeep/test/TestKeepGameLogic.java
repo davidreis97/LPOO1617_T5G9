@@ -45,6 +45,9 @@ public class TestKeepGameLogic {
 	
 	@Test
 	public void heroMovesToDoorWithoutKey() {
+		
+		new Game("Keep", "Rookie", 0);
+		
 		Point initialPoint = new Point(1,1);
 		assertEquals(false,((KeepMap) Game.getMapObject()).getHeroHasKey());
 		Game.getEntities().get(Game.getHeroIndex()).setCoords(initialPoint);
@@ -55,6 +58,9 @@ public class TestKeepGameLogic {
 	
 	@Test
 	public void heroMovesToDoorWithKey() {
+		
+		new Game("Keep", "Rookie", 0);
+		
 		Point initialPoint = new Point(7, 1);
 		Game.getEntities().get(Game.getHeroIndex()).setCoords(initialPoint);
 		assertEquals('k', Game.getMap()[1][8]);
