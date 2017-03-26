@@ -98,6 +98,15 @@ public class GUI {
 	}
 	
 	private void initializeStartExitEditorButtons() {
+		
+		initializeEditorButton();
+		
+		initializeStartNewGameButton();
+		
+		initializeExitButton();
+	}
+
+	private void initializeEditorButton() {
 		btnLevelEditor = new JButton("Level Editor");
 		btnLevelEditor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -107,6 +116,10 @@ public class GUI {
 		btnLevelEditor.setBounds(382, 246, 117, 29);
 		frame.getContentPane().add(btnLevelEditor);
 		
+		
+	}
+
+	private void initializeStartNewGameButton() {
 		btnStartNewGame = new JButton("Start New Game");
 		btnStartNewGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -115,7 +128,9 @@ public class GUI {
 		});
 		btnStartNewGame.setBounds(370, 22, 141, 29);
 		frame.getContentPane().add(btnStartNewGame);
-		
+	}
+
+	private void initializeExitButton() {
 		btnExit = new JButton("Exit");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -163,7 +178,6 @@ public class GUI {
 		btnLoadGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int returnVal = fc.showOpenDialog(frame);
-				
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 		            File file = fc.getSelectedFile();
 		            try {

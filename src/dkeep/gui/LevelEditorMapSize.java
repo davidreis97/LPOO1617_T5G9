@@ -48,26 +48,19 @@ public class LevelEditorMapSize extends JDialog {
 		
 		initializeLabelsSliders();
 		
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						LevelEditor.setMapHeight(height.getValue());
-						LevelEditor.setMapWidth(width.getValue());
-						LevelEditor.initialize();
-						LevelEditor.setStatus("Map Height: " + LevelEditor.getMapHeight() + " Map Width: " + LevelEditor.getMapWidth());
-						dispose();
-					}
-				});
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+		initializeOkButton();
+	}
+
+	private void initializeOkButton() {
+		JButton btnOk = new JButton("OK");
+		btnOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LevelEditor.initialize(height.getValue(),width.getValue());
+				dispose();
 			}
-		}
+		});
+		btnOk.setBounds(155, 114, 117, 29);
+		contentPanel.add(btnOk);
 	}
 
 	private void initializeLabelsSliders() {

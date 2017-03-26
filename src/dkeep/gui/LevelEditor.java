@@ -71,12 +71,36 @@ public class LevelEditor {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @param j 
+	 * @param i 
 	 */
-	public static void initialize() {
-		
-		initializeGame();
-				
+	public static void initialize(int height, int width) {
+		mapWidth = width;
+		mapHeight = height;
 		frame = new JFrame();
+		
+		initializePanel();
+		initializeGame();
+		initializeFrame();
+		initializePlacementMapButtons();
+		initializePlacementKeyButton();
+		initializePlacementEntityButtons();
+		initializeOptionsButtons();
+		initializeClearAllButton();
+		initializeClearAndEmptyButtons();
+		initializeLabels();
+		initializeArmoredHeroCheckbox();
+		panel.repaint();
+		setStatus("Map Height: " + mapHeight + " Map Width: " + mapWidth);
+	}
+	
+	private static void initializePanel() {
+		panel = new SimpleGraphicsPanel(true);
+		panel.setBounds(16, 22, 320, 320);
+		frame.getContentPane().add(panel);
+	}
+
+	private static void initializeFrame() {
 		frame.setResizable(false);
 		frame.setBounds(100, 100, 477, 398);
 		frame.getContentPane().setLayout(null);
@@ -91,30 +115,8 @@ public class LevelEditor {
 		        GUI.updateGUIStatus();
 		    }
 		});
-		
-		panel = new SimpleGraphicsPanel(true);
-		panel.setBounds(16, 22, 320, 320);
-		frame.getContentPane().add(panel);
-		
-		initializePlacementMapButtons();
-		
-		initializePlacementKeyButton();
-		
-		initializePlacementEntityButtons();
-
-		initializeOptionsButtons();
-		
-		initializeClearAllButton();
-		
-		initializeClearAndEmptyButtons();
-		
-		initializeLabels();
-		
-		initializeArmoredHeroCheckbox();
-		
-		panel.repaint();
 	}
-	
+
 	private static void initializeClearAllButton() {
 		btnClearAll = new JButton("Clear all Map");
 		btnClearAll.addActionListener(new ActionListener() {
@@ -319,6 +321,27 @@ public class LevelEditor {
 	}
 	
 	private static void initializePlacementEntityButtons(){
+		
+		initializeHeroButton();
+		frame.getContentPane().add(btnHero);
+		
+		initializeOgreButton();
+	}
+	
+	private static void initializeOgreButton() {
+		btnOgre = new JButton("Ogre");
+		btnOgre.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nextChar = '0';
+				lblOptions.setText("Current Entity: Ogre");
+				panel.requestFocusInWindow();
+			}
+		});
+		btnOgre.setBounds(344, 159, 127, 29);
+		frame.getContentPane().add(btnOgre);
+	}
+
+	private static void initializeHeroButton() {
 		btnHero = new JButton("Hero");
 		btnHero.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -333,20 +356,8 @@ public class LevelEditor {
 			}
 		});
 		btnHero.setBounds(344, 45, 127, 29);
-		frame.getContentPane().add(btnHero);
-		
-		btnOgre = new JButton("Ogre");
-		btnOgre.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				nextChar = '0';
-				lblOptions.setText("Current Entity: Ogre");
-				panel.requestFocusInWindow();
-			}
-		});
-		btnOgre.setBounds(344, 159, 127, 29);
-		frame.getContentPane().add(btnOgre);
 	}
-	
+
 	public static void setVisible(){
 		frame.setVisible(true);
 	}

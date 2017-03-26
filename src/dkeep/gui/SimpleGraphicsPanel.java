@@ -169,31 +169,14 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 		KeepMap map;
 		char [][] charMap;
 		
-		switch(LevelEditor.getNextChar()){
-		case 'k':
+		if(LevelEditor.getNextChar() == 'k' || 
+				LevelEditor.getNextChar() == 'X' || 
+				LevelEditor.getNextChar() == 'I' || 
+				LevelEditor.getNextChar() == ' '){
 			map = (KeepMap)Game.getMapObject();
 			charMap = Game.getMapObject().getMap();
-			charMap[(int)(e.getY()/31)][(int)(e.getX()/31)] = 'k';
+			charMap[(int)(e.getY()/31)][(int)(e.getX()/31)] = LevelEditor.getNextChar();
 			map.setMap(charMap);
-			break;
-		case 'X':
-			map = (KeepMap)Game.getMapObject();
-			charMap = Game.getMapObject().getMap();
-			charMap[(int)(e.getY()/31)][(int)(e.getX()/31)] = 'X';
-			map.setMap(charMap);
-			break;
-		case 'I':
-			map = (KeepMap)Game.getMapObject();
-			charMap = Game.getMapObject().getMap();
-			charMap[(int)(e.getY()/31)][(int)(e.getX()/31)] = 'I';
-			map.setMap(charMap);
-			break;
-		case ' ':
-			map = (KeepMap)Game.getMapObject();
-			charMap = Game.getMapObject().getMap();
-			charMap[(int)(e.getY()/31)][(int)(e.getX()/31)] = ' ';
-			map.setMap(charMap);
-			break;
 		}
 	}
 

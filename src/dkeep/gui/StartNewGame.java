@@ -47,6 +47,24 @@ public class StartNewGame extends JDialog {
 		
 		initializeOptionsElements();
 		
+		initializeStartButton();
+		
+		initializeCancelButton();
+	}
+
+	private void initializeCancelButton() {
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GUI.updateGUIStatus();
+				dispose();
+			}
+		});
+		btnCancel.setBounds(279, 53, 117, 29);
+		contentPanel.add(btnCancel);
+	}
+
+	private void initializeStartButton() {
 		JButton btnStart = new JButton("Start");
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -57,16 +75,6 @@ public class StartNewGame extends JDialog {
 		});
 		btnStart.setBounds(279, 18, 117, 29);
 		contentPanel.add(btnStart);
-		
-		JButton btnCancel = new JButton("Cancel");
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				GUI.updateGUIStatus();
-				dispose();
-			}
-		});
-		btnCancel.setBounds(279, 53, 117, 29);
-		contentPanel.add(btnCancel);
 	}
 
 	private void initializeOptionsElements() {
