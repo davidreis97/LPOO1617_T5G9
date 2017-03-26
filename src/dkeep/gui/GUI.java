@@ -297,8 +297,7 @@ public class GUI {
 	}
 
 	public static boolean validate() {
-		boolean hero = false,key = false,wall = false,door = false,ogre = false;
-		int ogreToClub = 0;
+		boolean key = false,wall = false,door = false;
 		for(char []i: Game.getMap()){
 			for(char j: i){
 				if(j == 'k'){

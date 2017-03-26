@@ -245,13 +245,28 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 		}catch (NullPointerException npe){
 			return;
 		}
-
+		
+		printOgreKeyObjects(g);
+		
 		printStaticObjects(g,mapCopy);
 		
 		printHeroObjects(g);
 		printGuardObjects(g);
 		printOgreObjects(g);
 	}
+
+	private void printOgreKeyObjects(Graphics g) {
+		for(Entity e : Game.getEntities()) {
+			if(e.getRepresentation() == '$'){
+				if (e instanceof Ogre){
+					g.drawImage(ogre, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
+				}else{
+					g.drawImage(mace, e.getCoords().x*imagex, e.getCoords().y*imagey, null);
+				}
+			}
+		}
+	}
+
 
 	//Prints map with dynamic objects (entities)
 	private void printHeroObjects(Graphics g) {
@@ -322,6 +337,9 @@ public class SimpleGraphicsPanel extends JPanel implements MouseListener, KeyLis
 						g.drawImage(openDoor, j*imagex, i*imagey, null);
 						break;
 					case 'k':
+						g.drawImage(key, j*imagex, i*imagey, null);
+						break;
+					case '$':
 						g.drawImage(key, j*imagex, i*imagey, null);
 						break;
 				};
