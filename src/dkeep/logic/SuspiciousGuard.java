@@ -1,7 +1,6 @@
 package dkeep.logic;
 
 import java.awt.Point;
-import java.util.Random;
 
 public class SuspiciousGuard extends Guard {
 	
@@ -15,24 +14,18 @@ public class SuspiciousGuard extends Guard {
 		super(coords, representation, guardPath);
 	}
 	
-	public void nextMovement(int index) {
+	private void doLogic() {
 		
-		Random rand = new Random();
-		int reverse = rand.nextInt(4);
+		if(isReversed) {
+			stepCounter++;
+		} else stepCounter--;
 		
-		switch(reverse) {
-		case 1:
-			if(isReversed) {
-				stepCounter++;
-			} else stepCounter--;
-			
-			stepCounter = clamp(stepCounter, 0, guardPath.length - 1);
-			
-			isReversed = !isReversed;
-			break;
-		default:
-			break;
-		}
+		stepCounter = clamp(stepCounter, 0, guardPath.length - 1);
+		
+		isReversed = !isReversed;
+	}
+	
+	private char nextDirection() {
 		
 		char nextMove = 'w';
 		
@@ -61,6 +54,17 @@ public class SuspiciousGuard extends Guard {
 			nextMove = guardPath[stepCounter];
 			stepCounter++;
 		}
+		
+		return nextMove;
+	}
+	
+	public void nextMovement(int index) {
+		
+		if(generateChance(0.20f)) {
+			doLogic();
+		}
+
+		char nextMove = nextDirection();
 
 		stepCounter = clamp(stepCounter, 0, guardPath.length - 1);
 		

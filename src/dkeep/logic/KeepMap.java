@@ -3,6 +3,7 @@ package dkeep.logic;
 import java.awt.Point;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class KeepMap implements Map,Serializable {
 	
@@ -72,13 +73,21 @@ public class KeepMap implements Map,Serializable {
 	}
 
 	public void initMap(String guardtype) {
+		
 		ArrayList<Entity> entities = Game.getEntities();
 		entities.clear();
 		entities.add(new Hero(new Point(1, 8), 'A', true));
-		for(int i = 0; i < Game.getNumOgres(); i++){
-			entities.add(new Ogre(new Point(4, 1), '0'));
-			entities.add(new Club(new Point(4, 2), '*'));
+		
+		Random ogreCoords = new Random();
+		
+		for(int i = 0; i < Game.getNumOgres(); i++) {
+			
+			Point ogreRandCoords = new Point(ogreCoords.nextInt(8) + 1, ogreCoords.nextInt(6) + 1);
+			
+			entities.add(new Ogre(ogreRandCoords, '0'));
+			entities.add(new Club(ogreRandCoords, '*'));
 		}
+		
 		Game.setEntities(entities);
 		Game.setState("Playing");
 		Game.setHeroIndex(0);

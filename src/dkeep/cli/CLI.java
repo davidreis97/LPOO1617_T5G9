@@ -1,10 +1,17 @@
 package dkeep.cli;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import dkeep.logic.Entity;
 import dkeep.logic.Game;
+import dkeep.logic.GameSaveHelper;
 
 //Class responsible for displaying the game on the console, requesting user input and calling all the game logic functions
 public class CLI {
@@ -70,6 +77,68 @@ public class CLI {
 		}
 	}
 	
+	private static void saveGame(Scanner keyboard) {
+		
+		String savePath = System.getProperty("user.dir") + "/saves";
+		new File(savePath).mkdir();
+		
+		System.out.println("Insert savefile name:");
+		String filename = keyboard.nextLine();
+
+		try {
+			File file = new File(savePath + "/" + filename);
+			FileOutputStream fileOut = new FileOutputStream(file);
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			GameSaveHelper gsh = new GameSaveHelper();
+			gsh.gameToObject();
+			out.writeObject(gsh);
+			out.close();
+			fileOut.close();
+		}catch(IOException i) {
+			System.out.println("Error saving game: " + i.getMessage());
+		}
+	}
+	
+	private static void printSaves() {
+		
+		String savePath = System.getProperty("user.dir") + "/saves";
+		
+	    File folder = new File(savePath);
+	    File[] filenames = folder.listFiles();
+	    
+	    
+	    if(!(filenames == null)) {
+		    for(int i = 0; i < filenames.length; i++) {
+		    	System.out.println(filenames[i].getName());
+		    }
+	    }
+	}
+	
+	private static void loadGame(Scanner keyboard) {
+		
+		printSaves();
+		
+		String savePath = System.getProperty("user.dir") + "/saves";
+		
+		System.out.println("Insert savefile to load:");
+		String filename = keyboard.nextLine();
+		
+        try {
+            File file = new File(savePath + "/" + filename);
+            FileInputStream fileIn = new FileInputStream(file);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            GameSaveHelper gsh = new GameSaveHelper();
+            gsh = (GameSaveHelper) in.readObject();
+            gsh.objectToGame();
+            in.close();
+            fileIn.close();
+         } catch(IOException i) {
+            System.out.println("Error loading game: " + i.getMessage());
+         } catch(ClassNotFoundException c) {
+            System.out.println("Error loading game: " + c.getMessage());
+         }
+	}
+	
 	//Entry point and game loop, processes input until game is over
 	public static void main(String[] args) {
 
@@ -78,7 +147,7 @@ public class CLI {
 		gameSetup(keyboard);
 		
 		String kbdInput;
-		String validInput = "wasd";
+		String validInput = "wasdtf";
 
 		do {
 
@@ -88,8 +157,17 @@ public class CLI {
 			
 			kbdInput = userInput(validInput, keyboard);
 		
-			Game.updateGame(kbdInput.charAt(0), true);
-
+			switch(kbdInput) {
+			case "t":
+				saveGame(keyboard);
+				break;
+			case "f":
+				loadGame(keyboard);
+				break;
+			default:
+				Game.updateGame(kbdInput.charAt(0), true);
+			}
+			
 		} while(Game.getState().equals("Playing"));
 
 		printMap(Game.getMap(), Game.getEntities());

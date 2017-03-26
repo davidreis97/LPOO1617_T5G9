@@ -1,12 +1,10 @@
 package dkeep.logic;
 
 import java.awt.Point;
-import java.util.Random;
 
 public class DrunkenGuard extends Guard { 
 	
 	private boolean isReversed = false;
-	private boolean isSleeping = false;
 	
 	public DrunkenGuard(Point coords, char representation) {
 		super(coords, representation);
@@ -16,35 +14,29 @@ public class DrunkenGuard extends Guard {
 		super(coords, representation, guardPath);
 	}
 	
-	public void nextMovement(int index) {
+	private void doLogic(boolean toggleSleep, boolean toggleReverse) {
 		
-		Random rand = new Random();
-		int reverse = rand.nextInt(4);
-		int sleep = rand.nextInt(4);
-
-		if(isSleeping && sleep == 1) {
+		if(isSleeping && toggleSleep) {
 			isSleeping = false;
 			representation = 'G';
 
-			if(reverse == 1 && isReversed) {
+			if(toggleReverse && isReversed) {
 				stepCounter++;
 				stepCounter = clamp(stepCounter, 0, guardPath.length - 1);
-
 				isReversed = !isReversed;
-			}else if(reverse == 1 && !isReversed){
+			} else if(toggleReverse && !isReversed) {
 				stepCounter--;
 				stepCounter = clamp(stepCounter, 0, guardPath.length - 1);
-				
 				isReversed = !isReversed;
 			}
-		} else if(!isSleeping && sleep == 1){
+			
+		} else if(!isSleeping && toggleSleep){
 			isSleeping = true;
 			representation = 'g';
 		}
-
-		if(isSleeping) {
-			return;
-		}
+	}
+	
+	private char nextDirection() {
 		
 		char nextMove = 'w';
 		
@@ -73,6 +65,19 @@ public class DrunkenGuard extends Guard {
 			nextMove = guardPath[stepCounter];
 			stepCounter++;
 		}
+		
+		return nextMove;
+	}
+	
+	public void nextMovement(int index) {
+
+		doLogic(generateChance(0.20f), generateChance(0.20f));
+
+		if(isSleeping) {
+			return;
+		}
+		
+		char nextMove = nextDirection();
 
 		stepCounter = clamp(stepCounter, 0, guardPath.length - 1);
 		

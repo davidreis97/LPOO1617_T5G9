@@ -7,13 +7,11 @@
 * [ ] - Generate HTML documentation
 * [ ] - Level editor - user can specify width/height of Keep map (current implementation forces square maps)
 ---------------------------------------------------------------------------------------------------------------
-* [ ] - CLI Save/Load
+* [ ] - Nicer CLI Save/Load
 * [ ] - dkeep.logic Javadoc documentation
-* [ ] - Random coords for Ogres
-* [ ] - Try to remove changeMap from Game.java (not open-closed design)
 
 EXTRAS
-* [ ] - Replace Game states with enums
+* [ ] - Try to remove changeMap from Game.java (not open-closed design)
 * [ ] - Console play by play
 * [ ] - Level editor - non-square maps
 * [ ] - https://www.gamedev.net/resources/_/technical/game-programming/introduction-to-isometric-engines-r744
