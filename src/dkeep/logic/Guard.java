@@ -1,6 +1,7 @@
 package dkeep.logic;
 
 import java.awt.Point;
+import java.util.Random;
 
 public abstract class Guard extends Entity {
 	
@@ -14,6 +15,11 @@ public abstract class Guard extends Entity {
 	    } else if(val > max) {
 	    	return min;
 	    } else return val;
+	}
+	
+	protected static boolean generateChance(float probability) {
+		Random random = new Random();
+		return random.nextFloat() < probability;
 	}
 	
 	public Guard(Point coords, char representation) {
