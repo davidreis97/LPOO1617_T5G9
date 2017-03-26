@@ -5,6 +5,8 @@ import java.util.Random;
 
 public class Club extends Entity {
 
+	boolean active = true;
+	
 	public Club(Point coords, char representation) {
 		super(coords, representation);
 	}
@@ -28,7 +30,7 @@ public class Club extends Entity {
 	
 	public void nextMovement(int index) {
 		int result;
-		
+		Point oldCoords = coords;
 		char nextMove = nextDirection();
 		result = Game.entityCol(index, nextMove);
 		
@@ -38,5 +40,13 @@ public class Club extends Entity {
 			coords = Game.move(coords, nextMove, "Club", index);
 			Game.setState("Lose");
 		}
+		
+		if(oldCoords == coords) {
+			active = false;
+		} else active = true;
+	}
+
+	public boolean isActive() {
+		return active;
 	}
 }
