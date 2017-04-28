@@ -35,9 +35,9 @@ public class TSSCClient {
     }
 
     private void registerPackets(){
-        Kryo kyro = client.getKryo();
-        kyro.register(Packet.ControllerInfoPacket.class);
-        kyro.register(Vector2.class);
+        Kryo kryo = client.getKryo();
+        kryo.register(Packet.ControllerInfoPacket.class);
+        kryo.register(Vector2.class);
     }
 
     public int getTimeout() {
