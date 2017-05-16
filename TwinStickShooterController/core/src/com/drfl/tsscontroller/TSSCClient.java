@@ -7,8 +7,11 @@ package com.drfl.tsscontroller;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.util.List;
 import java.util.Scanner;
 
 public class TSSCClient {
@@ -22,7 +25,13 @@ public class TSSCClient {
         client = new Client();
         timeout = 5000;
         port = 54555;
-        IPAddress = "192.168.1.3";
+
+        IPAddress = client.discoverHost(port, timeout).toString();
+
+        if(IPAddress == null){
+            Log.info("Could not find any host. (Not connected to network/Not on the same subnet/Not broadcasting)");
+        }
+
         registerPackets();
 
         client.addListener(new NetworkListener());
