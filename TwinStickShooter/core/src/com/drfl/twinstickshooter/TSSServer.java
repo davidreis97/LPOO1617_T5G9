@@ -35,8 +35,8 @@ public class TSSServer {
     }
 
     public static void processControllerInfo(Packet.ControllerInfoPacket cip){
-        TSSGame.setAcceleration(cip.acceleration);
-        TSSGame.setBullets(cip.bullet);
+        //TSSGame.setAcceleration(cip.acceleration);
+        //TSSGame.setBullets(cip.bullet);
         Log.info("Received Acceleration: " + cip.acceleration + " / Received Bullet: " + cip.bullet);
     }
 }
