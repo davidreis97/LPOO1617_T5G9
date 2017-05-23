@@ -1,9 +1,5 @@
 package com.drfl.twinstickshooter;
 
-/**
- * Created by davidreis on 18/04/2017.
- */
-
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;

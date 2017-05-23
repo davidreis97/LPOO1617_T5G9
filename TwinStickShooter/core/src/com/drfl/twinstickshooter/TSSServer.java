@@ -7,10 +7,6 @@ import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 
-/**
- * Created by davidreis on 13/04/2017.
- */
-
 public class TSSServer {
     private int port = 54555;
 
