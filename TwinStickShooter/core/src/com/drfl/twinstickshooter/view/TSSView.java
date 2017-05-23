@@ -6,13 +6,21 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.drfl.twinstickshooter.TSSGame;
+import com.drfl.twinstickshooter.controller.TSSController;
 import com.drfl.twinstickshooter.model.TSSModel;
-import com.drfl.twinstickshooter.model.entities.MainChar;
+import com.drfl.twinstickshooter.model.entities.MainCharModel;
 import com.drfl.twinstickshooter.view.entities.EntityView;
 import com.drfl.twinstickshooter.view.entities.ViewFactory;
 
 public class TSSView extends ScreenAdapter {
+
+    /**
+     * Used to debug the position of the physics fixtures
+     */
+    private static final boolean DEBUG_PHYSICS = true;
 
     /**
      * Tileset size. (must be square tiles)
@@ -41,6 +49,17 @@ public class TSSView extends ScreenAdapter {
     private final OrthographicCamera camera;
 
     /**
+     * A renderer used to debug the physical fixtures.
+     */
+    private Box2DDebugRenderer debugRenderer;
+
+    /**
+     * The transformation matrix used to transform meters into
+     * pixels in order to show fixtures in their correct places.
+     */
+    private Matrix4 debugCamera;
+
+    /**
      * Create game view using libGDX screen
      * @param game game this screen belongs to
      */
@@ -63,11 +82,11 @@ public class TSSView extends ScreenAdapter {
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
 
-//        if (DEBUG_PHYSICS) {
-//            debugRenderer = new Box2DDebugRenderer();
-//            debugCamera = camera.combined.cpy();
-//            debugCamera.scl(1 / PIXEL_TO_METER);
-//        }
+        if (DEBUG_PHYSICS) {
+            debugRenderer = new Box2DDebugRenderer();
+            debugCamera = camera.combined.cpy();
+            debugCamera.scl(1 / PIXEL_TO_METER);
+        }
 
         return camera;
     }
@@ -91,9 +110,10 @@ public class TSSView extends ScreenAdapter {
 //        GameController.getInstance().removeFlagged();
 //        GameController.getInstance().createNewAsteroids();
 //
+//        TSSController.getInstance().setMovement(0, 0);
         handleInputs(delta);
-//
-//        GameController.getInstance().update(delta);
+
+        TSSController.getInstance().update(delta);
 
 //        camera.position.set(GameModel.getInstance().getShip().getX() / PIXEL_TO_METER, GameModel.getInstance().getShip().getY() / PIXEL_TO_METER, 0);
 //        camera.update();
@@ -107,11 +127,11 @@ public class TSSView extends ScreenAdapter {
         drawEntities();
         game.getBatch().end();
 
-//        if (DEBUG_PHYSICS) {
-//            debugCamera = camera.combined.cpy();
-//            debugCamera.scl(1 / PIXEL_TO_METER);
-//            debugRenderer.render(GameController.getInstance().getWorld(), debugCamera);
-//        }
+        if (DEBUG_PHYSICS) {
+            debugCamera = camera.combined.cpy();
+            debugCamera.scl(1 / PIXEL_TO_METER);
+            debugRenderer.render(TSSController.getInstance().getWorld(), debugCamera);
+        }
     }
 
     /**
@@ -121,24 +141,38 @@ public class TSSView extends ScreenAdapter {
      */
     private void handleInputs(float delta) {
 
-        MainChar mc = TSSModel.getInstance().getMainChar();
-
-        float speed = 2.0f;
+        boolean keyPress = false;
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            mc.setPosition(mc.getX() - delta * speed, mc.getY());
+            TSSController.getInstance().setMovement(-1, 0);
+            keyPress = true;
+//            TSSController.getInstance().setRotation((float) Math.PI / 2.0f);
+//            TSSController.getInstance().accelerate(delta);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            mc.setPosition(mc.getX() + delta * speed, mc.getY());
+            TSSController.getInstance().setMovement(1, 0);
+            keyPress = true;
+//            TSSController.getInstance().setRotation((float) -Math.PI / 2.0f);
+//            TSSController.getInstance().accelerate(delta);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            mc.setPosition(mc.getX(), mc.getY() + delta * speed);
+            TSSController.getInstance().setMovement(0, 1);
+            keyPress = true;
+//            TSSController.getInstance().setRotation(0);
+//            TSSController.getInstance().accelerate(delta);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            mc.setPosition(mc.getX(), mc.getY() - delta * speed);
+            TSSController.getInstance().setMovement(0, -1);
+            keyPress = true;
+//            TSSController.getInstance().setRotation((float) Math.PI);
+//            TSSController.getInstance().accelerate(delta);
+        }
+
+        if(!keyPress) {
+            TSSController.getInstance().setMovement(0, 0);
         }
     }
 
@@ -147,7 +181,7 @@ public class TSSView extends ScreenAdapter {
      */
     private void drawEntities() {
 
-        MainChar mc = TSSModel.getInstance().getMainChar();
+        MainCharModel mc = TSSModel.getInstance().getMainChar();
         EntityView view = ViewFactory.makeView(game, mc);
         view.update(mc);
         view.draw(game.getBatch());

@@ -1,8 +1,6 @@
 package com.drfl.twinstickshooter.model;
 
-import com.drfl.twinstickshooter.model.entities.MainChar;
-
-import static com.drfl.twinstickshooter.view.TSSView.TILESIZE;
+import com.drfl.twinstickshooter.model.entities.MainCharModel;
 
 /**
  * TSS world model
@@ -17,14 +15,14 @@ public class TSSModel {
     /**
      * Character controlled by the player
      */
-    private MainChar mc;
+    private MainCharModel mc;
 
     /**
      * Constructs game with main character //TODO expand game model
      */
     private TSSModel() {
 
-        mc = new MainChar(2.0f - 0.5f, 2.0f + 0.5f, 0); //TODO add initial coords
+        mc = new MainCharModel(2.0f - 0.5f, 2.0f + 0.5f, 0); //TODO add initial coords
     }
 
     /**
@@ -42,7 +40,7 @@ public class TSSModel {
     /**
      * @return the main character model.
      */
-    public MainChar getMainChar() {
+    public MainCharModel getMainChar() {
         return mc;
     }
 }
