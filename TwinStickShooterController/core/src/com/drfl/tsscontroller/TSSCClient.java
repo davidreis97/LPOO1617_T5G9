@@ -26,7 +26,7 @@ public class TSSCClient {
         timeout = 5000;
         port = 54555;
 
-        IPAddress = client.discoverHost(port, timeout).toString();
+        IPAddress = "192.168.1.1";
 
         if(IPAddress == null){
             Log.info("Could not find any host. (Not connected to network/Not on the same subnet/Not broadcasting)");
