@@ -134,11 +134,10 @@ public class TSSController implements ContactListener {
     }
 
     /**
-     * @param x The x-component of the input
-     * @param y The y-component of the input
+     * @param movement Set movement vector of controller
      */
-    public void setMovement(float x, float y) {
-        move_input = new Vector2(x, y);
+    public void setMovement(Vector2 movement) {
+        move_input = movement;
     }
 
     /**
