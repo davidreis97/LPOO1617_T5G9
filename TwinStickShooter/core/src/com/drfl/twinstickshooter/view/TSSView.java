@@ -3,12 +3,17 @@ package com.drfl.twinstickshooter.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.drfl.twinstickshooter.TSSGame;
+import com.drfl.twinstickshooter.TSSServer;
 import com.drfl.twinstickshooter.controller.TSSController;
 import com.drfl.twinstickshooter.model.TSSModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
@@ -44,6 +49,11 @@ public class TSSView extends ScreenAdapter {
     private final TSSGame game;
 
     /**
+     * The server this screen uses.
+     */
+    private final TSSServer server;
+
+    /**
      * The camera used to show the viewport.
      */
     private final OrthographicCamera camera;
@@ -63,8 +73,10 @@ public class TSSView extends ScreenAdapter {
      * Create game view using libGDX screen
      * @param game game this screen belongs to
      */
-    public TSSView(TSSGame game) {
+    public TSSView(TSSGame game, TSSServer server) {
+
         this.game = game;
+        this.server = server;
 
         loadAssets();
 
@@ -95,7 +107,10 @@ public class TSSView extends ScreenAdapter {
      * Loads the assets needed by this screen.
      */
     private void loadAssets() { //TODO can show progress bar
+
         this.game.getAssetManager().load( "TilesetTest.png" , Texture.class);
+        this.game.getAssetManager().setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+        this.game.getAssetManager().load("test.tmx", TiledMap.class);
 
         this.game.getAssetManager().finishLoading();
     }
@@ -141,39 +156,41 @@ public class TSSView extends ScreenAdapter {
      */
     private void handleInputs(float delta) {
 
+        TSSController.getInstance().setMovement(server.getMovement());
+
         boolean keyPress = false;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            TSSController.getInstance().setMovement(-1, 0);
-            keyPress = true;
-//            TSSController.getInstance().setRotation((float) Math.PI / 2.0f);
-//            TSSController.getInstance().accelerate(delta);
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            TSSController.getInstance().setMovement(1, 0);
-            keyPress = true;
-//            TSSController.getInstance().setRotation((float) -Math.PI / 2.0f);
-//            TSSController.getInstance().accelerate(delta);
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            TSSController.getInstance().setMovement(0, 1);
-            keyPress = true;
-//            TSSController.getInstance().setRotation(0);
-//            TSSController.getInstance().accelerate(delta);
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            TSSController.getInstance().setMovement(0, -1);
-            keyPress = true;
-//            TSSController.getInstance().setRotation((float) Math.PI);
-//            TSSController.getInstance().accelerate(delta);
-        }
-
-        if(!keyPress) {
-            TSSController.getInstance().setMovement(0, 0);
-        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+//            TSSController.getInstance().setMovement(-1, 0);
+//            keyPress = true;
+////            TSSController.getInstance().setRotation((float) Math.PI / 2.0f);
+////            TSSController.getInstance().accelerate(delta);
+//        }
+//
+//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+//            TSSController.getInstance().setMovement(1, 0);
+//            keyPress = true;
+////            TSSController.getInstance().setRotation((float) -Math.PI / 2.0f);
+////            TSSController.getInstance().accelerate(delta);
+//        }
+//
+//        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+//            TSSController.getInstance().setMovement(0, 1);
+//            keyPress = true;
+////            TSSController.getInstance().setRotation(0);
+////            TSSController.getInstance().accelerate(delta);
+//        }
+//
+//        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+//            TSSController.getInstance().setMovement(0, -1);
+//            keyPress = true;
+////            TSSController.getInstance().setRotation((float) Math.PI);
+////            TSSController.getInstance().accelerate(delta);
+//        }
+//
+//        if(!keyPress) {
+//            TSSController.getInstance().setMovement(0, 0);
+//        }
     }
 
     /**
@@ -191,6 +208,10 @@ public class TSSView extends ScreenAdapter {
      * Draws the Tile Map.
      */
     private void drawTileMap() {
+        TiledMap map = game.getAssetManager().get("test.tmx");
+//        for(TiledMapTileSet tiles: map.getTileSets()) {
+//            tiles.
+//        }
         Texture tileMap = game.getAssetManager().get("TilesetTest.png", Texture.class);
         tileMap.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         //game.getBatch().draw(background, 0, 0, 0, 0, (int)(ARENA_WIDTH / PIXEL_TO_METER), (int) (ARENA_HEIGHT / PIXEL_TO_METER));

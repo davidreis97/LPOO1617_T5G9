@@ -12,9 +12,14 @@ public class TSSServer {
 
     private Server server;
 
+    private static Vector2 movement = new Vector2(0, 0);
+    private static Vector2 shooting = new Vector2(0, 0);
+
     public TSSServer(){
+
         server = new Server();
         registerPackets();
+
         server.addListener(new NetworkListener());
         try {
             server.bind(port);
@@ -25,14 +30,30 @@ public class TSSServer {
     }
 
     private void registerPackets(){
-        Kryo kyro = server.getKryo();
-        kyro.register(Packet.ControllerInfoPacket.class);
-        kyro.register(Vector2.class);
+
+        Kryo kryo = server.getKryo();
+        kryo.register(Packet.ControllerInfoPacket.class);
+        kryo.register(Vector2.class);
     }
 
     public static void processControllerInfo(Packet.ControllerInfoPacket cip){
-        //TSSGame.setAcceleration(cip.acceleration);
-        //TSSGame.setBullets(cip.bullet);
-        Log.info("Received Acceleration: " + cip.acceleration + " / Received Bullet: " + cip.bullet);
+
+        TSSServer.movement = cip.movement;
+        TSSServer.shooting = cip.shooting;
+        Log.info("Received Acceleration: " + cip.movement + " / Received Bullet: " + cip.shooting);
+    }
+
+    /**
+     * @return Vector2 representing player movement.
+     */
+    public static Vector2 getMovement() {
+        return movement;
+    }
+
+    /**
+     * @return Vector2 representing direction of shooting.
+     */
+    public static Vector2 getShooting() {
+        return shooting;
     }
 }
