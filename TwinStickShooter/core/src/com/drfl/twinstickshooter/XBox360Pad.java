@@ -23,7 +23,7 @@ public class XBox360Pad {
      */
     //public static final String ID = "XBOX 360 For Windows (Controller)";
 
-    /* //Original Configuration
+     //Original Configuration
     public static final int BUTTON_X = 2;
     public static final int BUTTON_Y = 3;
     public static final int BUTTON_A = 0;
@@ -44,8 +44,8 @@ public class XBox360Pad {
     public static final int AXIS_RIGHT_X = 3; //-1 is left | +1 is right
     public static final int AXIS_RIGHT_Y = 2; //-1 is up | +1 is down
     public static final int AXIS_RIGHT_TRIGGER = 4; //value 0 to -1f
-    */
 
+    /*
     // "New" Windows 10 Config??
     public static final int BUTTON_A = 0;
     public static final int BUTTON_B = 1;
@@ -66,5 +66,5 @@ public class XBox360Pad {
     public static final int AXIS_RIGHT_X = 2; //-1 is left | +1 is right
     public static final int AXIS_RIGHT_Y = 3; //-1 is up | +1 is down
     public static final int AXIS_LEFT_TRIGGER = 4; //value 0 to 1f
-    public static final int AXIS_RIGHT_TRIGGER = 5; //value 0 to -1f
+    public static final int AXIS_RIGHT_TRIGGER = 5; //value 0 to -1f*/
 }

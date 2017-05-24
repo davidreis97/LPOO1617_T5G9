@@ -71,6 +71,9 @@ public class TSSView extends ScreenAdapter {
      */
     private Matrix4 debugCamera;
 
+    /**
+     * The type of input currently in use to control the game.
+     */
     private String inputMode;
 
     /**
@@ -89,6 +92,11 @@ public class TSSView extends ScreenAdapter {
         camera = createCamera();
     }
 
+    /**
+     * Decides which input mode will be used.
+     * If a controller is connected, the controller is used to control the game. Otherwise, the server is used.
+     * @return The type of input currently in use to control the game.
+     */
     private String chooseInput() {
         if(TSSGamePad.getInstance().controllerExists()){
             Log.info("Controller found, using it as input");
