@@ -13,12 +13,14 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.drfl.twinstickshooter.TSSGame;
+import com.drfl.twinstickshooter.TSSGamePad;
 import com.drfl.twinstickshooter.TSSServer;
 import com.drfl.twinstickshooter.controller.TSSController;
 import com.drfl.twinstickshooter.model.TSSModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
 import com.drfl.twinstickshooter.view.entities.EntityView;
 import com.drfl.twinstickshooter.view.entities.ViewFactory;
+import com.esotericsoftware.minlog.Log;
 
 public class TSSView extends ScreenAdapter {
 
@@ -69,6 +71,8 @@ public class TSSView extends ScreenAdapter {
      */
     private Matrix4 debugCamera;
 
+    private String inputMode;
+
     /**
      * Create game view using libGDX screen
      * @param game game this screen belongs to
@@ -80,8 +84,21 @@ public class TSSView extends ScreenAdapter {
 
         loadAssets();
 
+        inputMode = chooseInput();
+
         camera = createCamera();
     }
+
+    private String chooseInput() {
+        if(TSSGamePad.getInstance().controllerExists()){
+            Log.info("Controller found, using it as input");
+            return "controller";
+        }else{
+            Log.info("Controller NOT found, using SERVER as input");
+            return "server";
+        }
+    }
+
 
     /**
      * Creates the camera used to show the viewport.
@@ -156,7 +173,13 @@ public class TSSView extends ScreenAdapter {
      */
     private void handleInputs(float delta) {
 
-        TSSController.getInstance().setMovement(server.getMovement());
+        if(inputMode.equals("controller")){
+            TSSController.getInstance().setMovement(TSSGamePad.getInstance().getLeftStickVector());
+        }else if(inputMode.equals("server")){
+            TSSController.getInstance().setMovement(server.getMovement());
+        }
+
+
 
         boolean keyPress = false;
 

@@ -6,12 +6,21 @@ import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.Vector2;
+import com.esotericsoftware.minlog.Log;
 
 
 public class TSSGamePad implements ControllerListener{
 
-    boolean usesController = true;
-    Controller controller;
+    private boolean usesController = true;
+    private Controller controller;
+
+    private static TSSGamePad instance;
+
+    public static TSSGamePad getInstance() {
+        if (instance == null)
+            instance = new TSSGamePad();
+        return instance;
+    }
 
     public TSSGamePad(){
         Controllers.addListener(this);
@@ -46,6 +55,10 @@ public class TSSGamePad implements ControllerListener{
         return right;
     }
 
+    public boolean controllerExists() {
+        return usesController;
+    }
+
     @Override
     public void connected(Controller controller) {usesController = true;} //Does NOT work with XBOX360 controller
 
@@ -56,21 +69,23 @@ public class TSSGamePad implements ControllerListener{
     @Override
     public boolean buttonDown(Controller controller, int buttonCode) {
 
+        Log.info("Button code: " + buttonCode);
+
         if(buttonCode == XBox360Pad.BUTTON_Y) {
-            //Action
+            Log.info("Y");
         }else if(buttonCode == XBox360Pad.BUTTON_A) {
-            //Action
+            Log.info("A");
         }else if(buttonCode == XBox360Pad.BUTTON_X) {
-            //Action
+            Log.info("X");
         }else if(buttonCode == XBox360Pad.BUTTON_B){
-            //Action
+            Log.info("B");
         }
 
 
         else if(buttonCode == XBox360Pad.BUTTON_LB) {
-            //Action
+            Log.info("LB");
         }else if(buttonCode == XBox360Pad.BUTTON_RB){
-            //Action
+            Log.info("RB");
         }
 
         //Does not implement all possible buttons, see XBox360Pad.java for more buttons
@@ -91,6 +106,7 @@ public class TSSGamePad implements ControllerListener{
     @Override
     public boolean povMoved(Controller controller, int povCode, PovDirection value) {
         // This is the dpad
+        /*
         if(value == XBox360Pad.BUTTON_DPAD_LEFT){
             //Action
         }else if(value == XBox360Pad.BUTTON_DPAD_RIGHT){
@@ -99,7 +115,7 @@ public class TSSGamePad implements ControllerListener{
             //Action
         }else if (value == XBox360Pad.BUTTON_DPAD_DOWN) {
             //Action
-        }
+        }*/
         return false;
     }
 
