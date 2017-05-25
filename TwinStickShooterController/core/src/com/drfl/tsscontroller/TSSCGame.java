@@ -2,7 +2,9 @@ package com.drfl.tsscontroller;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
 public class TSSCGame extends ApplicationAdapter {
@@ -25,6 +29,8 @@ public class TSSCGame extends ApplicationAdapter {
 	Drawable touchKnob;
 	Touchpad.TouchpadStyle touchpadStyle;
 	TSSCClient client;
+	Viewport viewport;
+	Camera camera;
 
 	@Override
 	public void create () {
@@ -76,7 +82,10 @@ public class TSSCGame extends ApplicationAdapter {
             }
         });
 
-		stage = new Stage();
+        camera = new OrthographicCamera();
+        viewport = new FitViewport(1920, 1080, camera);
+
+		stage = new Stage(viewport);
 		stage.addActor(touchpadLeft);
 		stage.addActor(touchpadRight);
 		Gdx.input.setInputProcessor(stage);
@@ -95,4 +104,10 @@ public class TSSCGame extends ApplicationAdapter {
 		batch.dispose();
 		img.dispose();
 	}
+
+	@Override
+    public void resize(int width, int height) {
+        viewport.update(width, height);
+        stage.getViewport().update(width, height);
+    }
 }
