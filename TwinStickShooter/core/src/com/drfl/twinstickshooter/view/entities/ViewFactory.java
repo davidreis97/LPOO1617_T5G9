@@ -6,6 +6,7 @@ import com.drfl.twinstickshooter.model.entities.EntityModel;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.drfl.twinstickshooter.model.entities.EntityModel.ModelType.BULLET;
 import static com.drfl.twinstickshooter.model.entities.EntityModel.ModelType.MAINCHAR;
 
 /**
@@ -20,8 +21,9 @@ public class ViewFactory {
     public static EntityView makeView(TSSGame game, EntityModel model) {
 
         if (!cache.containsKey(model.getType())) {
-            if (model.getType() == MAINCHAR)
-                cache.put(model.getType(), new MainCharView(game));
+            if (model.getType() == MAINCHAR) cache.put(model.getType(), new MainCharView(game));
+            if (model.getType() == BULLET) cache.put(model.getType(), new BulletView(game));
+
         }
         return cache.get(model.getType());
     }

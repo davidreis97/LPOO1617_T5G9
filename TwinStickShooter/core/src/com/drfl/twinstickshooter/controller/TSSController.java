@@ -1,12 +1,16 @@
 package com.drfl.twinstickshooter.controller;
 
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.drfl.twinstickshooter.controller.entities.BulletBody;
 import com.drfl.twinstickshooter.controller.entities.MainCharBody;
+import com.drfl.twinstickshooter.controller.entities.TileEntity;
 import com.drfl.twinstickshooter.model.TSSModel;
+import com.drfl.twinstickshooter.model.entities.BulletModel;
 import com.drfl.twinstickshooter.model.entities.EntityModel;
-import com.drfl.twinstickshooter.model.entities.MainCharModel;
 
 public class TSSController implements ContactListener {
 
@@ -18,7 +22,12 @@ public class TSSController implements ContactListener {
     /**
      * User movement input in x,y.
      */
-    private static Vector2 move_input = new Vector2(0, 0);
+    private static Vector2 moveInput = new Vector2(0, 0);
+
+    /**
+     * User shoot input in x,y.
+     */
+    private static Vector2 shootInput = new Vector2(0, 0);
 
     /**
      * The arena width in meters.
@@ -31,9 +40,19 @@ public class TSSController implements ContactListener {
     public static final int MAP_HEIGHT = 21;
 
     /**
-     * The acceleration impulse in newtons.
+     * Minimum time between consecutive shots in seconds
      */
-    private static final float ACCEL_IMPULSE = 1f;
+    private static final float TIME_BETWEEN_SHOTS = .2f; //TODO move to weaponModel if considering weapons with different cooldowns
+
+    /**
+     * The speed of bullets
+     */
+    private static final float BULLET_SPEED = 20f; //TODO move to weaponModel if using different bullet speeds
+
+    /**
+     * Time left until gun cools down
+     */
+    private float timeToNextShoot = 0;
 
     /**
      * The physics world controlled by this controller.
@@ -44,7 +63,6 @@ public class TSSController implements ContactListener {
      * The main character body.
      */
     private final MainCharBody mainCharBody;
-    private final MainCharBody mainCharBody2; //TODO temp
 
     /**
      * Accumulator used to calculate the simulation step.
@@ -53,17 +71,23 @@ public class TSSController implements ContactListener {
 
     /**
      * Creates a new GameController that controls the physics of a TSSModel.
-     *
      */
     private TSSController() {
+
         world = new World(new Vector2(0, 0), true);
 
         mainCharBody = new MainCharBody(world, TSSModel.getInstance().getMainChar());
-        TSSModel.getInstance().getMainChar().setPosition(5.0f - 0.5f, 5.0f + 0.5f);
-        mainCharBody2 = new MainCharBody(world, TSSModel.getInstance().getMainChar());
-        TSSModel.getInstance().getMainChar().setPosition(2.0f - 0.5f, 2.0f + 0.5f);
 
         world.setContactListener(this);
+    }
+
+    public void createTileEntities(MapLayer collisionLayer) {
+        for(MapObject object : collisionLayer.getObjects()) {
+            new TileEntity(world, object.getProperties().get("x", float.class),
+                                object.getProperties().get("y", float.class),
+                                object.getProperties().get("width", float.class),
+                                object.getProperties().get("height", float.class));
+        }
     }
 
     /**
@@ -86,14 +110,9 @@ public class TSSController implements ContactListener {
 
 //        TSSModel.getInstance().update(delta); //TODO can use for bullets
 
-//        timeToNextShoot -= delta;
-//        Vector2 currVel = mainCharBody.getLinearVelocity();
-//        mainCharBody.setLinearVelocity(currVel.x + move_input.x, currVel.y + move_input.y);
-//        mainCharBody.setLinearVelocity(2 * move_input.x, 2 * move_input.y); //TODO take current velocity into account?
+        timeToNextShoot -= delta;
 
-        //Vector2 currVel = mainCharBody.getLinearVelocity();
-        //Vector2 velChange = new Vector2(currVel.x - move_input.x, currVel.y - move_input.y);
-        Vector2 velChange = new Vector2(move_input.x, move_input.y);
+        Vector2 velChange = new Vector2(moveInput.x, moveInput.y);
         Vector2 impulse = new Vector2(mainCharBody.getMass() * velChange.x, mainCharBody.getMass() * velChange.y);
         mainCharBody.applyLinearImpulse(impulse.x, impulse.y, true);
 
@@ -108,9 +127,11 @@ public class TSSController implements ContactListener {
         world.getBodies(bodies);
 
         for (Body body : bodies) {
-            verifyBounds(body);
-            ((EntityModel) body.getUserData()).setPosition(body.getPosition().x, body.getPosition().y);
-            //((EntityModel) body.getUserData()).setRotation(body.getAngle()); //TODO model sprite rotation unused
+            if(!body.getType().equals(BodyDef.BodyType.StaticBody)) {
+                verifyBounds(body);
+                ((EntityModel) body.getUserData()).setPosition(body.getPosition().x, body.getPosition().y);
+                ((EntityModel) body.getUserData()).setRotation(body.getAngle()); //TODO model sprite rotation unused
+            }
         }
     }
 
@@ -134,10 +155,17 @@ public class TSSController implements ContactListener {
     }
 
     /**
-     * @param movement Set movement vector of controller
+     * @param moveInput Set movement vector of main char
      */
-    public void setMovement(Vector2 movement) {
-        move_input = movement;
+    public void setMoveInput(Vector2 moveInput) {
+        this.moveInput = moveInput;
+    }
+
+    /**
+     * @param shootInput Set shoot vector of main char
+     */
+    public void setShootInput(Vector2 shootInput) {
+        this.shootInput = shootInput.nor();
     }
 
     /**
@@ -153,25 +181,32 @@ public class TSSController implements ContactListener {
      *
      * @param delta Duration of the rotation in seconds.
      */
-    public void accelerate(float delta) {
-
-        mainCharBody.setLinearVelocity(move_input.x, move_input.y);
-        mainCharBody.applyLinearImpulse(-(float) Math.sin(mainCharBody.getAngle()) * ACCEL_IMPULSE, (float) Math.cos(mainCharBody.getAngle()) * ACCEL_IMPULSE, true);
-        //mainCharBody.applyForceToCenter(-(float) Math.sin(mainCharBody.getAngle()) * ACCEL_IMPULSE * delta, (float) Math.cos(mainCharBody.getAngle()) * ACCEL_IMPULSE * delta, true);
-       // ((MainCharModel)mainCharBody.getUserData()).setAccelerating(true); //TODO use for animating
-    }
-
-//    /**
-//     * Shoots a bullet from the spaceship at 10m/s
-//     */
-//    public void shoot() {
-//        if (timeToNextShoot < 0) {
-//            BulletModel bullet = GameModel.getInstance().createBullet(GameModel.getInstance().getShip());
-//            BulletBody body = new BulletBody(world, bullet);
-//            body.setLinearVelocity(BULLET_SPEED);
-//            timeToNextShoot = TIME_BETWEEN_SHOTS;
-//        }
+//    public void accelerate(float delta) {
+//
+//        mainCharBody.setLinearVelocity(moveInput.x, moveInput.y);
+//        mainCharBody.applyLinearImpulse(-(float) Math.sin(mainCharBody.getAngle()) * ACCEL_IMPULSE, (float) Math.cos(mainCharBody.getAngle()) * ACCEL_IMPULSE, true);
+//        //mainCharBody.applyForceToCenter(-(float) Math.sin(mainCharBody.getAngle()) * ACCEL_IMPULSE * delta, (float) Math.cos(mainCharBody.getAngle()) * ACCEL_IMPULSE * delta, true);
+//       // ((MainCharModel)mainCharBody.getUserData()).setAccelerating(true); //TODO use for animating
 //    }
+
+    /**
+     * Shoots a bullet
+     */
+    public void shoot() { //TODO add owner of bullet, pass bullet type if different weapons
+
+        if(this.shootInput.x == 0 && this.shootInput.y == 0) return;
+
+        if (timeToNextShoot < 0) {
+
+            BulletModel bullet = TSSModel.getInstance().createBullet(TSSModel.getInstance().getMainChar(), this.shootInput);
+
+            BulletBody body = new BulletBody(world, bullet);
+            body.setLinearDamping(0);
+            body.setLinearVelocity(BULLET_SPEED);
+
+            timeToNextShoot = TIME_BETWEEN_SHOTS;
+        }
+    }
 
     /**
      * @return The world controlled by this controller.
@@ -186,15 +221,38 @@ public class TSSController implements ContactListener {
         Body bodyA = contact.getFixtureA().getBody();
         Body bodyB = contact.getFixtureB().getBody();
 
-//        if (bodyA.getUserData() instanceof BulletModel)
-//            bulletCollision(bodyA);
-//        if (bodyB.getUserData() instanceof BulletModel)
-//            bulletCollision(bodyB);
-//
-//        if (bodyA.getUserData() instanceof BulletModel && bodyB.getUserData() instanceof AsteroidModel)
-//            bulletAsteroidCollision(bodyA, bodyB);
-//        if (bodyA.getUserData() instanceof AsteroidModel && bodyB.getUserData() instanceof BulletModel)
-//            bulletAsteroidCollision(bodyB, bodyA);
+        if (bodyA.getUserData() instanceof BulletModel)
+            bulletCollision(bodyA);
+        if (bodyB.getUserData() instanceof BulletModel)
+            bulletCollision(bodyB);
+    }
+
+    /**
+     * A bullet collided with something, remove it.
+     *
+     * @param bulletBody the bullet that collided
+     */
+    private void bulletCollision(Body bulletBody) {
+        ((BulletModel)bulletBody.getUserData()).setFlaggedForRemoval(true);
+    }
+
+    /**
+     * Removes objects that have been flagged for removal on the
+     * previous step.
+     */
+    public void removeFlagged() {
+
+        Array<Body> bodies = new Array<Body>();
+        world.getBodies(bodies);
+
+        for (Body body : bodies) {
+            if(!body.getType().equals(BodyDef.BodyType.StaticBody)) {
+                if (((EntityModel)body.getUserData()).isFlaggedToBeRemoved()) {
+                    TSSModel.getInstance().remove((EntityModel) body.getUserData());
+                    world.destroyBody(body);
+                }
+            }
+        }
     }
 
     @Override

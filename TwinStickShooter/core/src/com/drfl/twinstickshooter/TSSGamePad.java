@@ -4,8 +4,10 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.PovDirection;
+import com.badlogic.gdx.controllers.mappings.Xbox;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.Vector2;
+import com.drfl.twinstickshooter.controller.TSSController;
 import com.esotericsoftware.minlog.Log;
 
 /**
@@ -31,7 +33,8 @@ public class TSSGamePad implements ControllerListener{
     /**
     * Creates a new TSSGamePad, adds it as a listener and detects the connected controllers.
      */
-    public TSSGamePad(){
+    public TSSGamePad() {
+
         Controllers.addListener(this);
 
         if(Controllers.getControllers().size == 0)
@@ -62,7 +65,7 @@ public class TSSGamePad implements ControllerListener{
      * Gets the current data from the right analog stick, if it is outside of the deadzone.
      * @return Vector2 with right stick current position
      */
-    public Vector2 getRightStickVector(){
+    public Vector2 getRightStickVector() {
         Vector2 right = new Vector2(0,0);
 
         float deadzone = 0.2f;
@@ -74,6 +77,16 @@ public class TSSGamePad implements ControllerListener{
             right.y = -controller.getAxis(XBox360Pad.AXIS_RIGHT_Y);
 
         return right;
+    }
+
+    /**
+     * Returns whether a button is pressed.
+     *
+     * @param button ID of button.
+     * @return Whether the button is pressed.
+     */
+    public boolean getButton(int button) {
+        return this.controller.getButton(button);
     }
 
     /**
@@ -103,7 +116,6 @@ public class TSSGamePad implements ControllerListener{
         }else if(buttonCode == XBox360Pad.BUTTON_B){
             Log.info("B");
         }
-
 
         else if(buttonCode == XBox360Pad.BUTTON_LB) {
             Log.info("LB");

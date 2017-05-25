@@ -7,20 +7,32 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.drfl.twinstickshooter.TSSGame;
 import com.drfl.twinstickshooter.TSSGamePad;
 import com.drfl.twinstickshooter.TSSServer;
+import com.drfl.twinstickshooter.XBox360Pad;
 import com.drfl.twinstickshooter.controller.TSSController;
 import com.drfl.twinstickshooter.model.TSSModel;
+import com.drfl.twinstickshooter.model.entities.BulletModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
 import com.drfl.twinstickshooter.view.entities.EntityView;
 import com.drfl.twinstickshooter.view.entities.ViewFactory;
 import com.esotericsoftware.minlog.Log;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class TSSView extends ScreenAdapter {
 
@@ -87,6 +99,10 @@ public class TSSView extends ScreenAdapter {
 
         loadAssets();
 
+        TiledMap map = game.getAssetManager().get("tilemap.tmx");
+        TSSModel.getInstance().createEntityModels(map.getLayers().get("Entities"));
+        TSSController.getInstance().createTileEntities(map.getLayers().get("Collision"));
+
         inputMode = chooseInput();
 
         camera = createCamera();
@@ -133,9 +149,12 @@ public class TSSView extends ScreenAdapter {
      */
     private void loadAssets() { //TODO can show progress bar
 
-        this.game.getAssetManager().load( "TilesetTest.png" , Texture.class);
+        this.game.getAssetManager().load( "tileset.png" , Texture.class); //TODO replace with main char spritemap
+        this.game.getAssetManager().load("bullet.png", Texture.class); //TODO add more bullet types if adding more weapons
+
+        //Tile map loading
         this.game.getAssetManager().setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        this.game.getAssetManager().load("test.tmx", TiledMap.class);
+        this.game.getAssetManager().load("tilemap.tmx", TiledMap.class);
 
         this.game.getAssetManager().finishLoading();
     }
@@ -147,10 +166,10 @@ public class TSSView extends ScreenAdapter {
      */
     @Override
     public void render(float delta) {
-//        GameController.getInstance().removeFlagged();
+
+        TSSController.getInstance().removeFlagged();
 //        GameController.getInstance().createNewAsteroids();
-//
-//        TSSController.getInstance().setMovement(0, 0);
+
         handleInputs(delta);
 
         TSSController.getInstance().update(delta);
@@ -162,8 +181,9 @@ public class TSSView extends ScreenAdapter {
         Gdx.gl.glClearColor( 103/255f, 69/255f, 117/255f, 1 );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 
+        drawTileMap(game.getBatch());
+
         game.getBatch().begin();
-        drawTileMap();
         drawEntities();
         game.getBatch().end();
 
@@ -181,53 +201,34 @@ public class TSSView extends ScreenAdapter {
      */
     private void handleInputs(float delta) {
 
-        if(inputMode.equals("controller")){
-            TSSController.getInstance().setMovement(TSSGamePad.getInstance().getLeftStickVector());
-        }else if(inputMode.equals("server")){
-            TSSController.getInstance().setMovement(server.getMovement());
+        if(inputMode.equals("controller")) {
+            TSSController.getInstance().setMoveInput(TSSGamePad.getInstance().getLeftStickVector());
+            TSSController.getInstance().setShootInput(TSSGamePad.getInstance().getRightStickVector());
+            if(TSSGamePad.getInstance().getButton(XBox360Pad.BUTTON_RB)) TSSController.getInstance().shoot();
+        } else if(inputMode.equals("server")) {
+            TSSController.getInstance().setMoveInput(server.getMovement());
+            TSSController.getInstance().setShootInput(server.getShooting());
         }
 
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            TSSController.getInstance().shoot();
+        }
 
-
-        boolean keyPress = false;
-
-//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-//            TSSController.getInstance().setMovement(-1, 0);
-//            keyPress = true;
-////            TSSController.getInstance().setRotation((float) Math.PI / 2.0f);
-////            TSSController.getInstance().accelerate(delta);
-//        }
-//
-//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-//            TSSController.getInstance().setMovement(1, 0);
-//            keyPress = true;
-////            TSSController.getInstance().setRotation((float) -Math.PI / 2.0f);
-////            TSSController.getInstance().accelerate(delta);
-//        }
-//
-//        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-//            TSSController.getInstance().setMovement(0, 1);
-//            keyPress = true;
-////            TSSController.getInstance().setRotation(0);
-////            TSSController.getInstance().accelerate(delta);
-//        }
-//
-//        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-//            TSSController.getInstance().setMovement(0, -1);
-//            keyPress = true;
-////            TSSController.getInstance().setRotation((float) Math.PI);
-////            TSSController.getInstance().accelerate(delta);
-//        }
-//
-//        if(!keyPress) {
-//            TSSController.getInstance().setMovement(0, 0);
-//        }
+        //TODO add keyboard controls
+        //TODO option menu for choosing input method
     }
 
     /**
      * Draws the entities to the screen.
      */
     private void drawEntities() {
+
+        List<BulletModel> bullets = TSSModel.getInstance().getBullets();
+        for (BulletModel bullet : bullets) {
+            EntityView view = ViewFactory.makeView(game, bullet);
+            view.update(bullet);
+            view.draw(game.getBatch());
+        }
 
         MainCharModel mc = TSSModel.getInstance().getMainChar();
         EntityView view = ViewFactory.makeView(game, mc);
@@ -238,18 +239,12 @@ public class TSSView extends ScreenAdapter {
     /**
      * Draws the Tile Map.
      */
-    private void drawTileMap() {
-        TiledMap map = game.getAssetManager().get("test.tmx");
-//        for(TiledMapTileSet tiles: map.getTileSets()) {
-//            tiles.
-//        }
-        Texture tileMap = game.getAssetManager().get("TilesetTest.png", Texture.class);
-        tileMap.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        //game.getBatch().draw(background, 0, 0, 0, 0, (int)(ARENA_WIDTH / PIXEL_TO_METER), (int) (ARENA_HEIGHT / PIXEL_TO_METER));
-        for(int i = 0; i < 21; i++) {
-            for(int j = 0; j < VIEWPORT_WIDTH; j++) {
-                game.getBatch().draw(tileMap, j * TILESIZE, i * TILESIZE, 0, 1 * TILESIZE, TILESIZE, TILESIZE);
-            }
-        }
+    private void drawTileMap(SpriteBatch batch) {
+
+        TiledMap map = game.getAssetManager().get("tilemap.tmx");
+
+        OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map, batch);
+        renderer.setView(camera);
+        renderer.render();
     }
 }
