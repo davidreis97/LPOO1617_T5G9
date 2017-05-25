@@ -12,6 +12,9 @@ import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;
 public abstract class EntityBody {
 
     final static short MAINCHAR_BODY = 0x0001;
+    final static short BULLET_BODY = 0x0002;
+    final static short TILE_ENTITY = 0x0004;
+    final static short COLLIDE_ALL = (MAINCHAR_BODY | BULLET_BODY | TILE_ENTITY);
 
     /**
      * The Box2D body that supports this body.
@@ -34,6 +37,21 @@ public abstract class EntityBody {
 
         body = world.createBody(bodyDef);
         body.setUserData(model);
+    }
+
+    /**
+     * Constructs a body representing a model in a certain world.
+     *
+     * @param world The world this body lives on.
+     * @param model The model representing the body.
+     */
+    EntityBody(World world, float x, float y) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x, y);
+
+        body = world.createBody(bodyDef);
+//        body.setUserData(model);
     }
 
     /**

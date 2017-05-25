@@ -73,7 +73,7 @@ public class MainCharView extends EntityView {
      * @return the texture used when the main character is stopped.
      */
     private TextureRegion createIdleRegion(TSSGame game) {
-        Texture idleTexture = game.getAssetManager().get("TilesetTest.png");
+        Texture idleTexture = game.getAssetManager().get("tileset.png");
         return new TextureRegion(idleTexture, 1 * TILESIZE, 4 * TILESIZE, TILESIZE, TILESIZE);
 //        return new TextureRegion(idleTexture, idleTexture.getWidth(), idleTexture.getHeight());
     }

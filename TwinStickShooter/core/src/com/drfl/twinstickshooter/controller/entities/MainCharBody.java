@@ -23,6 +23,6 @@ public class MainCharBody extends EntityBody {
         int width = TILESIZE, height = TILESIZE;
 
         createFixture(body, new float[]{0,0, TILESIZE,0, 0,TILESIZE, TILESIZE,TILESIZE},
-                width, height, density, friction, restitution, MAINCHAR_BODY, (short) (MAINCHAR_BODY)); //TODO test no collision powerup
+                width, height, density, friction, restitution, MAINCHAR_BODY, COLLIDE_ALL); //TODO test no collision powerup
     }
 }

@@ -1,5 +1,8 @@
 package com.drfl.twinstickshooter.model.entities;
 
+import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;
+import static com.drfl.twinstickshooter.view.TSSView.TILESIZE;
+
 /**
  * A model representing the player character.
  */
@@ -18,7 +21,7 @@ public class MainCharModel extends EntityModel {
      * @param rotation the rotation in radians
      */
     public MainCharModel(float x, float y, int rotation) {
-        super(x, y, rotation);
+        super(x / TILESIZE + TILESIZE * PIXEL_TO_METER / 2.0f, y / TILESIZE + TILESIZE * PIXEL_TO_METER / 2.0f, rotation);
     }
 
 //    /**

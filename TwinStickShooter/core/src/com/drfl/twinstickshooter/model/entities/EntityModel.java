@@ -4,7 +4,7 @@ package com.drfl.twinstickshooter.model.entities;
  * Abstract model for representing entities in a game model.
  */
 public abstract class EntityModel {
-    public enum ModelType {MAINCHAR};
+    public enum ModelType {MAINCHAR, BULLET};
 
     /**
      * The x-coordinate of this model in meters.
@@ -21,10 +21,10 @@ public abstract class EntityModel {
      */
     private float rotation;
 
-//    /**
-//     * Has this model been flagged for removal?
-//     */
-//    private boolean flaggedForRemoval = false;
+    /**
+     * Has this model been flagged for removal?
+     */
+    private boolean flaggedForRemoval = false;
 
     /**
      * Constructs a model with a position and a rotation.
@@ -76,21 +76,21 @@ public abstract class EntityModel {
         this.rotation = rotation;
     }
 
-//    /**
-//     * Returns if this entity has been flagged for removal
-//     *
-//     * @return
-//     */
-//    public boolean isFlaggedToBeRemoved() {
-//        return flaggedForRemoval;
-//    }
+    /**
+     * Returns if this entity has been flagged for removal
+     *
+     * @return
+     */
+    public boolean isFlaggedToBeRemoved() {
+        return flaggedForRemoval;
+    }
 
-//    /**
-//     * Makes this model flagged for removal on next step
-//     */
-//    public void setFlaggedForRemoval(boolean flaggedForRemoval) {
-//        this.flaggedForRemoval = flaggedForRemoval;
-//    }
+    /**
+     * Makes this model flagged for removal on next step
+     */
+    public void setFlaggedForRemoval(boolean flaggedForRemoval) {
+        this.flaggedForRemoval = flaggedForRemoval;
+    }
 
     public abstract ModelType getType();
 }
