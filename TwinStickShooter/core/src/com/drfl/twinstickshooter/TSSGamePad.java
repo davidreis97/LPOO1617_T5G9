@@ -4,16 +4,14 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.PovDirection;
-import com.badlogic.gdx.controllers.mappings.Xbox;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.Vector2;
-import com.drfl.twinstickshooter.controller.TSSController;
 import com.esotericsoftware.minlog.Log;
 
 /**
  * Class responsible for interacting with a XBOX360 controller
  */
-public class TSSGamePad implements ControllerListener{
+public class TSSGamePad implements ControllerListener {
 
     private boolean usesController = true;
 
@@ -37,17 +35,19 @@ public class TSSGamePad implements ControllerListener{
 
         Controllers.addListener(this);
 
-        if(Controllers.getControllers().size == 0)
+        if(Controllers.getControllers().size == 0) {
             usesController = false;
-        else
+        } else {
             controller = Controllers.getControllers().first();
+        }
     }
 
     /**
      * Gets the current data from the left analog stick, if it is outside of the deadzone.
      * @return Vector2 with left stick current position
      */
-    public Vector2 getLeftStickVector(){
+    public Vector2 getLeftStickVector() {
+
         Vector2 left = new Vector2(0,0);
 
         float deadzone = 0.2f;
@@ -66,6 +66,7 @@ public class TSSGamePad implements ControllerListener{
      * @return Vector2 with right stick current position
      */
     public Vector2 getRightStickVector() {
+
         Vector2 right = new Vector2(0,0);
 
         float deadzone = 0.2f;
@@ -137,6 +138,9 @@ public class TSSGamePad implements ControllerListener{
      */
     @Override
     public boolean povMoved(Controller controller, int povCode, PovDirection value) {
+
+        Log.info("POV: " + value);
+
         // This is the dpad
         if(value == XBox360Pad.BUTTON_DPAD_LEFT){
             //Action
@@ -177,9 +181,7 @@ public class TSSGamePad implements ControllerListener{
     }
 
     @Override
-    public boolean accelerometerMoved(Controller controller, int accelerometerCode, Vector3 value) {
-        return false;
-    }
+    public boolean accelerometerMoved(Controller controller, int accelerometerCode, Vector3 value) { return false; }
 
     @Override
     public boolean buttonUp(Controller controller, int buttonCode) {
@@ -187,7 +189,5 @@ public class TSSGamePad implements ControllerListener{
     }
 
     @Override
-    public boolean axisMoved(Controller controller, int axisCode, float value) {
-        return false;
-    }
+    public boolean axisMoved(Controller controller, int axisCode, float value) { return false; }
 }

@@ -83,7 +83,7 @@ public class TSSModel {
 
         float angle = shootInput.angle() * (float) Math.PI / 180.0f - (float) Math.PI / 2.0f;
 
-        bullet.setPosition(mc.getX() - (float) Math.sin(angle), mc.getY() + (float) Math.cos(angle));
+        bullet.setPosition(mc.getX() - (float) Math.sin(angle), mc.getY() + (float) Math.cos(angle)); //TODO more precise position
         bullet.setRotation(angle);
 
 //      bullet.setTimeToLive(.5f); //TODO needed if implementing weapons with decaying bullets

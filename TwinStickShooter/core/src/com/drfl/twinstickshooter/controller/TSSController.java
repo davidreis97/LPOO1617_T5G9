@@ -110,6 +110,7 @@ public class TSSController implements ContactListener {
 
 //        TSSModel.getInstance().update(delta); //TODO can use for bullets
 
+        this.shoot();
         timeToNextShoot -= delta;
 
         Vector2 velChange = new Vector2(moveInput.x, moveInput.y);

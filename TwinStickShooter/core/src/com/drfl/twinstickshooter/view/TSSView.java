@@ -99,7 +99,7 @@ public class TSSView extends ScreenAdapter {
 
         loadAssets();
 
-        TiledMap map = game.getAssetManager().get("tilemap.tmx");
+        TiledMap map = game.getAssetManager().get("Badlands.tmx");
         TSSModel.getInstance().createEntityModels(map.getLayers().get("Entities"));
         TSSController.getInstance().createTileEntities(map.getLayers().get("Collision"));
 
@@ -149,12 +149,12 @@ public class TSSView extends ScreenAdapter {
      */
     private void loadAssets() { //TODO can show progress bar
 
-        this.game.getAssetManager().load( "tileset.png" , Texture.class); //TODO replace with main char spritemap
-        this.game.getAssetManager().load("bullet.png", Texture.class); //TODO add more bullet types if adding more weapons
+        this.game.getAssetManager().load( "Engineer.png" , Texture.class); //TODO replace with main char spritemap
+        this.game.getAssetManager().load("Bullet.png", Texture.class); //TODO add more bullet types if adding more weapons
 
         //Tile map loading
         this.game.getAssetManager().setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        this.game.getAssetManager().load("tilemap.tmx", TiledMap.class);
+        this.game.getAssetManager().load("Badlands.tmx", TiledMap.class);
 
         this.game.getAssetManager().finishLoading();
     }
@@ -204,7 +204,7 @@ public class TSSView extends ScreenAdapter {
         if(inputMode.equals("controller")) {
             TSSController.getInstance().setMoveInput(TSSGamePad.getInstance().getLeftStickVector());
             TSSController.getInstance().setShootInput(TSSGamePad.getInstance().getRightStickVector());
-            if(TSSGamePad.getInstance().getButton(XBox360Pad.BUTTON_RB)) TSSController.getInstance().shoot();
+//            if(TSSGamePad.getInstance().getButton(XBox360Pad.BUTTON_RB)) TSSController.getInstance().shoot();
         } else if(inputMode.equals("server")) {
             TSSController.getInstance().setMoveInput(server.getMovement());
             TSSController.getInstance().setShootInput(server.getShooting());
@@ -241,7 +241,7 @@ public class TSSView extends ScreenAdapter {
      */
     private void drawTileMap(SpriteBatch batch) {
 
-        TiledMap map = game.getAssetManager().get("tilemap.tmx");
+        TiledMap map = game.getAssetManager().get("Badlands.tmx");
 
         OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map, batch);
         renderer.setView(camera);

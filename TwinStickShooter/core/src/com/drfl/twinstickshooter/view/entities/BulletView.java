@@ -28,7 +28,7 @@ public class BulletView extends EntityView {
      */
     public Sprite createSprite(TSSGame game) {
 
-        Texture texture = game.getAssetManager().get("bullet.png");
+        Texture texture = game.getAssetManager().get("Bullet.png");
         return new Sprite(texture, texture.getWidth(), texture.getHeight());
     }
 }
