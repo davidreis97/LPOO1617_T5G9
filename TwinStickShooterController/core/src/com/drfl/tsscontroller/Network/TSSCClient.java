@@ -1,18 +1,17 @@
-package com.drfl.tsscontroller;
+package com.drfl.tsscontroller.Network;
 
 /**
  * Created by davidreis on 18/04/2017.
  */
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.util.List;
-import java.util.Scanner;
 
 public class TSSCClient {
 
@@ -21,16 +20,12 @@ public class TSSCClient {
     private int port;
     private String IPAddress;
 
-    public TSSCClient(){
+    public TSSCClient(String IPAddress) {
         client = new Client();
         timeout = 5000;
-        port = 54555;
 
-        IPAddress = "192.168.1.1";
-
-        if(IPAddress == null){
-            Log.info("Could not find any host. (Not connected to network/Not on the same subnet/Not broadcasting)");
-        }
+        this.port = 54555;
+        this.IPAddress = IPAddress;
 
         registerPackets();
 

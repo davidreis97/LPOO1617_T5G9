@@ -1,4 +1,4 @@
-package com.drfl.tsscontroller;
+package com.drfl.tsscontroller.Network;
 
 /**
  * Created by davidreis on 18/04/2017.
