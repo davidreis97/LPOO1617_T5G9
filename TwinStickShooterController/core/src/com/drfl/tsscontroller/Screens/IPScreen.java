@@ -33,6 +33,7 @@ public class IPScreen implements Screen {
 
     @Override
     public void show() {
+
         camera = new OrthographicCamera();
         viewport = new FitViewport(1920, 1080, camera);
 
@@ -67,7 +68,7 @@ public class IPScreen implements Screen {
 
         if(ipAddressField.getText().isEmpty()) {
             btnAccept.setDisabled(true);
-        }else{
+        } else {
             btnAccept.setDisabled(false);
         }
 

@@ -1,15 +1,8 @@
 package com.drfl.tsscontroller.Network;
 
-/**
- * Created by davidreis on 18/04/2017.
- */
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 
@@ -21,6 +14,7 @@ public class TSSCClient {
     private String IPAddress;
 
     public TSSCClient(String IPAddress) {
+
         client = new Client();
         timeout = 5000;
 
@@ -30,9 +24,10 @@ public class TSSCClient {
         registerPackets();
 
         client.addListener(new NetworkListener());
+
         try {
             client.start();
-            client.connect(timeout,IPAddress,port);
+            client.connect(timeout, IPAddress, port);
         } catch (IOException e) {
             e.printStackTrace();
         }

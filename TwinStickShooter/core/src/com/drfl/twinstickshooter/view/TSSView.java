@@ -44,18 +44,18 @@ public class TSSView extends ScreenAdapter {
     /**
      * Tileset size. (must be square tiles)
      */
-    public static final int TILESIZE = 32; //32x32 //TODO import from TSSModel.java?
+    public static final int TILESIZE = 32; //32x32
 
     /**
      * Every tile is a meter.
      */
-    public static final float PIXEL_TO_METER = 1.0f / TILESIZE; //TODO check this value
+    public static final float PIXEL_TO_METER = 1.0f / TILESIZE;
 
     /**
      * The width of the viewport in meters (equivalent to number of tiles). The height is
      * automatically calculated using the screen ratio.
      */
-    private static final float VIEWPORT_WIDTH = 40; //TODO check this value
+    private static final float VIEWPORT_WIDTH = 40;
 
     /**
      * The game this screen belongs to.
@@ -149,7 +149,7 @@ public class TSSView extends ScreenAdapter {
      */
     private void loadAssets() { //TODO can show progress bar
 
-        this.game.getAssetManager().load( "Engineer.png" , Texture.class); //TODO replace with main char spritemap
+        this.game.getAssetManager().load( "Engineer.png" , Texture.class);
         this.game.getAssetManager().load("Bullet.png", Texture.class); //TODO add more bullet types if adding more weapons
 
         //Tile map loading
@@ -168,14 +168,11 @@ public class TSSView extends ScreenAdapter {
     public void render(float delta) {
 
         TSSController.getInstance().removeFlagged();
-//        GameController.getInstance().createNewAsteroids();
 
         handleInputs(delta);
 
         TSSController.getInstance().update(delta);
 
-//        camera.position.set(GameModel.getInstance().getShip().getX() / PIXEL_TO_METER, GameModel.getInstance().getShip().getY() / PIXEL_TO_METER, 0);
-//        camera.update();
         game.getBatch().setProjectionMatrix(camera.combined);
 
         Gdx.gl.glClearColor( 103/255f, 69/255f, 117/255f, 1 );
@@ -204,14 +201,10 @@ public class TSSView extends ScreenAdapter {
         if(inputMode.equals("controller")) {
             TSSController.getInstance().setMoveInput(TSSGamePad.getInstance().getLeftStickVector());
             TSSController.getInstance().setShootInput(TSSGamePad.getInstance().getRightStickVector());
-//            if(TSSGamePad.getInstance().getButton(XBox360Pad.BUTTON_RB)) TSSController.getInstance().shoot();
+
         } else if(inputMode.equals("server")) {
             TSSController.getInstance().setMoveInput(server.getMovement());
             TSSController.getInstance().setShootInput(server.getShooting());
-        }
-
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            TSSController.getInstance().shoot();
         }
 
         //TODO add keyboard controls

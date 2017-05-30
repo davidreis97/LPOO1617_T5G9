@@ -15,32 +15,34 @@ public class TSSServer {
     private static Vector2 movement = new Vector2(0, 0);
     private static Vector2 shooting = new Vector2(0, 0);
 
-    public TSSServer(){
+    public TSSServer() {
 
         server = new Server();
         registerPackets();
 
         server.addListener(new NetworkListener());
+
         try {
             server.bind(port);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         server.start();
     }
 
-    private void registerPackets(){
+    private void registerPackets() {
 
         Kryo kryo = server.getKryo();
         kryo.register(Packet.ControllerInfoPacket.class);
         kryo.register(Vector2.class);
     }
 
-    public static void processControllerInfo(Packet.ControllerInfoPacket cip){
+    public static void processControllerInfo(Packet.ControllerInfoPacket cip) {
 
         TSSServer.movement = cip.movement;
         TSSServer.shooting = cip.shooting;
-        Log.info("Received Acceleration: " + cip.movement + " / Received Bullet: " + cip.shooting);
+        Log.info("Received Acceleration: " + cip.movement + " / Received Bullet: " + cip.shooting); //TODO make optional
     }
 
     /**

@@ -32,7 +32,7 @@ public abstract class EntityBody {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(model.getX(), model.getY());
         bodyDef.fixedRotation = true; //TODO some objects might rotate?
-        bodyDef.angle = model.getRotation(); //TODO rotation not needed?
+        bodyDef.angle = model.getRotation();
         bodyDef.linearDamping = 5f;
 
         body = world.createBody(bodyDef);
@@ -43,7 +43,6 @@ public abstract class EntityBody {
      * Constructs a body representing a model in a certain world.
      *
      * @param world The world this body lives on.
-     * @param model The model representing the body.
      */
     EntityBody(World world, float x, float y) {
         BodyDef bodyDef = new BodyDef();
@@ -51,7 +50,6 @@ public abstract class EntityBody {
         bodyDef.position.set(x, y);
 
         body = world.createBody(bodyDef);
-//        body.setUserData(model);
     }
 
     /**

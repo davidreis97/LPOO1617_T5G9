@@ -4,10 +4,11 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
-public class NetworkListener extends Listener{
+//TODO make logging optional
+public class NetworkListener extends Listener {
 
     @Override
-    public void connected(Connection conn){
+    public void connected(Connection conn) {
         Log.info("[SERVER] Someone connected.");
     }
 
@@ -18,12 +19,13 @@ public class NetworkListener extends Listener{
 
     @Override
     public void received (Connection conn, Object obj) {
-        if (obj instanceof Packet.ControllerInfoPacket){
+
+        if (obj instanceof Packet.ControllerInfoPacket) {
             Log.info("[SERVER] ControllerInfoPacket received.");
             TSSServer.processControllerInfo((Packet.ControllerInfoPacket) obj);
-        }else{
+
+        } else {
             Log.info("[SERVER] Unknown packet received.");
         }
     }
-
 }
