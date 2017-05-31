@@ -5,6 +5,7 @@ package com.drfl.twinstickshooter.model.entities;
  */
 public abstract class EntityModel {
     public enum ModelType {MAINCHAR, BULLET};
+    public enum AnimDirection {NONE, DOWN, LEFT, RIGHT, UP};
 
     /**
      * The x-coordinate of this model in meters.
@@ -33,7 +34,7 @@ public abstract class EntityModel {
      * @param y The y-coordinate of this entity in meters.
      * @param rotation The current rotation of this entity in radians.
      */
-    EntityModel(float x, float y, float rotation) { //TODO rotation needed?
+    EntityModel(float x, float y, float rotation) {
         this.x = x;
         this.y = y;
         this.rotation = rotation;

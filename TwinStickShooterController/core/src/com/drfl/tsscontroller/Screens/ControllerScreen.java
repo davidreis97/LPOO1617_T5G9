@@ -1,6 +1,5 @@
 package com.drfl.tsscontroller.Screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
@@ -42,6 +41,7 @@ public class ControllerScreen implements Screen{
 
     @Override
     public void show() {
+
         loadTouchpadStyle();
 
         loadTouchpadRight();
@@ -60,7 +60,8 @@ public class ControllerScreen implements Screen{
     }
 
     private void loadTouchpadLeft() {
-        touchpadLeft = new Touchpad(10,touchpadStyle);
+
+        touchpadLeft = new Touchpad(10, touchpadStyle);
 
         touchpadLeft.setBounds(300, 100, 500, 500);
 
@@ -77,7 +78,8 @@ public class ControllerScreen implements Screen{
     }
 
     private void loadTouchpadRight() {
-        touchpadRight = new Touchpad(10,touchpadStyle);
+
+        touchpadRight = new Touchpad(10, touchpadStyle);
 
         touchpadRight.setBounds( 1000, 100, 500, 500);
 
@@ -94,9 +96,10 @@ public class ControllerScreen implements Screen{
     }
 
     private void loadTouchpadStyle() {
+
         touchpadSkin = new Skin();
-        touchpadSkin.add("touchBackground",new Texture("touchBackground.png"));
-        touchpadSkin.add("touchKnob",new Texture("touchKnob.png"));
+        touchpadSkin.add("touchBackground", new Texture("touchBackground.png"));
+        touchpadSkin.add("touchKnob", new Texture("touchKnob.png"));
 
         touchBackground = touchpadSkin.getDrawable("touchBackground");
         touchKnob = touchpadSkin.getDrawable("touchKnob");
@@ -112,6 +115,7 @@ public class ControllerScreen implements Screen{
 
     @Override
     public void render(float delta) {
+
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
@@ -120,6 +124,7 @@ public class ControllerScreen implements Screen{
 
     @Override
     public void resize(int width, int height) {
+
         viewport.update(width, height);
         stage.getViewport().update(width, height);
     }

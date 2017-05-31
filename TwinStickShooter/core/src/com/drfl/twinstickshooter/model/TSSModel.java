@@ -44,12 +44,13 @@ public class TSSModel {
     };
 
     /**
-     * Constructs game with main character //TODO expand game model
+     * Constructs game with initial bullets array, other entities
+     * are created by TSSView calling createEntityModels with the entities layer
+     * from the tile map.
      */
     private TSSModel() {
 
         bullets = new ArrayList<BulletModel>();
-        //createEntityModels is called right after getInstance creates Singleton instance
     }
 
     /**

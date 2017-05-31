@@ -11,6 +11,8 @@ import com.drfl.twinstickshooter.controller.entities.TileEntity;
 import com.drfl.twinstickshooter.model.TSSModel;
 import com.drfl.twinstickshooter.model.entities.BulletModel;
 import com.drfl.twinstickshooter.model.entities.EntityModel;
+import com.drfl.twinstickshooter.model.entities.MainCharModel;
+import com.esotericsoftware.minlog.Log;
 
 public class TSSController implements ContactListener {
 
@@ -108,17 +110,38 @@ public class TSSController implements ContactListener {
      */
     public void update(float delta) {
 
-//        TSSModel.getInstance().update(delta); //TODO can use for bullets
+//        TSSModel.getInstance().update(delta); //TODO can use for bullet decay time, others
 
         this.shoot();
         timeToNextShoot -= delta;
 
-        Vector2 velChange = new Vector2(moveInput.x, moveInput.y);
-        Vector2 impulse = new Vector2(mainCharBody.getMass() * velChange.x, mainCharBody.getMass() * velChange.y);
-        mainCharBody.applyLinearImpulse(impulse.x, impulse.y, true);
+        //TODO move this to generic function for setting animation direction for any entity
+
+        if(!(moveInput.x == 0 && moveInput.y == 0)) {
+
+            float angle = moveInput.angle();
+
+            if((angle >= 0 && angle <= 45) || (angle > 315 && angle <= 360)) {
+                ((MainCharModel)mainCharBody.getUserData()).setDirection(EntityModel.AnimDirection.RIGHT);
+
+            } else if(angle > 45 && angle <= 135) {
+                ((MainCharModel)mainCharBody.getUserData()).setDirection(EntityModel.AnimDirection.UP);
+
+            } else if(angle > 135 && angle <= 225) {
+                ((MainCharModel)mainCharBody.getUserData()).setDirection(EntityModel.AnimDirection.LEFT);
+
+            } else if(angle > 225 && angle <= 315) {
+                ((MainCharModel)mainCharBody.getUserData()).setDirection(EntityModel.AnimDirection.DOWN);
+            }
+
+            Vector2 velChange = new Vector2(moveInput.x, moveInput.y);
+            Vector2 impulse = new Vector2(mainCharBody.getMass() * velChange.x, mainCharBody.getMass() * velChange.y);
+            mainCharBody.applyLinearImpulse(impulse.x, impulse.y, true);
+        }
 
         float frameTime = Math.min(delta, 0.25f);
         accumulator += frameTime;
+
         while (accumulator >= 1/60f) {
             world.step(1/60f, 6, 2);
             accumulator -= 1/60f;
@@ -131,7 +154,7 @@ public class TSSController implements ContactListener {
             if(!body.getType().equals(BodyDef.BodyType.StaticBody)) {
                 verifyBounds(body);
                 ((EntityModel) body.getUserData()).setPosition(body.getPosition().x, body.getPosition().y);
-                ((EntityModel) body.getUserData()).setRotation(body.getAngle()); //TODO model sprite rotation unused
+                ((EntityModel) body.getUserData()).setRotation(body.getAngle());
             }
         }
     }
@@ -168,27 +191,6 @@ public class TSSController implements ContactListener {
     public void setShootInput(Vector2 shootInput) {
         this.shootInput = shootInput.nor();
     }
-
-    /**
-     * Sets main character rotation.
-     */
-    public void setRotation(float angle) {
-
-        mainCharBody.setTransform(mainCharBody.getX(), mainCharBody.getY(), angle);
-    }
-
-    /**
-     * Accelerates the main character.
-     *
-     * @param delta Duration of the rotation in seconds.
-     */
-//    public void accelerate(float delta) {
-//
-//        mainCharBody.setLinearVelocity(moveInput.x, moveInput.y);
-//        mainCharBody.applyLinearImpulse(-(float) Math.sin(mainCharBody.getAngle()) * ACCEL_IMPULSE, (float) Math.cos(mainCharBody.getAngle()) * ACCEL_IMPULSE, true);
-//        //mainCharBody.applyForceToCenter(-(float) Math.sin(mainCharBody.getAngle()) * ACCEL_IMPULSE * delta, (float) Math.cos(mainCharBody.getAngle()) * ACCEL_IMPULSE * delta, true);
-//       // ((MainCharModel)mainCharBody.getUserData()).setAccelerating(true); //TODO use for animating
-//    }
 
     /**
      * Shoots a bullet

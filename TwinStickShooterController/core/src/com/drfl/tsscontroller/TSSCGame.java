@@ -2,7 +2,6 @@ package com.drfl.tsscontroller;
 
 import com.badlogic.gdx.Game;
 import com.drfl.tsscontroller.Network.TSSCClient;
-import com.drfl.tsscontroller.Screens.ControllerScreen;
 import com.drfl.tsscontroller.Screens.IPScreen;
 
 public class TSSCGame extends Game {

@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.minlog.Log;
 
+//TODO make logging optional
 /**
  * Class responsible for interacting with a XBOX360 controller
  */
