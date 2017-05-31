@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.drfl.tsscontroller.Network.Packet.ControllerInfoPacket;
 import com.drfl.tsscontroller.Network.TSSCClient;
 import com.drfl.tsscontroller.TSSCGame;
 import com.esotericsoftware.minlog.Log;
@@ -66,7 +67,7 @@ public class ControllerScreen implements Screen{
         touchpadLeft.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                com.drfl.tsscontroller.Network.Packet.ControllerInfoPacket packet = new com.drfl.tsscontroller.Network.Packet.ControllerInfoPacket();
+                ControllerInfoPacket packet = new ControllerInfoPacket();
                 packet.acceleration = new Vector2(touchpadLeft.getKnobPercentX(),touchpadLeft.getKnobPercentY());
                 packet.bullet = new Vector2(touchpadRight.getKnobPercentX(),touchpadRight.getKnobPercentY());
                 client.client.sendTCP(packet);
@@ -83,7 +84,7 @@ public class ControllerScreen implements Screen{
         touchpadRight.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                com.drfl.tsscontroller.Network.Packet.ControllerInfoPacket packet = new com.drfl.tsscontroller.Network.Packet.ControllerInfoPacket();
+                ControllerInfoPacket packet = new ControllerInfoPacket();
                 packet.acceleration = new Vector2(touchpadLeft.getKnobPercentX(),touchpadLeft.getKnobPercentY());
                 packet.bullet = new Vector2(touchpadRight.getKnobPercentX(),touchpadRight.getKnobPercentY());
                 client.client.sendTCP(packet);

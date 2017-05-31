@@ -5,11 +5,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -27,6 +26,13 @@ public class IPScreen implements Screen {
     private TextButton btnAccept;
     private TextField ipAddressField;
 
+    private Label askIP;
+
+    private Table statusTable;
+    private Label status;
+
+    private int attempts = 0;
+
     public IPScreen(TSSCGame game){
         this.game = game;
     }
@@ -43,23 +49,51 @@ public class IPScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         btnAccept = new TextButton("Enter", skin);
-        btnAccept.setPosition(Gdx.graphics.getWidth()/2 + 100,Gdx.graphics.getHeight()/2);
-        btnAccept.setSize(50,50);
+        btnAccept.setPosition(1200,700);
+        btnAccept.setSize(300,300);
+        btnAccept.getLabel().setFontScale(4);
         btnAccept.addListener(new ClickListener() {
             @Override
-            public void touchUp(InputEvent e, float x, float y, int point, int button){
+            public boolean touchDown(InputEvent e, float x, float y, int point, int button){
                 game.setClient(new TSSCClient(ipAddressField.getText()));
-                game.setScreen(new ControllerScreen(game));
-                dispose();
+                if(game.getClient().isConnected()) {
+                    game.setScreen(new ControllerScreen(game));
+                    dispose();
+                }else {
+                    setStatus("Connection Failed: " + game.getClient().getErrorMsg());
+                }
+                Gdx.input.setOnscreenKeyboardVisible(false);
+                return false;
             }
         });
 
-        ipAddressField = new TextField("",skin);
-        ipAddressField.setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
-        ipAddressField.setSize(200,60);
+        ipAddressField = new TextField("",skin); //TODO- Change font size
+        ipAddressField.setPosition(100,700);
+        ipAddressField.setSize(1000,200);
 
+        askIP = new Label("IP Address: ",skin);
+        askIP.setPosition(100,1000);
+        askIP.setFontScale(5);
+
+        status = new Label("",skin);
+        status.setFontScale(3);
+        status.setWidth(1000);
+        status.setWrap(true);
+
+        statusTable = new Table(skin);
+        statusTable.setPosition(600,600);
+        statusTable.add(status).width(1000f);
+
+        setStatus("Ready");
+
+        stage.addActor(statusTable);
+        stage.addActor(askIP);
         stage.addActor(ipAddressField);
         stage.addActor(btnAccept);
+    }
+
+    public void setStatus(String text){
+        status.setText("STATUS: " + text);
     }
 
     @Override

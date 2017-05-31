@@ -20,9 +20,14 @@ public class TSSCClient {
     private int port;
     private String IPAddress;
 
+    private boolean connected;
+    private String errorMsg;
+
     public TSSCClient(String IPAddress) {
         client = new Client();
         timeout = 5000;
+
+        errorMsg = "";
 
         this.port = 54555;
         this.IPAddress = IPAddress;
@@ -30,11 +35,15 @@ public class TSSCClient {
         registerPackets();
 
         client.addListener(new NetworkListener());
+
         try {
             client.start();
             client.connect(timeout,IPAddress,port);
+            connected = true;
         } catch (IOException e) {
             e.printStackTrace();
+            connected = false;
+            errorMsg = e.getMessage();
         }
     }
 
@@ -42,6 +51,10 @@ public class TSSCClient {
         Kryo kryo = client.getKryo();
         kryo.register(Packet.ControllerInfoPacket.class);
         kryo.register(Vector2.class);
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 
     public int getTimeout() {
@@ -66,5 +79,9 @@ public class TSSCClient {
 
     public void setIPAddress(String IPAddress) {
         this.IPAddress = IPAddress;
+    }
+
+    public String getErrorMsg() {
+        return errorMsg;
     }
 }
