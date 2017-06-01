@@ -1,15 +1,8 @@
 package com.drfl.tsscontroller.Network;
 
-/**
- * Created by davidreis on 18/04/2017.
- */
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 
