@@ -14,7 +14,8 @@ public abstract class EntityBody {
     final static short MAINCHAR_BODY = 0x0001;
     final static short BULLET_BODY = 0x0002;
     final static short TILE_ENTITY = 0x0004;
-    final static short COLLIDE_ALL = (MAINCHAR_BODY | BULLET_BODY | TILE_ENTITY);
+    final static short ENEMY_BODY = 0x0008;
+    final static short COLLIDE_ALL = (MAINCHAR_BODY | BULLET_BODY | TILE_ENTITY | ENEMY_BODY);
 
     /**
      * The Box2D body that supports this body.

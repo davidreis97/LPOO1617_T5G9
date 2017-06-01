@@ -1,12 +1,10 @@
 package com.drfl.twinstickshooter.model.entities;
 
+
 import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;
 import static com.drfl.twinstickshooter.view.TSSView.TILESIZE;
 
-/**
- * A model representing the player character.
- */
-public class MainCharModel extends EntityModel {
+public class EnemyModel extends EntityModel {
 
     /**
      * Creates a new ship model in a certain position and having a certain rotation.
@@ -15,12 +13,12 @@ public class MainCharModel extends EntityModel {
      * @param y the y-coordinate in meters
      * @param rotation the rotation in radians
      */
-    public MainCharModel(float x, float y, int rotation) {
-        super(x / TILESIZE + TILESIZE * PIXEL_TO_METER / 2.0f, y / TILESIZE + TILESIZE * PIXEL_TO_METER / 2.0f, rotation);
+    public EnemyModel(float x, float y, int rotation) {
+        super(x + TILESIZE * PIXEL_TO_METER / 2.0f, y + TILESIZE * PIXEL_TO_METER / 2.0f, rotation);
     }
 
     @Override
-    public ModelType getType() {
-        return ModelType.MAINCHAR;
+    public EntityModel.ModelType getType() {
+        return ModelType.ENEMY;
     }
 }

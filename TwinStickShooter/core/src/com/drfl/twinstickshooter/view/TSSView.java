@@ -26,11 +26,13 @@ import com.drfl.twinstickshooter.XBox360Pad;
 import com.drfl.twinstickshooter.controller.TSSController;
 import com.drfl.twinstickshooter.model.TSSModel;
 import com.drfl.twinstickshooter.model.entities.BulletModel;
+import com.drfl.twinstickshooter.model.entities.EnemyModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
 import com.drfl.twinstickshooter.view.entities.EntityView;
 import com.drfl.twinstickshooter.view.entities.ViewFactory;
 import com.esotericsoftware.minlog.Log;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -150,6 +152,7 @@ public class TSSView extends ScreenAdapter {
     private void loadAssets() { //TODO can show progress bar
 
         this.game.getAssetManager().load( "Engineer.png" , Texture.class);
+        this.game.getAssetManager().load( "Rogue.png" , Texture.class);
         this.game.getAssetManager().load("Bullet.png", Texture.class); //TODO add more bullet types if adding more weapons
 
         //Tile map loading
@@ -217,9 +220,16 @@ public class TSSView extends ScreenAdapter {
     private void drawEntities() {
 
         List<BulletModel> bullets = TSSModel.getInstance().getBullets();
-        for (BulletModel bullet : bullets) {
+        for(BulletModel bullet : bullets) {
             EntityView view = ViewFactory.makeView(game, bullet);
             view.update(bullet);
+            view.draw(game.getBatch());
+        }
+
+        ArrayList<EnemyModel> enemies = TSSModel.getInstance().getEnemies();
+        for(EnemyModel enemy : enemies) {
+            EntityView view = ViewFactory.makeView(game, enemy);
+            view.update(enemy);
             view.draw(game.getBatch());
         }
 

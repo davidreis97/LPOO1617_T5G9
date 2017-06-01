@@ -6,15 +6,20 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.drfl.twinstickshooter.controller.entities.BulletBody;
+import com.drfl.twinstickshooter.controller.entities.EnemyBody;
 import com.drfl.twinstickshooter.controller.entities.MainCharBody;
 import com.drfl.twinstickshooter.controller.entities.TileEntity;
 import com.drfl.twinstickshooter.model.TSSModel;
 import com.drfl.twinstickshooter.model.entities.BulletModel;
+import com.drfl.twinstickshooter.model.entities.EnemyModel;
 import com.drfl.twinstickshooter.model.entities.EntityModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
 import com.esotericsoftware.minlog.Log;
 
 public class TSSController implements ContactListener {
+
+    private boolean testerino = false;
+    private int tester = 0; //TODO temp
 
     /**
      * The singleton instance of this controller
@@ -114,6 +119,22 @@ public class TSSController implements ContactListener {
 
         this.shoot();
         timeToNextShoot -= delta;
+
+        //TODO add cooldown to enemies
+        if(testerino == false) {
+
+            int spawnIndex = TSSModel.getInstance().createSpawnIndex();
+
+            if(spawnIndex != -1) {
+                EnemyModel enemy = TSSModel.getInstance().createEnemy(spawnIndex);
+                new EnemyBody(world, enemy);
+                tester++;
+            }
+
+            if(tester >= 6) {
+                testerino = true;
+            }
+        }
 
         //TODO move this to generic function for setting animation direction for any entity
 
