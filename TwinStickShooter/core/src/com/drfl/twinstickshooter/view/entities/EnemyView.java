@@ -16,5 +16,6 @@ public class EnemyView extends AnimatedEntityView {
      */
     public EnemyView(TSSGame game) {
         super(game, (Texture) game.getAssetManager().get("Rogue.png"), 0.15f);
+
     }
 }

@@ -4,9 +4,8 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
-import com.drfl.twinstickshooter.controller.entities.TileEntity;
 import com.drfl.twinstickshooter.model.entities.*;
-import com.esotericsoftware.minlog.Log;
+import com.drfl.twinstickshooter.view.TSSView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,7 @@ import java.util.Random;
  */
 
 public class TSSModel {
+
     /**
      * The singleton instance of the game model
      */
@@ -30,7 +30,7 @@ public class TSSModel {
     /**
      * RNG Seed
      */
-    Random rand = new Random();
+    private Random rand = new Random();
 
     /**
      * Map enemy spawners.
@@ -125,6 +125,8 @@ public class TSSModel {
         enemySpawners.get(index).setSpawned(true);
 
         enemies.add(new EnemyModel(enemySpawners.get(index).getX(), enemySpawners.get(index).getY(), 0));
+
+        TSSView.getInstance().addEnemyView();
 
         return enemies.get(enemies.size() - 1);
     }

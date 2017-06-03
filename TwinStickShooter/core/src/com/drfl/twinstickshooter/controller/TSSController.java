@@ -5,16 +5,17 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.drfl.twinstickshooter.controller.entities.BulletBody;
-import com.drfl.twinstickshooter.controller.entities.EnemyBody;
-import com.drfl.twinstickshooter.controller.entities.MainCharBody;
-import com.drfl.twinstickshooter.controller.entities.TileEntity;
+import com.drfl.twinstickshooter.controller.entities.*;
 import com.drfl.twinstickshooter.model.TSSModel;
 import com.drfl.twinstickshooter.model.entities.BulletModel;
 import com.drfl.twinstickshooter.model.entities.EnemyModel;
 import com.drfl.twinstickshooter.model.entities.EntityModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
+import com.drfl.twinstickshooter.view.entities.AnimatedEntityView;
 import com.esotericsoftware.minlog.Log;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class TSSController implements ContactListener {
 
@@ -52,9 +53,24 @@ public class TSSController implements ContactListener {
     private static final float TIME_BETWEEN_SHOTS = .2f; //TODO move to weaponModel if considering weapons with different cooldowns
 
     /**
+     * Cooldown for enemy spawning
+     */
+    private static final float ENEMY_SPAWN_CD = 5.0f;
+
+    /**
      * The speed of bullets
      */
     private static final float BULLET_SPEED = 20f; //TODO move to weaponModel if using different bullet speeds
+
+    /**
+     * RNG Seed
+     */
+    private Random rand = new Random();
+
+    /**
+     * Current enemy spawn cooldown
+     */
+    private float timeToNextSpawn = 0;
 
     /**
      * Time left until gun cools down
@@ -70,6 +86,11 @@ public class TSSController implements ContactListener {
      * The main character body.
      */
     private final MainCharBody mainCharBody;
+
+    /**
+     * Enemy bodies
+     */
+    private ArrayList<EnemyBody> enemies = new ArrayList<EnemyBody>();
 
     /**
      * Accumulator used to calculate the simulation step.
@@ -118,45 +139,40 @@ public class TSSController implements ContactListener {
 //        TSSModel.getInstance().update(delta); //TODO can use for bullet decay time, others
 
         this.shoot();
-        timeToNextShoot -= delta;
+        if(timeToNextShoot > 0) timeToNextShoot -= delta;
 
-        //TODO add cooldown to enemies
-        if(testerino == false) {
+        this.spawnEnemy();
+        if(timeToNextSpawn > 0) timeToNextSpawn -= delta;
 
-            int spawnIndex = TSSModel.getInstance().createSpawnIndex();
+        //TODO move enemy and player movement/animation to separate method, rework player portion
 
-            if(spawnIndex != -1) {
-                EnemyModel enemy = TSSModel.getInstance().createEnemy(spawnIndex);
-                new EnemyBody(world, enemy);
-                tester++;
+        //Enemy movement/animation
+        for(EnemyBody enemy : enemies) {
+
+            float currCooldown = ((EnemyModel)enemy.getUserData()).getTimeToNextDirection();
+
+            if(currCooldown > 0) {
+                ((EnemyModel)enemy.getUserData()).setTimeToNextDirection(currCooldown - delta);
+            } else {
+                ((EnemyModel)enemy.getUserData()).resetTimeToNextDirection();
+                ((EnemyModel)enemy.getUserData()).setMoveDirection(generateMovement()); //TODO make movement in direction of player
             }
 
-            if(tester >= 6) {
-                testerino = true;
-            }
+            Vector2 direction = ((EnemyModel)enemy.getUserData()).getMoveDirection();
+
+            if(direction.x == 0 && direction.y == 0) continue;
+
+            entityAnimate(enemy, direction);
+
+            Vector2 impulse = new Vector2(enemy.getMass() * direction.x, enemy.getMass() * direction.y);
+            enemy.applyLinearImpulse(impulse.x, impulse.y, true);
         }
 
-        //TODO move this to generic function for setting animation direction for any entity
-
+        //Player movement/animation
         if(!(moveInput.x == 0 && moveInput.y == 0)) {
 
-            float angle = moveInput.angle();
-
-            if((angle >= 0 && angle <= 45) || (angle > 315 && angle <= 360)) {
-                ((MainCharModel)mainCharBody.getUserData()).setDirection(EntityModel.AnimDirection.RIGHT);
-
-            } else if(angle > 45 && angle <= 135) {
-                ((MainCharModel)mainCharBody.getUserData()).setDirection(EntityModel.AnimDirection.UP);
-
-            } else if(angle > 135 && angle <= 225) {
-                ((MainCharModel)mainCharBody.getUserData()).setDirection(EntityModel.AnimDirection.LEFT);
-
-            } else if(angle > 225 && angle <= 315) {
-                ((MainCharModel)mainCharBody.getUserData()).setDirection(EntityModel.AnimDirection.DOWN);
-            }
-
-            Vector2 velChange = new Vector2(moveInput.x, moveInput.y);
-            Vector2 impulse = new Vector2(mainCharBody.getMass() * velChange.x, mainCharBody.getMass() * velChange.y);
+            entityAnimate(mainCharBody, moveInput);
+            Vector2 impulse = new Vector2(mainCharBody.getMass() * moveInput.x, mainCharBody.getMass() * moveInput.y);
             mainCharBody.applyLinearImpulse(impulse.x, impulse.y, true);
         }
 
@@ -199,6 +215,59 @@ public class TSSController implements ContactListener {
             body.setTransform(body.getPosition().x, 0, body.getAngle());
     }
 
+    private void entityAnimate(EntityBody entity, Vector2 direction) {
+
+        float angle = direction.angle();
+
+        if((angle >= 0 && angle <= 45) || (angle > 315 && angle <= 360)) {
+            ((EntityModel)entity.getUserData()).setDirection(EntityModel.AnimDirection.RIGHT);
+
+        } else if(angle > 45 && angle <= 135) {
+            ((EntityModel)entity.getUserData()).setDirection(EntityModel.AnimDirection.UP);
+
+        } else if(angle > 135 && angle <= 225) {
+            ((EntityModel)entity.getUserData()).setDirection(EntityModel.AnimDirection.LEFT);
+
+        } else if(angle > 225 && angle <= 315) {
+            ((EntityModel)entity.getUserData()).setDirection(EntityModel.AnimDirection.DOWN);
+        }
+    }
+
+    /**
+     * Randomly selects a 4-way direction
+     *
+     * @return random direction vector
+     */
+    private Vector2 generateMovement() {
+
+        ArrayList<Vector2> directions = new ArrayList<Vector2>();
+        directions.add(new Vector2(0, 0));
+        directions.add(new Vector2(0, 1));
+        directions.add(new Vector2(0, -1));
+        directions.add(new Vector2(1, 0));
+        directions.add(new Vector2(-1, 0));
+
+        return directions.get(rand.nextInt(directions.size()));
+    }
+
+    /**
+     * Try to spawn an enemy if cooldown seconds have passed. Can only spawn
+     * if a spawner has space.
+     */
+    private void spawnEnemy() {
+
+        if(timeToNextSpawn > 0) return;
+
+        int spawnIndex = TSSModel.getInstance().createSpawnIndex();
+
+        if(spawnIndex != -1) { //TODO remove magic value
+            EnemyModel enemy = TSSModel.getInstance().createEnemy(spawnIndex);
+            enemies.add(new EnemyBody(world, enemy));
+        }
+
+        timeToNextSpawn = ENEMY_SPAWN_CD;
+    }
+
     /**
      * @param moveInput Set movement vector of main char
      */
@@ -220,16 +289,15 @@ public class TSSController implements ContactListener {
 
         if(this.shootInput.x == 0 && this.shootInput.y == 0) return;
 
-        if (timeToNextShoot < 0) {
+        if (timeToNextShoot > 0) return;
 
-            BulletModel bullet = TSSModel.getInstance().createBullet(TSSModel.getInstance().getMainChar(), this.shootInput);
+        BulletModel bullet = TSSModel.getInstance().createBullet(TSSModel.getInstance().getMainChar(), this.shootInput);
 
-            BulletBody body = new BulletBody(world, bullet);
-            body.setLinearDamping(0);
-            body.setLinearVelocity(BULLET_SPEED);
+        BulletBody body = new BulletBody(world, bullet);
+        body.setLinearDamping(0);
+        body.setLinearVelocity(BULLET_SPEED);
 
-            timeToNextShoot = TIME_BETWEEN_SHOTS;
-        }
+        timeToNextShoot = TIME_BETWEEN_SHOTS;
     }
 
     /**

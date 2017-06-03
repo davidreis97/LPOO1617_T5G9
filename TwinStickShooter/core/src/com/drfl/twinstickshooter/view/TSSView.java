@@ -1,20 +1,13 @@
 package com.drfl.twinstickshooter.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
@@ -22,18 +15,17 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.drfl.twinstickshooter.TSSGame;
 import com.drfl.twinstickshooter.TSSGamePad;
 import com.drfl.twinstickshooter.TSSServer;
-import com.drfl.twinstickshooter.XBox360Pad;
 import com.drfl.twinstickshooter.controller.TSSController;
 import com.drfl.twinstickshooter.model.TSSModel;
 import com.drfl.twinstickshooter.model.entities.BulletModel;
 import com.drfl.twinstickshooter.model.entities.EnemyModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
+import com.drfl.twinstickshooter.view.entities.EnemyView;
 import com.drfl.twinstickshooter.view.entities.EntityView;
 import com.drfl.twinstickshooter.view.entities.ViewFactory;
 import com.esotericsoftware.minlog.Log;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class TSSView extends ScreenAdapter {
@@ -70,6 +62,11 @@ public class TSSView extends ScreenAdapter {
     private final TSSServer server;
 
     /**
+     * The singleton instance of the game view
+     */
+    private static TSSView instance;
+
+    /**
      * The camera used to show the viewport.
      */
     private final OrthographicCamera camera;
@@ -91,6 +88,11 @@ public class TSSView extends ScreenAdapter {
     private String inputMode;
 
     /**
+     * Array of enemy views to keep track of independent animation cycles
+     */
+    private ArrayList<EnemyView> enemies = new ArrayList<EnemyView>();
+
+    /**
      * Create game view using libGDX screen
      * @param game game this screen belongs to
      */
@@ -106,8 +108,15 @@ public class TSSView extends ScreenAdapter {
         TSSController.getInstance().createTileEntities(map.getLayers().get("Collision"));
 
         inputMode = chooseInput();
-
         camera = createCamera();
+    }
+
+    public void initInstance(TSSView view) {
+        instance = view;
+    }
+
+    public static TSSView getInstance() {
+        return instance;
     }
 
     /**
@@ -124,7 +133,6 @@ public class TSSView extends ScreenAdapter {
             return "server";
         }
     }
-
 
     /**
      * Creates the camera used to show the viewport.
@@ -227,10 +235,12 @@ public class TSSView extends ScreenAdapter {
         }
 
         ArrayList<EnemyModel> enemies = TSSModel.getInstance().getEnemies();
-        for(EnemyModel enemy : enemies) {
-            EntityView view = ViewFactory.makeView(game, enemy);
-            view.update(enemy);
-            view.draw(game.getBatch());
+
+        for(int i = 0; i < enemies.size(); i++) {
+            this.enemies.get(i).update(enemies.get(i));
+//            EntityView view = ViewFactory.makeView(game, enemy);
+//            view.update(enemy);
+            this.enemies.get(i).draw(game.getBatch());
         }
 
         MainCharModel mc = TSSModel.getInstance().getMainChar();
@@ -249,5 +259,9 @@ public class TSSView extends ScreenAdapter {
         OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map, batch);
         renderer.setView(camera);
         renderer.render();
+    }
+
+    public void addEnemyView() {
+        enemies.add(new EnemyView(game));
     }
 }
