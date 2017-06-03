@@ -24,6 +24,7 @@ public class TSSCClient {
     private String errorMsg;
 
     public TSSCClient(String IPAddress) {
+
         client = new Client();
         timeout = 5000;
 
@@ -38,7 +39,7 @@ public class TSSCClient {
 
         try {
             client.start();
-            client.connect(timeout,IPAddress,port);
+            client.connect(timeout, IPAddress, port);
             connected = true;
         } catch (IOException e) {
             e.printStackTrace();
