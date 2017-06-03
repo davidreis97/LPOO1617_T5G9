@@ -338,6 +338,7 @@ public class TSSController implements ContactListener {
     private void enemyCollide(Body bullet, Body enemy) {
         ((BulletModel)bullet.getUserData()).setFlaggedForRemoval(true);
         if(((BulletModel)bullet.getUserData()).getOwner().equals(EntityModel.ModelType.MAINCHAR)) {
+            ((EnemyModel)enemy.getUserData()).setHurt(true);
             ((EnemyModel)enemy.getUserData()).removeHitpoints(5); //TODO remove magic value, use per bullet damage if different weapons
         }
     }
@@ -352,8 +353,13 @@ public class TSSController implements ContactListener {
     }
 
     private void mainCharCollide(Body bullet, Body mainChar) {
+
         ((BulletModel)bullet.getUserData()).setFlaggedForRemoval(true);
+
+        if(((MainCharModel)mainChar.getUserData()).isHurt()) return;
+
         if(((BulletModel)bullet.getUserData()).getOwner().equals(EntityModel.ModelType.ENEMY)) {
+            ((MainCharModel)mainChar.getUserData()).setHurt(true);
             ((MainCharModel)mainChar.getUserData()).removeHitpoints(5); //TODO remove magic value, use per bullet damage if different weapons
         }
     }

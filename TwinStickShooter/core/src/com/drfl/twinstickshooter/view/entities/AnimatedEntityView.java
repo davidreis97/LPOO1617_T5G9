@@ -40,6 +40,9 @@ public abstract class AnimatedEntityView extends EntityView {
      */
     protected float stateTime = 0;
 
+    protected final static float HURT_FRAMES = 0.5f;
+    protected float hurtTime = 0;
+
     AnimatedEntityView(TSSGame game, Texture spriteSheet, float frameTime) {
         super(game);
         createGraphics(spriteSheet, frameTime);
@@ -63,6 +66,7 @@ public abstract class AnimatedEntityView extends EntityView {
     public void draw(SpriteBatch batch) {
 
         stateTime += Gdx.graphics.getDeltaTime();
+        if(hurtTime > 0) hurtTime -= Gdx.graphics.getDeltaTime();
 
         //TODO divide into functions
         switch(this.direction) {
@@ -108,6 +112,13 @@ public abstract class AnimatedEntityView extends EntityView {
         super.update(model);
         EntityModel.AnimDirection modelDir = model.getDirection();
 
+        if(hurtTime < 0) {
+            model.setHurt(false);
+            hurtTime = 0;
+        } else if(model.isHurt() && hurtTime == 0) {
+            hurtTime = HURT_FRAMES;
+        }
+
         if(this.direction != modelDir) {
             this.previousDirection = this.direction;
             this.stateTime = 0;
@@ -118,11 +129,9 @@ public abstract class AnimatedEntityView extends EntityView {
     }
 
     /**
-     * Creates the texture used when the main character is stopped.
+     * Creates idle textures for all 4 directions
      *
-     * @param game the game this view belongs to. Needed to access the
-     *             asset manager to get textures.
-     * @return the texture used when the main character is stopped.
+     * @param spriteSheet sprites to use for the directions
      */
     private void createIdleRegions(Texture spriteSheet) {
 
@@ -136,10 +145,10 @@ public abstract class AnimatedEntityView extends EntityView {
     }
 
     /**
-     * Creates the animations used when an entity is moving
+     * Creates animations for all 4 directions
      *
-     * @param game the game this view belongs to. Needed to access the
-     *             asset manager to get textures.
+     * @param spriteSheet sprite sheet to use for the directions
+     * @param frameTime time between frames in seconds
      */
     private void createAnimations(Texture spriteSheet, float frameTime) {
 

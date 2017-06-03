@@ -42,6 +42,8 @@ public abstract class EntityModel {
      */
     protected float timeToNextShoot = 0;
 
+    protected boolean isHurt = false;
+
     /**
      * Constructs a model with a position and a rotation.
      *
@@ -138,5 +140,13 @@ public abstract class EntityModel {
 
     public void setTimeToNextShoot(float timeToNextShoot) {
         this.timeToNextShoot = timeToNextShoot;
+    }
+
+    public boolean isHurt() {
+        return isHurt;
+    }
+
+    public void setHurt(boolean hurt) {
+        isHurt = hurt;
     }
 }
