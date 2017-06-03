@@ -185,6 +185,9 @@ public abstract class EntityBody {
         body.applyLinearImpulse(impulse, center, awake);
     }
 
+    public Body getBody() {
+        return body;
+    }
 
     /**
      * @param velX the x-component of the velocity

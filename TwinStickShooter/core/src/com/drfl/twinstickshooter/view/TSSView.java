@@ -179,6 +179,7 @@ public class TSSView extends ScreenAdapter {
     public void render(float delta) {
 
         TSSController.getInstance().removeFlagged();
+        TSSController.getInstance().removeDead();
 
         handleInputs(delta);
 
@@ -238,8 +239,6 @@ public class TSSView extends ScreenAdapter {
 
         for(int i = 0; i < enemies.size(); i++) {
             this.enemies.get(i).update(enemies.get(i));
-//            EntityView view = ViewFactory.makeView(game, enemy);
-//            view.update(enemy);
             this.enemies.get(i).draw(game.getBatch());
         }
 
@@ -263,5 +262,9 @@ public class TSSView extends ScreenAdapter {
 
     public void addEnemyView() {
         enemies.add(new EnemyView(game));
+    }
+
+    public void removeEnemyView(int index) {
+        enemies.remove(index);
     }
 }

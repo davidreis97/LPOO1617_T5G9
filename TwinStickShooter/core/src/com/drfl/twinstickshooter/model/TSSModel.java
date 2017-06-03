@@ -194,4 +194,27 @@ public class TSSModel {
             bulletPool.free((BulletModel) model);
         }
     }
+
+    /**
+     * Resets one spawner so it can spawn another enemy
+     */
+    private void resetSpawner() {
+        for(EnemySpawnerModel spawner : enemySpawners) {
+            if(spawner.isSpawned()) {
+                spawner.setSpawned(false);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Removes enemy model and enemy view at specified index
+     * @param index index on entities array
+     */
+    public void removeEnemy(int index) {
+
+        resetSpawner();
+        enemies.remove(index);
+        TSSView.getInstance().removeEnemyView(index);
+    }
 }

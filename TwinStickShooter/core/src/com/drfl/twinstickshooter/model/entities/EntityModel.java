@@ -33,6 +33,11 @@ public abstract class EntityModel {
     private AnimDirection direction = AnimDirection.NONE;
 
     /**
+     * Hitpoints for character entities
+     */
+    protected int hitpoints;
+
+    /**
      * Constructs a model with a position and a rotation.
      *
      * @param x The x-coordinate of this entity in meters.
@@ -110,6 +115,14 @@ public abstract class EntityModel {
      */
     public void setFlaggedForRemoval(boolean flaggedForRemoval) {
         this.flaggedForRemoval = flaggedForRemoval;
+    }
+
+    public int getHitpoints() {
+        return hitpoints;
+    }
+
+    public void removeHitpoints(int value) {
+        this.hitpoints -= value;
     }
 
     public abstract ModelType getType();

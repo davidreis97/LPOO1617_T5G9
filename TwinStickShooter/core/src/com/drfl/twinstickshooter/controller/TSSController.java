@@ -19,9 +19,6 @@ import java.util.Random;
 
 public class TSSController implements ContactListener {
 
-    private boolean testerino = false;
-    private int tester = 0; //TODO temp
-
     /**
      * The singleton instance of this controller
      */
@@ -313,10 +310,19 @@ public class TSSController implements ContactListener {
         Body bodyA = contact.getFixtureA().getBody();
         Body bodyB = contact.getFixtureB().getBody();
 
-        if (bodyA.getUserData() instanceof BulletModel)
-            bulletCollision(bodyA);
-        if (bodyB.getUserData() instanceof BulletModel)
-            bulletCollision(bodyB);
+        if (bodyA.getUserData() instanceof BulletModel && bodyB.getUserData() instanceof EnemyModel) enemyCollide(bodyA, bodyB);
+        if (bodyA.getUserData() instanceof EnemyModel && bodyB.getUserData() instanceof BulletModel) enemyCollide(bodyB, bodyA);
+
+        if (bodyA.getUserData() instanceof BulletModel) bulletCollision(bodyA);
+        if (bodyB.getUserData() instanceof BulletModel) bulletCollision(bodyB);
+    }
+
+    /**
+     * Bullet collided with enemy, remove bullet and hurt enemy
+     */
+    private void enemyCollide(Body bullet, Body enemy) {
+        ((BulletModel)bullet.getUserData()).setFlaggedForRemoval(true);
+        ((EnemyModel)enemy.getUserData()).removeHitpoints(5); //TODO remove magic value, use per bullet damage if different weapons
     }
 
     /**
@@ -343,6 +349,20 @@ public class TSSController implements ContactListener {
                     TSSModel.getInstance().remove((EntityModel) body.getUserData());
                     world.destroyBody(body);
                 }
+            }
+        }
+    }
+
+    /**
+     * Handle game entities' hitpoints
+     */
+    public void removeDead() {
+
+        for(int i = enemies.size() - 1; i >= 0; i--) {
+            if(((EnemyModel)enemies.get(i).getUserData()).getHitpoints() <= 0) {
+                TSSModel.getInstance().removeEnemy(i);
+                world.destroyBody(enemies.get(i).getBody());
+                enemies.remove(i);
             }
         }
     }

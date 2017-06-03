@@ -32,6 +32,7 @@ public class EnemyModel extends EntityModel {
      */
     public EnemyModel(float x, float y, int rotation) {
         super(x + TILESIZE * PIXEL_TO_METER / 2.0f, y + TILESIZE * PIXEL_TO_METER / 2.0f, rotation);
+        this.hitpoints = 20;
     }
 
     @Override
