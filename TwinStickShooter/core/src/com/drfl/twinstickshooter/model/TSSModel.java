@@ -95,16 +95,20 @@ public class TSSModel {
         }
     }
 
-    public BulletModel createBullet(MainCharModel mc, Vector2 shootInput) {
+    public BulletModel createBullet(EntityModel owner, Vector2 direction) {
 
         BulletModel bullet = bulletPool.obtain();
 
         bullet.setFlaggedForRemoval(false);
 
-        float angle = shootInput.angle() * (float) Math.PI / 180.0f - (float) Math.PI / 2.0f;
+        float angle = direction.angle() * (float) Math.PI / 180.0f - (float) Math.PI / 2.0f;
 
-        bullet.setPosition(mc.getX() - (float) Math.sin(angle), mc.getY() + (float) Math.cos(angle)); //TODO more precise position
+        bullet.setPosition(owner.getX() - (float) Math.sin(angle), owner.getY() + (float) Math.cos(angle)); //TODO more precise position
         bullet.setRotation(angle);
+
+        if(owner instanceof MainCharModel) {
+            bullet.setOwner(EntityModel.ModelType.MAINCHAR);
+        } else bullet.setOwner(EntityModel.ModelType.ENEMY);
 
 //      bullet.setTimeToLive(.5f); //TODO needed if implementing weapons with decaying bullets
 
@@ -199,5 +203,28 @@ public class TSSModel {
             bullets.remove(model);
             bulletPool.free((BulletModel) model);
         }
+    }
+
+    /**
+     * Resets one spawner so it can spawn another enemy
+     */
+    private void resetSpawner() {
+        for(EnemySpawnerModel spawner : enemySpawners) {
+            if(spawner.isSpawned()) {
+                spawner.setSpawned(false);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Removes enemy model and enemy view at specified index
+     * @param index index on entities array
+     */
+    public void removeEnemy(int index) {
+
+        resetSpawner();
+        enemies.remove(index);
+        TSSView.getInstance().removeEnemyView(index);
     }
 }

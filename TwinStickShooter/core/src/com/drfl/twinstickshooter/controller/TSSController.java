@@ -19,9 +19,6 @@ import java.util.Random;
 
 public class TSSController implements ContactListener {
 
-    private boolean testerino = false;
-    private int tester = 0; //TODO temp
-
     /**
      * The singleton instance of this controller
      */
@@ -71,11 +68,6 @@ public class TSSController implements ContactListener {
      * Current enemy spawn cooldown
      */
     private float timeToNextSpawn = 0;
-
-    /**
-     * Time left until gun cools down
-     */
-    private float timeToNextShoot = 0;
 
     /**
      * The physics world controlled by this controller.
@@ -138,24 +130,48 @@ public class TSSController implements ContactListener {
 
 //        TSSModel.getInstance().update(delta); //TODO can use for bullet decay time, others
 
-        this.shoot();
-        if(timeToNextShoot > 0) timeToNextShoot -= delta;
+        //TODO refactor enemy/player handling
 
         this.spawnEnemy();
         if(timeToNextSpawn > 0) timeToNextSpawn -= delta;
 
-        //TODO move enemy and player movement/animation to separate method, rework player portion
+        //Player movement/animation
+        if(!(moveInput.x == 0 && moveInput.y == 0)) {
 
-        //Enemy movement/animation
+            entityAnimate(mainCharBody, moveInput);
+            Vector2 impulse = new Vector2(mainCharBody.getMass() * moveInput.x, mainCharBody.getMass() * moveInput.y);
+            mainCharBody.applyLinearImpulse(impulse.x, impulse.y, true);
+        }
+
+        //Main character shoot
+        float mainCharCD = ((MainCharModel)mainCharBody.getUserData()).getTimeToNextShoot();
+
+        if(mainCharCD <= 0) {
+            ((MainCharModel)mainCharBody.getUserData()).setTimeToNextShoot(TIME_BETWEEN_SHOTS);
+            this.shoot(((MainCharModel)mainCharBody.getUserData()), shootInput);
+        } else {
+            ((MainCharModel)mainCharBody.getUserData()).setTimeToNextShoot(mainCharCD - delta);
+        }
+
+        //Enemy movement/animation/shooting
         for(EnemyBody enemy : enemies) {
 
             float currCooldown = ((EnemyModel)enemy.getUserData()).getTimeToNextDirection();
+            float shootCooldown = ((EnemyModel)enemy.getUserData()).getTimeToNextShoot();
 
             if(currCooldown > 0) {
                 ((EnemyModel)enemy.getUserData()).setTimeToNextDirection(currCooldown - delta);
             } else {
                 ((EnemyModel)enemy.getUserData()).resetTimeToNextDirection();
                 ((EnemyModel)enemy.getUserData()).setMoveDirection(generateMovement()); //TODO make movement in direction of player
+            }
+
+            if(shootCooldown > 0) {
+                ((EnemyModel)enemy.getUserData()).setTimeToNextShoot(shootCooldown - delta);
+            } else {
+                ((EnemyModel)enemy.getUserData()).resetTimeToNextShoot();
+                ((EnemyModel)enemy.getUserData()).setShootDirection(generateShootDirection((MainCharModel)mainCharBody.getUserData(), (EnemyModel)enemy.getUserData()));
+                shoot((EnemyModel)enemy.getUserData(), ((EnemyModel) enemy.getUserData()).getShootDirection());
             }
 
             Vector2 direction = ((EnemyModel)enemy.getUserData()).getMoveDirection();
@@ -166,14 +182,6 @@ public class TSSController implements ContactListener {
 
             Vector2 impulse = new Vector2(enemy.getMass() * direction.x, enemy.getMass() * direction.y);
             enemy.applyLinearImpulse(impulse.x, impulse.y, true);
-        }
-
-        //Player movement/animation
-        if(!(moveInput.x == 0 && moveInput.y == 0)) {
-
-            entityAnimate(mainCharBody, moveInput);
-            Vector2 impulse = new Vector2(mainCharBody.getMass() * moveInput.x, mainCharBody.getMass() * moveInput.y);
-            mainCharBody.applyLinearImpulse(impulse.x, impulse.y, true);
         }
 
         float frameTime = Math.min(delta, 0.25f);
@@ -233,6 +241,11 @@ public class TSSController implements ContactListener {
         }
     }
 
+    private Vector2 generateShootDirection(MainCharModel target, EnemyModel shooter) {
+
+        return new Vector2(target.getX() - shooter.getX(), target.getY() - shooter.getY());
+    }
+
     /**
      * Randomly selects a 4-way direction
      *
@@ -285,19 +298,15 @@ public class TSSController implements ContactListener {
     /**
      * Shoots a bullet
      */
-    public void shoot() { //TODO add owner of bullet, pass bullet type if different weapons
+    public void shoot(EntityModel owner, Vector2 direction) { //TODO add owner of bullet, pass bullet type if different weapons
 
-        if(this.shootInput.x == 0 && this.shootInput.y == 0) return;
+        if(direction.x == 0 && direction.y == 0) return;
 
-        if (timeToNextShoot > 0) return;
-
-        BulletModel bullet = TSSModel.getInstance().createBullet(TSSModel.getInstance().getMainChar(), this.shootInput);
+        BulletModel bullet = TSSModel.getInstance().createBullet(owner, direction);
 
         BulletBody body = new BulletBody(world, bullet);
         body.setLinearDamping(0);
         body.setLinearVelocity(BULLET_SPEED);
-
-        timeToNextShoot = TIME_BETWEEN_SHOTS;
     }
 
     /**
@@ -313,10 +322,25 @@ public class TSSController implements ContactListener {
         Body bodyA = contact.getFixtureA().getBody();
         Body bodyB = contact.getFixtureB().getBody();
 
-        if (bodyA.getUserData() instanceof BulletModel)
-            bulletCollision(bodyA);
-        if (bodyB.getUserData() instanceof BulletModel)
-            bulletCollision(bodyB);
+        if (bodyA.getUserData() instanceof BulletModel && bodyB.getUserData() instanceof EnemyModel) enemyCollide(bodyA, bodyB);
+        if (bodyA.getUserData() instanceof EnemyModel && bodyB.getUserData() instanceof BulletModel) enemyCollide(bodyB, bodyA);
+
+        if (bodyA.getUserData() instanceof BulletModel && bodyB.getUserData() instanceof MainCharModel) mainCharCollide(bodyA, bodyB);
+        if (bodyA.getUserData() instanceof MainCharModel && bodyB.getUserData() instanceof BulletModel) mainCharCollide(bodyB, bodyA);
+
+        if (bodyA.getUserData() instanceof BulletModel) bulletCollision(bodyA);
+        if (bodyB.getUserData() instanceof BulletModel) bulletCollision(bodyB);
+    }
+
+    /**
+     * Bullet collided with enemy, remove bullet and hurt enemy
+     */
+    private void enemyCollide(Body bullet, Body enemy) {
+        ((BulletModel)bullet.getUserData()).setFlaggedForRemoval(true);
+        if(((BulletModel)bullet.getUserData()).getOwner().equals(EntityModel.ModelType.MAINCHAR)) {
+            ((EnemyModel)enemy.getUserData()).setHurt(true);
+            ((EnemyModel)enemy.getUserData()).removeHitpoints(5); //TODO remove magic value, use per bullet damage if different weapons
+        }
     }
 
     /**
@@ -326,6 +350,18 @@ public class TSSController implements ContactListener {
      */
     private void bulletCollision(Body bulletBody) {
         ((BulletModel)bulletBody.getUserData()).setFlaggedForRemoval(true);
+    }
+
+    private void mainCharCollide(Body bullet, Body mainChar) {
+
+        ((BulletModel)bullet.getUserData()).setFlaggedForRemoval(true);
+
+        if(((MainCharModel)mainChar.getUserData()).isHurt()) return;
+
+        if(((BulletModel)bullet.getUserData()).getOwner().equals(EntityModel.ModelType.ENEMY)) {
+            ((MainCharModel)mainChar.getUserData()).setHurt(true);
+            ((MainCharModel)mainChar.getUserData()).removeHitpoints(5); //TODO remove magic value, use per bullet damage if different weapons
+        }
     }
 
     /**
@@ -343,6 +379,20 @@ public class TSSController implements ContactListener {
                     TSSModel.getInstance().remove((EntityModel) body.getUserData());
                     world.destroyBody(body);
                 }
+            }
+        }
+    }
+
+    /**
+     * Handle game entities' hitpoints
+     */
+    public void removeDead() {
+
+        for(int i = enemies.size() - 1; i >= 0; i--) {
+            if(((EnemyModel)enemies.get(i).getUserData()).getHitpoints() <= 0) {
+                TSSModel.getInstance().removeEnemy(i);
+                world.destroyBody(enemies.get(i).getBody());
+                enemies.remove(i);
             }
         }
     }

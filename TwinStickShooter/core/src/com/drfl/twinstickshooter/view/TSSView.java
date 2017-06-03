@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -50,6 +51,7 @@ public class TSSView extends ScreenAdapter {
      * automatically calculated using the screen ratio.
      */
     private static final float VIEWPORT_WIDTH = 40;
+    private static final float VIEWPORT_HEIGHT = 22.5f;
 
     /**
      * The game this screen belongs to.
@@ -81,6 +83,36 @@ public class TSSView extends ScreenAdapter {
      * pixels in order to show fixtures in their correct places.
      */
     private Matrix4 debugCamera;
+
+    String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+            + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
+            + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
+            + "uniform mat4 u_projTrans;\n" //
+            + "varying vec4 v_color;\n" //
+            + "varying vec2 v_texCoords;\n" //
+            + "\n" //
+            + "void main()\n" //
+            + "{\n" //
+            + "   v_color = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
+            + "   v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
+            + "   gl_Position =  u_projTrans * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+            + "}\n";
+    String fragmentShader = "#ifdef GL_ES\n" //
+            + "#define LOWP lowp\n" //
+            + "precision mediump float;\n" //
+            + "#else\n" //
+            + "#define LOWP \n" //
+            + "#endif\n" //
+            + "varying LOWP vec4 v_color;\n" //
+            + "const vec4 c_color = vec4(1.0, 0.5, 0.5, 1.0);\n" //
+            + "varying vec2 v_texCoords;\n" //
+            + "uniform sampler2D u_texture;\n" //
+            + "void main()\n"//
+            + "{\n" //
+            + "  gl_FragColor = c_color * texture2D(u_texture, v_texCoords).a;\n" //
+            + "}";
+
+    private ShaderProgram shader = new ShaderProgram(vertexShader, fragmentShader);
 
     /**
      * The type of input currently in use to control the game.
@@ -140,8 +172,8 @@ public class TSSView extends ScreenAdapter {
      * @return the camera
      */
     private OrthographicCamera createCamera() {
-        OrthographicCamera camera = new OrthographicCamera(VIEWPORT_WIDTH / PIXEL_TO_METER, VIEWPORT_WIDTH / PIXEL_TO_METER * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
 
+        OrthographicCamera camera = new OrthographicCamera(VIEWPORT_WIDTH / PIXEL_TO_METER, VIEWPORT_HEIGHT / PIXEL_TO_METER);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
 
@@ -179,6 +211,7 @@ public class TSSView extends ScreenAdapter {
     public void render(float delta) {
 
         TSSController.getInstance().removeFlagged();
+        TSSController.getInstance().removeDead();
 
         handleInputs(delta);
 
@@ -188,6 +221,8 @@ public class TSSView extends ScreenAdapter {
 
         Gdx.gl.glClearColor( 103/255f, 69/255f, 117/255f, 1 );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
+
+        game.getBatch().setShader(null);
 
         drawTileMap(game.getBatch());
 
@@ -227,6 +262,8 @@ public class TSSView extends ScreenAdapter {
      */
     private void drawEntities() {
 
+        game.getBatch().setShader(null);
+
         List<BulletModel> bullets = TSSModel.getInstance().getBullets();
         for(BulletModel bullet : bullets) {
             EntityView view = ViewFactory.makeView(game, bullet);
@@ -237,13 +274,14 @@ public class TSSView extends ScreenAdapter {
         ArrayList<EnemyModel> enemies = TSSModel.getInstance().getEnemies();
 
         for(int i = 0; i < enemies.size(); i++) {
+            if(enemies.get(i).isHurt()) { game.getBatch().setShader(shader);} else game.getBatch().setShader(null);
             this.enemies.get(i).update(enemies.get(i));
-//            EntityView view = ViewFactory.makeView(game, enemy);
-//            view.update(enemy);
             this.enemies.get(i).draw(game.getBatch());
         }
 
         MainCharModel mc = TSSModel.getInstance().getMainChar();
+
+        if(mc.isHurt()) { game.getBatch().setShader(shader);} else game.getBatch().setShader(null);
         EntityView view = ViewFactory.makeView(game, mc);
         view.update(mc);
         view.draw(game.getBatch());
@@ -263,5 +301,9 @@ public class TSSView extends ScreenAdapter {
 
     public void addEnemyView() {
         enemies.add(new EnemyView(game));
+    }
+
+    public void removeEnemyView(int index) {
+        enemies.remove(index);
     }
 }

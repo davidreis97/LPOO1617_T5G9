@@ -2,6 +2,8 @@ package com.drfl.twinstickshooter.model.entities;
 
 public class BulletModel extends EntityModel {
 
+    private ModelType owner;
+
     /**
      * Constructs a bullet model belonging to a game model.
      *
@@ -16,5 +18,13 @@ public class BulletModel extends EntityModel {
     @Override
     public ModelType getType() {
         return ModelType.BULLET;
+    }
+
+    public ModelType getOwner() {
+        return owner;
+    }
+
+    public void setOwner(ModelType owner) {
+        this.owner = owner;
     }
 }
