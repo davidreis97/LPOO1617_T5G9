@@ -13,6 +13,7 @@ public class EnemyModel extends EntityModel {
     //Both in milliseconds
     private static final int MOVE_COOLDOWN_MIN = 500;
     private static final int MOVE_COOLDOWN_MAX = 2500;
+    private static final float TIME_BETWEEN_SHOTS = 1.0f;
 
     /**
      * RNG Seed
@@ -22,6 +23,7 @@ public class EnemyModel extends EntityModel {
     private float timeToNextDirection = 0;
 
     private Vector2 moveDirection = new Vector2(0, 0);
+    private Vector2 shootDirection = new Vector2(0, 0);
 
     /**
      * Creates a new ship model in a certain position and having a certain rotation.
@@ -32,7 +34,6 @@ public class EnemyModel extends EntityModel {
      */
     public EnemyModel(float x, float y, int rotation) {
         super(x + TILESIZE * PIXEL_TO_METER / 2.0f, y + TILESIZE * PIXEL_TO_METER / 2.0f, rotation);
-        this.hitpoints = 20;
     }
 
     @Override
@@ -58,5 +59,17 @@ public class EnemyModel extends EntityModel {
 
     public void setMoveDirection(Vector2 moveDirection) {
         this.moveDirection = moveDirection;
+    }
+
+    public Vector2 getShootDirection() {
+        return shootDirection;
+    }
+
+    public void setShootDirection(Vector2 shootDirection) {
+        this.shootDirection = shootDirection;
+    }
+
+    public void resetTimeToNextShoot() {
+        this.timeToNextShoot = TIME_BETWEEN_SHOTS;
     }
 }

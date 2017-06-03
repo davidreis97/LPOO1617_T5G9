@@ -35,7 +35,12 @@ public abstract class EntityModel {
     /**
      * Hitpoints for character entities
      */
-    protected int hitpoints;
+    protected int hitpoints = 20;
+
+    /**
+     * Time until character entity can shoot again
+     */
+    protected float timeToNextShoot = 0;
 
     /**
      * Constructs a model with a position and a rotation.
@@ -126,4 +131,12 @@ public abstract class EntityModel {
     }
 
     public abstract ModelType getType();
+
+    public float getTimeToNextShoot() {
+        return timeToNextShoot;
+    }
+
+    public void setTimeToNextShoot(float timeToNextShoot) {
+        this.timeToNextShoot = timeToNextShoot;
+    }
 }

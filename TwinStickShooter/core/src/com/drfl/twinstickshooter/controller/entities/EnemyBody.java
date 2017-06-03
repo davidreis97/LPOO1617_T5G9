@@ -23,6 +23,6 @@ public class EnemyBody extends EntityBody {
         int width = TILESIZE, height = TILESIZE;
 
         createFixture(body, new float[]{4,0, 28,0, 4,TILESIZE, 28,TILESIZE},
-                width, height, density, friction, restitution, ENEMY_BODY, COLLIDE_ALL);
+                width, height, density, friction, restitution, ENEMY_BODY, (short) (MAINCHAR_BODY | BULLET_BODY | TILE_ENTITY));
     }
 }
