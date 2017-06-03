@@ -51,6 +51,15 @@ public class TSSGame extends Game {
     }
 
     /**
+     * assetManager asset manager used for loading texture and sounds
+     */
+    public void setAssetManager(AssetManager assetManager) {
+        this.assetManager = assetManager;
+    }
+
+
+
+    /**
      * @return sprite batch
      */
     public SpriteBatch getBatch() {

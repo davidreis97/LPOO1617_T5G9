@@ -83,7 +83,6 @@ public class TSSModel {
      * Creates entity models from a Tiled file using an object layer named "Entities".
      */
     public void createEntityModels(MapLayer entitiesLayer) {
-
         for(MapObject object : entitiesLayer.getObjects()) {
 
             if(object.getProperties().get("type", String.class).equals("MainChar")) {
@@ -160,6 +159,13 @@ public class TSSModel {
      */
     public MainCharModel getMainChar() {
         return mc;
+    }
+
+    /**
+     * @return the main character model.
+     */
+    public void setMainChar(MainCharModel mc) {
+        this.mc = mc;
     }
 
     /**
