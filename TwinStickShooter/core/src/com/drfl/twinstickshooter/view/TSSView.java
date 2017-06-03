@@ -1,6 +1,7 @@
 package com.drfl.twinstickshooter.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.drfl.twinstickshooter.TSSGame;
 import com.drfl.twinstickshooter.TSSGamePad;
@@ -30,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TSSView extends ScreenAdapter {
+
+    private enum ControlType {CONTROLLER, REMOTE, KBM};
 
     /**
      * Used to debug the position of the physics fixtures
@@ -117,7 +121,7 @@ public class TSSView extends ScreenAdapter {
     /**
      * The type of input currently in use to control the game.
      */
-    private String inputMode;
+    private ControlType inputMode;
 
     /**
      * Array of enemy views to keep track of independent animation cycles
@@ -156,13 +160,16 @@ public class TSSView extends ScreenAdapter {
      * If a controller is connected, the controller is used to control the game. Otherwise, the server is used.
      * @return The type of input currently in use to control the game.
      */
-    private String chooseInput() {
-        if(TSSGamePad.getInstance().controllerExists()){
+    private ControlType chooseInput() {
+
+//        return ControlType.KBM;
+
+        if(TSSGamePad.getInstance().controllerExists()) {
             Log.info("Controller found, using it as input");
-            return "controller";
-        }else{
+            return ControlType.CONTROLLER;
+        } else {
             Log.info("Controller NOT found, using SERVER as input");
-            return "server";
+            return ControlType.REMOTE;
         }
     }
 
@@ -213,7 +220,7 @@ public class TSSView extends ScreenAdapter {
         TSSController.getInstance().removeFlagged();
         TSSController.getInstance().removeDead();
 
-        handleInputs(delta);
+        handleInputs();
 
         TSSController.getInstance().update(delta);
 
@@ -242,18 +249,38 @@ public class TSSView extends ScreenAdapter {
      *
      * @param delta time since last time inputs where handled in seconds
      */
-    private void handleInputs(float delta) {
+    private void handleInputs() {
 
-        if(inputMode.equals("controller")) {
+        if(inputMode == ControlType.CONTROLLER) {
+
             TSSController.getInstance().setMoveInput(TSSGamePad.getInstance().getLeftStickVector());
             TSSController.getInstance().setShootInput(TSSGamePad.getInstance().getRightStickVector());
+        } else if(inputMode == ControlType.REMOTE) {
 
-        } else if(inputMode.equals("server")) {
             TSSController.getInstance().setMoveInput(server.getMovement());
             TSSController.getInstance().setShootInput(server.getShooting());
+        } else if(inputMode == ControlType.KBM) {
+
+            Vector2 moveDirection = new Vector2(0, 0);
+
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                moveDirection.y = 1.0f;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                moveDirection.x = -1.0f;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                moveDirection.y = -1.0f;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                moveDirection.x = 1.0f;
+            }
+
+            TSSController.getInstance().setMoveInput(moveDirection);
+            TSSController.getInstance().setShootInput(new Vector2(Gdx.input.getX() * PIXEL_TO_METER - TSSModel.getInstance().getMainChar().getX(),
+                    (VIEWPORT_HEIGHT - Gdx.input.getY() * PIXEL_TO_METER) - TSSModel.getInstance().getMainChar().getY())); //Flip Y on mouse
         }
 
-        //TODO add keyboard controls
         //TODO option menu for choosing input method
     }
 
