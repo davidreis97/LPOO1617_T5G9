@@ -21,6 +21,6 @@ public class BulletBody extends EntityBody {
         int width = 9, height = 15;
 
         createFixture(body, new float[]{0,0, width,0, 0,height, width,height},
-                width, height, density, friction, restitution, BULLET_BODY, TILE_ENTITY);
+                width, height, density, friction, restitution, BULLET_BODY, (short) (TILE_ENTITY | ENEMY_BODY));
     }
 }

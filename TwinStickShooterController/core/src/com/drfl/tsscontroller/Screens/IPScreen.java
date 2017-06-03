@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -48,6 +47,8 @@ public class IPScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+        Skin textField = new Skin(Gdx.files.internal("uiskin.json"));
+        textField.getFont("default-font").getData().setScale(5.00f,5.00f);
 
         btnAccept = new TextButton("Enter", skin);
         btnAccept.setPosition(1200,700);
@@ -68,18 +69,18 @@ public class IPScreen implements Screen {
             }
         });
 
-        ipAddressField = new TextField("",skin); //TODO- Change font size
+        ipAddressField = new TextField("", textField); //TODO- Change font size
         ipAddressField.setPosition(100,700);
         ipAddressField.setSize(1000,200);
-
-        askIP = new Label("IP Address: ",skin);
-        askIP.setPosition(100,1000);
-        askIP.setFontScale(5);
 
         status = new Label("",skin);
         status.setFontScale(3);
         status.setWidth(1000);
         status.setWrap(true);
+
+        askIP = new Label("IP Address: ",skin);
+        askIP.setPosition(100,1000);
+        askIP.setFontScale(5);
 
         statusTable = new Table(skin);
         statusTable.setPosition(600,600);
@@ -87,9 +88,9 @@ public class IPScreen implements Screen {
 
         setStatus("Ready");
 
-        stage.addActor(statusTable);
-        stage.addActor(askIP);
         stage.addActor(ipAddressField);
+        stage.addActor(askIP);
+        stage.addActor(statusTable);
         stage.addActor(btnAccept);
     }
 

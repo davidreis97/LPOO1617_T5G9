@@ -4,7 +4,7 @@ package com.drfl.twinstickshooter.model.entities;
  * Abstract model for representing entities in a game model.
  */
 public abstract class EntityModel {
-    public enum ModelType {MAINCHAR, BULLET};
+    public enum ModelType {MAINCHAR, BULLET, SPAWNER, ENEMY};
     public enum AnimDirection {NONE, DOWN, LEFT, RIGHT, UP};
 
     /**
@@ -26,6 +26,11 @@ public abstract class EntityModel {
      * Has this model been flagged for removal?
      */
     private boolean flaggedForRemoval = false;
+
+    /**
+     * Animation direction of model
+     */
+    private AnimDirection direction = AnimDirection.NONE;
 
     /**
      * Constructs a model with a position and a rotation.
@@ -68,6 +73,20 @@ public abstract class EntityModel {
     public void setPosition(float x, float y) {
         this.x = x;
         this.y = y;
+    }
+
+    /**
+     * @param direction the movement direction to set
+     */
+    public void setDirection(AnimDirection direction) {
+        this.direction = direction;
+    }
+
+    /**
+     * @return the current movement direction
+     */
+    public AnimDirection getDirection() {
+        return this.direction;
     }
 
     /**

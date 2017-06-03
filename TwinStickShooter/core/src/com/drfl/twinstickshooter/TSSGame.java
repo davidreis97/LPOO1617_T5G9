@@ -29,7 +29,9 @@ public class TSSGame extends Game {
      * Start game
      */
     private void startGame() {
-        setScreen(new TSSView(this, new TSSServer()));
+        TSSView gameScreen = new TSSView(this, new TSSServer());
+        gameScreen.initInstance(gameScreen);
+        setScreen(gameScreen);
     }
 
     /**
