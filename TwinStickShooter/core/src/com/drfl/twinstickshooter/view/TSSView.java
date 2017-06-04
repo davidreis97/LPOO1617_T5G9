@@ -162,15 +162,15 @@ public class TSSView extends ScreenAdapter {
      */
     private ControlType chooseInput() {
 
-//        return ControlType.KBM;
+        return ControlType.KBM;
 
-        if(TSSGamePad.getInstance().controllerExists()) {
-            Log.info("Controller found, using it as input");
-            return ControlType.CONTROLLER;
-        } else {
-            Log.info("Controller NOT found, using SERVER as input");
-            return ControlType.REMOTE;
-        }
+//        if(TSSGamePad.getInstance().controllerExists()) {
+//            Log.info("Controller found, using it as input");
+//            return ControlType.CONTROLLER;
+//        } else {
+//            Log.info("Controller NOT found, using SERVER as input");
+//            return ControlType.REMOTE;
+//        }
     }
 
     /**
@@ -246,8 +246,6 @@ public class TSSView extends ScreenAdapter {
 
     /**
      * Handles any inputs and passes them to the controller.
-     *
-     * @param delta time since last time inputs where handled in seconds
      */
     private void handleInputs() {
 
@@ -332,5 +330,10 @@ public class TSSView extends ScreenAdapter {
 
     public void removeEnemyView(int index) {
         enemies.remove(index);
+    }
+
+    @Override
+    public void dispose() {
+        this.shader.dispose();
     }
 }

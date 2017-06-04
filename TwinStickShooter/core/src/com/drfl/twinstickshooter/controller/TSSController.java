@@ -52,7 +52,7 @@ public class TSSController implements ContactListener {
     /**
      * Cooldown for enemy spawning
      */
-    private static final float ENEMY_SPAWN_CD = 5.0f;
+    private static final float ENEMY_SPAWN_CD = 4.0f;
 
     /**
      * The speed of bullets
@@ -67,7 +67,7 @@ public class TSSController implements ContactListener {
     /**
      * Current enemy spawn cooldown
      */
-    private float timeToNextSpawn = 0;
+    private float timeToNextSpawn = ENEMY_SPAWN_CD;
 
     /**
      * The physics world controlled by this controller.

@@ -3,6 +3,8 @@ package com.drfl.twinstickshooter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.drfl.twinstickshooter.view.TSSMainMenu;
 import com.drfl.twinstickshooter.view.TSSView;
 
 import java.net.InetAddress;
@@ -12,7 +14,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.List;
 
 /**
  * TSS main game class
@@ -21,6 +22,8 @@ public class TSSGame extends Game {
 
 	private SpriteBatch batch;
 	private AssetManager assetManager;
+	private Stage stage;
+	private TSSState stateM;
 
     /**
      * Initializes sprite batch and asset manager, starts the game
@@ -39,10 +42,17 @@ public class TSSGame extends Game {
      */
     private void startGame() {
 
-        TSSView gameScreen = new TSSView(this, new TSSServer());
-        gameScreen.initInstance(gameScreen);
-        setScreen(gameScreen);
+        stateM = new TSSState(TSSState.GameState.MAIN_MENU, this);
+        TSSMainMenu menu = new TSSMainMenu(this);
+        setScreen(menu);
     }
+
+//    public void switchToGame() {
+//
+//        TSSView gameScreen = new TSSView(this, new TSSServer());
+//        gameScreen.initInstance(gameScreen);
+//        setScreen(gameScreen);
+//    }
 
     //TODO show IP on main menu
     /**
@@ -107,12 +117,22 @@ public class TSSGame extends Game {
         this.assetManager = assetManager;
     }
 
-
-
     /**
      * @return sprite batch
      */
     public SpriteBatch getBatch() {
         return batch;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public TSSState getStateM() {
+        return stateM;
     }
 }
