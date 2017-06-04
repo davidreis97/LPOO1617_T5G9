@@ -140,15 +140,19 @@ public class TSSView extends ScreenAdapter {
         loadAssets();
 
         TiledMap map = game.getAssetManager().get("Badlands.tmx");
+
+        TSSModel.initInstance();
         TSSModel.getInstance().createEntityModels(map.getLayers().get("Entities"));
+
+        TSSController.initInstance();
         TSSController.getInstance().createTileEntities(map.getLayers().get("Collision"));
 
         inputMode = chooseInput();
         camera = createCamera();
     }
 
-    public void initInstance(TSSView view) {
-        instance = view;
+    public static void setInstance(TSSView instance) {
+        TSSView.instance = instance;
     }
 
     public static TSSView getInstance() {
@@ -333,7 +337,18 @@ public class TSSView extends ScreenAdapter {
     }
 
     @Override
+    public void hide() {
+        this.dispose();
+    }
+
+    @Override
     public void dispose() {
+
         this.shader.dispose();
+        this.server.dispose();
+    }
+
+    public TSSGame getGame() {
+        return game;
     }
 }

@@ -15,21 +15,23 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(GdxTestRunner.class)
-public class Tests{
+public class Tests {
 
     static TSSController controller;
     static TSSModel model;
 
     @Before
-    public void setUpBefore(){
-        model = TSSModel.getNewInstance();
+    public void setUpBefore() {
+
+        model = TSSModel.initInstance();
         model.setMainChar(new MainCharModel(0,0,0));
 
-        controller = TSSController.getNewInstance();
+        controller = TSSController.initInstance();
     }
 
     @Test
-    public void testEnemyPlacement(){
+    public void testEnemyPlacement() {
+
         model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
 
         controller.setTimeToNextSpawn(0f);
@@ -42,7 +44,8 @@ public class Tests{
     }
 
     @Test
-    public void testEnemyAutoShootPlayer(){
+    public void testEnemyAutoShootPlayer() {
+
         model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
         controller.spawnTestEnemy(0);
 
@@ -54,7 +57,8 @@ public class Tests{
     }
 
     @Test
-    public void testBulletsEnemy(){
+    public void testBulletsEnemy() {
+
         model.getEnemySpawners().add(new EnemySpawnerModel(1.5f,0));
         controller.spawnTestEnemy(0);
 
@@ -67,7 +71,8 @@ public class Tests{
     }
 
     @Test
-    public void testMovement(){
+    public void testMovement() {
+
         Vector2[] possibleMovements = {
                 new Vector2(0,0),
                 new Vector2(0,1),
@@ -79,25 +84,26 @@ public class Tests{
                 new Vector2(1,1),
                 new Vector2(1,-1)};
 
-        for (Vector2 movement : possibleMovements){
+        for (Vector2 movement : possibleMovements) {
+
             Vector2 initialPos = new Vector2(model.getMainChar().getX(),model.getMainChar().getY());
 
             controller.setMoveInput(movement);
             controller.update(1);
 
-            if(movement.x > 0){
+            if(movement.x > 0) {
                 assertTrue(initialPos.x < model.getMainChar().getX());
-            }else if(movement.x == 0){
+            } else if(movement.x == 0) {
                 assertTrue(initialPos.x == model.getMainChar().getX());
-            }else{
+            } else {
                 assertTrue(initialPos.x > model.getMainChar().getX());
             }
 
-            if(movement.y > 0){
+            if(movement.y > 0) {
                 assertTrue(initialPos.y < model.getMainChar().getY());
-            }else if(movement.y == 0){
+            } else if(movement.y == 0) {
                 assertTrue(initialPos.y == model.getMainChar().getY());
-            }else {
+            } else {
                 assertTrue(initialPos.y > model.getMainChar().getY());
             }
 

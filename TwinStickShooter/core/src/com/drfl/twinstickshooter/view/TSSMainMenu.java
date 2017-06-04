@@ -2,6 +2,7 @@ package com.drfl.twinstickshooter.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -72,6 +73,7 @@ public class TSSMainMenu extends ScreenAdapter {
 
     @Override
     public void show() {
+
         //TODO move to function
         startGame = new TextButton("Start Game", skin);
         startGame.setSize(0.25f * Gdx.graphics.getWidth(),0.15f * Gdx.graphics.getHeight());
@@ -84,7 +86,6 @@ public class TSSMainMenu extends ScreenAdapter {
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
 
                 game.getStateM().processState(TSSState.GameEvent.START);
-                dispose();
                 return false;
             }
         });
@@ -136,6 +137,11 @@ public class TSSMainMenu extends ScreenAdapter {
         Texture background = game.getAssetManager().get("MainMenuBack.jpg");
 
         game.getBatch().draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    }
+
+    @Override
+    public void hide() {
+        this.dispose();
     }
 
     @Override

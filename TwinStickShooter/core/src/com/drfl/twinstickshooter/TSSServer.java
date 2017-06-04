@@ -29,7 +29,6 @@ public class TSSServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         server.start();
     }
 
@@ -59,5 +58,19 @@ public class TSSServer {
      */
     public static Vector2 getShooting() {
         return shooting;
+    }
+
+    /**
+     * Disposes of server resources.
+     */
+    public void dispose() {
+
+    server.stop();
+        try {
+//            this.server.close();
+            this.server.dispose();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
