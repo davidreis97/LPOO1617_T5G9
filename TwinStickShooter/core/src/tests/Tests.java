@@ -2,44 +2,72 @@ package tests;
 
 import static org.junit.Assert.*;
 
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
-import com.drfl.twinstickshooter.*;
 
 import com.drfl.twinstickshooter.controller.TSSController;
 import com.drfl.twinstickshooter.model.TSSModel;
+import com.drfl.twinstickshooter.model.entities.EnemySpawnerModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
-import com.esotericsoftware.minlog.Log;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Set;
-
 @RunWith(GdxTestRunner.class)
 public class Tests{
 
-    TSSGame game;
-    TSSController controller;
-    TSSModel model;
+    static TSSController controller;
+    static TSSModel model;
 
     @Before
-    public void setUp(){
-        game = new TSSGame();
-        game.setAssetManager(new AssetManager());
-
-        model = TSSModel.getInstance();
+    public void setUpBefore(){
+        model = TSSModel.getNewInstance();
         model.setMainChar(new MainCharModel(0,0,0));
 
-        controller = TSSController.getInstance();
+        controller = TSSController.getNewInstance();
     }
 
     @Test
-    public void testMainCharMovement(){
+    public void testEnemyPlacement(){
+        model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
+
+        controller.setTimeToNextSpawn(0f);
+        controller.update(0.01f);
+
+        assertTrue(model.getEnemies().size() > 0);
+
+        assertEquals(model.getEnemies().get(0).getX(),model.getEnemySpawners().get(0).getX(),0.1f);
+        assertEquals(model.getEnemies().get(0).getX(),model.getEnemySpawners().get(0).getX(),0.1f);
+    }
+
+    @Test
+    public void testEnemyAutoShootPlayer(){
+        model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
+        controller.spawnTestEnemy(0);
+
+        int oldHitpoints = model.getMainChar().getHitpoints();
+
+        controller.update(50);
+
+        assertTrue(oldHitpoints > model.getMainChar().getHitpoints());
+    }
+
+    @Test
+    public void testBulletsEnemy(){
+        model.getEnemySpawners().add(new EnemySpawnerModel(1.5f,0));
+        controller.spawnTestEnemy(0);
+
+        int oldHitpoints = model.getEnemies().get(0).getHitpoints();
+
+        controller.shoot(model.getMainChar(),new Vector2(1,0));
+        controller.update(50);
+
+        assertTrue(oldHitpoints > model.getEnemies().get(0).getHitpoints());
+    }
+
+    @Test
+    public void testMovement(){
         Vector2[] possibleMovements = {
                 new Vector2(0,0),
                 new Vector2(0,1),

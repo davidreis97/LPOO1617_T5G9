@@ -121,6 +121,15 @@ public class TSSController implements ContactListener {
         return instance;
     }
 
+    public static TSSController getNewInstance() {
+        instance = new TSSController();
+        return instance;
+    }
+
+    public void setTimeToNextSpawn(float timeToNextSpawn) {
+        this.timeToNextSpawn = timeToNextSpawn;
+    }
+
     /**
      * Calculates the next physics step of duration delta (in seconds).
      *
@@ -279,6 +288,13 @@ public class TSSController implements ContactListener {
         }
 
         timeToNextSpawn = ENEMY_SPAWN_CD;
+    }
+
+    public void spawnTestEnemy(int spawnIndex){
+        if(spawnIndex != -1) {
+            EnemyModel enemy = TSSModel.getInstance().createTestEnemy(spawnIndex);
+            enemies.add(new EnemyBody(world, enemy));
+        }
     }
 
     /**

@@ -79,6 +79,12 @@ public class TSSModel {
         return instance;
     }
 
+    public static TSSModel getNewInstance() {
+
+        instance = new TSSModel();
+        return instance;
+    }
+
     /**
      * Creates entity models from a Tiled file using an object layer named "Entities".
      */
@@ -130,6 +136,21 @@ public class TSSModel {
         enemies.add(new EnemyModel(enemySpawners.get(index).getX(), enemySpawners.get(index).getY(), 0));
 
         TSSView.getInstance().addEnemyView();
+
+        return enemies.get(enemies.size() - 1);
+    }
+
+    /**
+     * Creates an enemy model with a specified spawner's coordinates
+     *
+     * @param index index of spawner to use coordinates of
+     * @return enemy model created
+     */
+    public EnemyModel createTestEnemy(int index) {
+
+        enemySpawners.get(index).setSpawned(true);
+
+        enemies.add(new EnemyModel(enemySpawners.get(index).getX(), enemySpawners.get(index).getY(), 0));
 
         return enemies.get(enemies.size() - 1);
     }
