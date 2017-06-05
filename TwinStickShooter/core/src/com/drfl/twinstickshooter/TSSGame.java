@@ -5,7 +5,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.drfl.twinstickshooter.view.TSSMainMenu;
-import com.drfl.twinstickshooter.view.TSSView;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -20,6 +19,14 @@ import java.util.Enumeration;
  */
 public class TSSGame extends Game {
 
+    public enum ControlType {CONTROLLER, REMOTE, KBM};
+
+    /**
+     * The type of input currently in use to control the game.
+     */
+    private ControlType inputMode = ControlType.KBM;
+    private TSSServer server;
+
 	private SpriteBatch batch;
 	private AssetManager assetManager;
 	private Stage stage;
@@ -33,6 +40,7 @@ public class TSSGame extends Game {
 
         batch = new SpriteBatch();
         assetManager = new AssetManager();
+        server = new TSSServer();
 
         startGame();
     }
@@ -47,20 +55,13 @@ public class TSSGame extends Game {
         setScreen(menu);
     }
 
-//    public void switchToGame() {
-//
-//        TSSView gameScreen = new TSSView(this, new TSSServer());
-//        gameScreen.initInstance(gameScreen);
-//        setScreen(gameScreen);
-//    }
-
     //TODO show IP on main menu
     /**
      * Finds the first site local host address
      *
      * @return first site local host address or getLocalHost() if no site local host found
      */
-    private ArrayList<InetAddress> findSiteLocalAddress() {
+    public ArrayList<InetAddress> findSiteLocalAddress() {
 
         ArrayList<InetAddress> addresses = new ArrayList<InetAddress>();
 
@@ -101,6 +102,7 @@ public class TSSGame extends Game {
 	public void dispose() {
 		batch.dispose();
 		assetManager.dispose();
+		server.dispose();
 	}
 
     /**
@@ -134,5 +136,17 @@ public class TSSGame extends Game {
 
     public TSSState getStateM() {
         return stateM;
+    }
+
+    public ControlType getInputMode() {
+        return inputMode;
+    }
+
+    public void setInputMode(ControlType inputMode) {
+        this.inputMode = inputMode;
+    }
+
+    public TSSServer getServer() {
+        return server;
     }
 }

@@ -2,18 +2,24 @@ package com.drfl.twinstickshooter.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.drfl.twinstickshooter.TSSGame;
+import com.drfl.twinstickshooter.TSSGamePad;
 import com.drfl.twinstickshooter.TSSState;
+
+import java.util.ArrayList;
 
 public class TSSMainMenu extends ScreenAdapter {
 
@@ -51,7 +57,15 @@ public class TSSMainMenu extends ScreenAdapter {
 
     private final Viewport viewport;
 
+    private TSSGame.ControlType selectedController = TSSGame.ControlType.KBM;
+
     private TextButton startGame;
+    private SelectBox inputMethod;
+    private Label controlWarning;
+    private Label IPBox;
+    private String IPField;
+
+    ArrayList<String> inputOptions = new ArrayList<String>();
 
     Skin skin = new Skin(Gdx.files.internal("uiskin.json")); //TODO can use assetManager?
 
@@ -72,24 +86,54 @@ public class TSSMainMenu extends ScreenAdapter {
 
     @Override
     public void show() {
+
+        inputOptions.add("Keyboard / Mouse");
+        inputOptions.add("X360 Controller");
+        inputOptions.add("Android Controller");
+
         //TODO move to function
         startGame = new TextButton("Start Game", skin);
         startGame.setSize(0.25f * Gdx.graphics.getWidth(),0.15f * Gdx.graphics.getHeight());
         startGame.setPosition(Gdx.graphics.getWidth() / 2.0f - startGame.getWidth() / 2.0f,Gdx.graphics.getHeight() - startGame.getHeight() - 0.10f * Gdx.graphics.getHeight());
-//        startGame.getLabel().setFontScale(4);
 
         //TODO optional depending on input method?
         startGame.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
 
+                game.setInputMode(selectedController);
                 game.getStateM().processState(TSSState.GameEvent.START);
-                dispose();
                 return false;
             }
         });
 
+        inputMethod = new SelectBox(skin);
+        inputMethod.setSize(0.25f * Gdx.graphics.getWidth(),0.05f * Gdx.graphics.getHeight());
+        inputMethod.setPosition(Gdx.graphics.getWidth() / 2.0f - inputMethod.getWidth() / 2.0f,
+                Gdx.graphics.getHeight() - inputMethod.getHeight() - 0.10f * Gdx.graphics.getHeight() - 1.10f * startGame.getHeight());
+        inputMethod.setItems(inputOptions.toArray());
+
+        controlWarning = new Label("", skin);
+        controlWarning.setSize(0.25f * Gdx.graphics.getWidth(),0.05f * Gdx.graphics.getHeight());
+        controlWarning.setPosition(Gdx.graphics.getWidth() / 2.0f - controlWarning.getWidth() / 2.0f,
+                Gdx.graphics.getHeight() - controlWarning.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - 1.10f * inputMethod.getHeight());
+        controlWarning.setColor(Color.RED);
+
+        if(!game.findSiteLocalAddress().isEmpty()) {
+            IPBox = new Label("Suggested IP: " + game.findSiteLocalAddress().get(0), skin);
+            IPField = "Suggested IP: " + game.findSiteLocalAddress().get(0);
+        } else {
+            IPBox = new Label("Suggested IP: not found", skin);
+            IPField = "Suggested IP: not found";
+        }
+        IPBox.setSize(0.25f * Gdx.graphics.getWidth(),0.05f * Gdx.graphics.getHeight());
+        IPBox.setPosition(Gdx.graphics.getWidth() / 2.0f - IPBox.getWidth() / 2.0f,
+                Gdx.graphics.getHeight() - IPBox.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - inputMethod.getHeight() - 1.10f * controlWarning.getHeight());
+
         game.getStage().addActor(startGame);
+        game.getStage().addActor(inputMethod);
+        game.getStage().addActor(controlWarning);
+        game.getStage().addActor(IPBox);
     }
 
     private OrthographicCamera createCamera() {
@@ -105,6 +149,29 @@ public class TSSMainMenu extends ScreenAdapter {
 
         this.game.getAssetManager().load( "MainMenuBack.jpg" , Texture.class);
         this.game.getAssetManager().finishLoading();
+    }
+
+    private TSSGame.ControlType parseInputMode() {
+
+        controlWarning.setText("");
+        IPBox.setText("");
+
+        if(inputMethod.getSelected().equals("Keyboard / Mouse")) {
+            return TSSGame.ControlType.KBM;
+
+        } else if(inputMethod.getSelected().equals("X360 Controller")) {
+            if(TSSGamePad.getInstance().controllerExists()) {
+                return TSSGame.ControlType.CONTROLLER;
+            } else controlWarning.setText("Controller not found, plug it and restart game please.");
+
+        } else if(inputMethod.getSelected().equals("Android Controller")) {
+            IPBox.setText(IPField);
+            if(game.getServer().getConnections().length != 0) {
+                return TSSGame.ControlType.REMOTE;
+            } else controlWarning.setText("Controller app not connected, insert IP into controller app to connect.");
+        }
+
+        return TSSGame.ControlType.KBM;
     }
 
     /**
@@ -128,7 +195,10 @@ public class TSSMainMenu extends ScreenAdapter {
         drawElements();
         game.getBatch().end();
 
+        game.getStage().act(delta);
         game.getStage().draw();
+
+        selectedController = parseInputMode();
     }
 
     private void drawElements() {
@@ -136,6 +206,11 @@ public class TSSMainMenu extends ScreenAdapter {
         Texture background = game.getAssetManager().get("MainMenuBack.jpg");
 
         game.getBatch().draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    }
+
+    @Override
+    public void hide() {
+        this.dispose();
     }
 
     @Override

@@ -5,14 +5,14 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.drfl.twinstickshooter.TSSState;
 import com.drfl.twinstickshooter.controller.entities.*;
 import com.drfl.twinstickshooter.model.TSSModel;
 import com.drfl.twinstickshooter.model.entities.BulletModel;
 import com.drfl.twinstickshooter.model.entities.EnemyModel;
 import com.drfl.twinstickshooter.model.entities.EntityModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
-import com.drfl.twinstickshooter.view.entities.AnimatedEntityView;
-import com.esotericsoftware.minlog.Log;
+import com.drfl.twinstickshooter.view.TSSView;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -72,12 +72,13 @@ public class TSSController implements ContactListener {
     /**
      * The physics world controlled by this controller.
      */
-    private final World world;
-
+//    private final World world;
+    private World world;
     /**
      * The main character body.
      */
-    private final MainCharBody mainCharBody;
+//    private final MainCharBody mainCharBody;
+    private MainCharBody mainCharBody;
 
     /**
      * Enemy bodies
@@ -116,18 +117,27 @@ public class TSSController implements ContactListener {
      * @return the singleton instance
      */
     public static TSSController getInstance() {
-        if (instance == null)
+
+        if (instance == null) {
             instance = new TSSController();
+        }
         return instance;
     }
 
-    public static TSSController getNewInstance() {
-        instance = new TSSController();
+    public static TSSController initInstance() {
+        TSSController.instance = new TSSController();
         return instance;
     }
 
     public void setTimeToNextSpawn(float timeToNextSpawn) {
         this.timeToNextSpawn = timeToNextSpawn;
+    }
+
+    public void spawnTestEnemy(int spawnIndex){
+        if(spawnIndex != -1) {
+            EnemyModel enemy = TSSModel.getInstance().createTestEnemy(spawnIndex);
+            enemies.add(new EnemyBody(world, enemy));
+        }
     }
 
     /**
@@ -290,13 +300,6 @@ public class TSSController implements ContactListener {
         timeToNextSpawn = ENEMY_SPAWN_CD;
     }
 
-    public void spawnTestEnemy(int spawnIndex){
-        if(spawnIndex != -1) {
-            EnemyModel enemy = TSSModel.getInstance().createTestEnemy(spawnIndex);
-            enemies.add(new EnemyBody(world, enemy));
-        }
-    }
-
     /**
      * @param moveInput Set movement vector of main char
      */
@@ -404,6 +407,10 @@ public class TSSController implements ContactListener {
      */
     public void removeDead() {
 
+        if(((MainCharModel)mainCharBody.getUserData()).getHitpoints() <= 0) {
+            TSSView.getInstance().getGame().getStateM().processState(TSSState.GameEvent.MC_DIED);
+        }
+
         for(int i = enemies.size() - 1; i >= 0; i--) {
             if(((EnemyModel)enemies.get(i).getUserData()).getHitpoints() <= 0) {
                 TSSModel.getInstance().removeEnemy(i);
@@ -426,5 +433,9 @@ public class TSSController implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
+    }
+
+    public static void setInstance(TSSController instance) {
+        TSSController.instance = instance;
     }
 }

@@ -74,14 +74,12 @@ public class TSSModel {
      */
     public static TSSModel getInstance() {
 
-        if (instance == null)
-            instance = new TSSModel();
+        if (instance == null) instance = new TSSModel();
         return instance;
     }
 
-    public static TSSModel getNewInstance() {
-
-        instance = new TSSModel();
+    public static TSSModel initInstance() {
+        TSSModel.instance = new TSSModel();
         return instance;
     }
 
@@ -99,6 +97,15 @@ public class TSSModel {
                 enemySpawners.add(new EnemySpawnerModel(object.getProperties().get("x", float.class), object.getProperties().get("y", float.class)));
             }
         }
+    }
+
+    public EnemyModel createTestEnemy(int index) {
+
+        enemySpawners.get(index).setSpawned(true);
+
+        enemies.add(new EnemyModel(enemySpawners.get(index).getX(), enemySpawners.get(index).getY(), 0));
+
+        return enemies.get(enemies.size() - 1);
     }
 
     public BulletModel createBullet(EntityModel owner, Vector2 direction) {
@@ -136,21 +143,6 @@ public class TSSModel {
         enemies.add(new EnemyModel(enemySpawners.get(index).getX(), enemySpawners.get(index).getY(), 0));
 
         TSSView.getInstance().addEnemyView();
-
-        return enemies.get(enemies.size() - 1);
-    }
-
-    /**
-     * Creates an enemy model with a specified spawner's coordinates
-     *
-     * @param index index of spawner to use coordinates of
-     * @return enemy model created
-     */
-    public EnemyModel createTestEnemy(int index) {
-
-        enemySpawners.get(index).setSpawned(true);
-
-        enemies.add(new EnemyModel(enemySpawners.get(index).getX(), enemySpawners.get(index).getY(), 0));
 
         return enemies.get(enemies.size() - 1);
     }
@@ -247,5 +239,9 @@ public class TSSModel {
         resetSpawner();
         enemies.remove(index);
         TSSView.getInstance().removeEnemyView(index);
+    }
+
+    public static void setInstance(TSSModel instance) {
+        TSSModel.instance = instance;
     }
 }

@@ -162,7 +162,7 @@ public class TSSGamePad implements ControllerListener {
      * @param controller The current controller
      */
     @Override
-    public void connected(Controller controller) {usesController = true;}
+    public void connected(Controller controller) { usesController = true;}
 
     /**
      * Changes the variable usesController to false when a controller is disconnected. (Not working with XBOX360 controller)
