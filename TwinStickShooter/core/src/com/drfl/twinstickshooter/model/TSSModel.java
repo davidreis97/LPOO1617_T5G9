@@ -47,6 +47,8 @@ public class TSSModel {
      */
     private List<BulletModel> bullets;
 
+    private int score;
+
     /**
      * A pool of bullets
      */
@@ -244,5 +246,13 @@ public class TSSModel {
 
     public static void setInstance(TSSModel instance) {
         TSSModel.instance = instance;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

@@ -2,6 +2,7 @@ package com.drfl.twinstickshooter.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -45,7 +46,15 @@ public class TSSGameOver extends ScreenAdapter {
 
             loadAssets();
 
+            startMusic();
+
             camera = createCamera();
+        }
+
+        private void startMusic() {
+
+            ((Music)game.getAssetManager().get("GameOver.wav")).setVolume(0.5f);
+            ((Music)game.getAssetManager().get("GameOver.wav")).play();
         }
 
         private OrthographicCamera createCamera() {
@@ -60,6 +69,7 @@ public class TSSGameOver extends ScreenAdapter {
         private void loadAssets() {
 
             this.game.getAssetManager().load( "GameOver.png" , Texture.class);
+            this.game.getAssetManager().load("GameOver.wav", Music.class);
             this.game.getAssetManager().finishLoading();
         }
 
@@ -73,7 +83,7 @@ public class TSSGameOver extends ScreenAdapter {
 
             totalTime += delta;
 
-            if(totalTime >= 3) {
+            if(totalTime >= 2.5f) { //TODO magic value
                 game.getStateM().processState(TSSState.GameEvent.MAIN);
                 return;
             }
@@ -104,5 +114,6 @@ public class TSSGameOver extends ScreenAdapter {
         @Override
         public void dispose() {
             game.getAssetManager().unload("GameOver.png");
+            game.getAssetManager().unload("GameOver.wav");
         }
 }

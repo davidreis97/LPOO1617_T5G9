@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -126,7 +127,6 @@ public class TSSView extends ScreenAdapter {
     Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
     private Label score;
-    private int scoreValue = 0;
 
     /**
      * Create game view using libGDX screen
@@ -137,6 +137,8 @@ public class TSSView extends ScreenAdapter {
         this.game = game;
 
         loadAssets();
+
+        startMusic();
 
         TiledMap map = game.getAssetManager().get("Badlands.tmx");
 
@@ -159,6 +161,21 @@ public class TSSView extends ScreenAdapter {
         return instance;
     }
 
+    private void startMusic() {
+
+        ((Music)game.getAssetManager().get("GameIntro.wav")).setOnCompletionListener(new Music.OnCompletionListener() {
+            @Override
+            public void onCompletion(Music music) {
+                ((Music)game.getAssetManager().get("Game.wav")).setLooping(true);
+                ((Music)game.getAssetManager().get("Game.wav")).setVolume(0.5f); //TODO volume magic values
+                ((Music)game.getAssetManager().get("Game.wav")).play();
+            }
+        });
+
+        ((Music)game.getAssetManager().get("GameIntro.wav")).setVolume(0.5f);
+        ((Music)game.getAssetManager().get("GameIntro.wav")).play();
+    }
+
     @Override
     public void show() {
 
@@ -166,7 +183,7 @@ public class TSSView extends ScreenAdapter {
 
         Gdx.input.setInputProcessor(game.getStage());
 
-        score = new Label("Score: " + scoreValue, skin);
+        score = new Label("Score: 0", skin);
 //        score.setPosition(10.0f, Gdx.graphics.getHeight() - score.getHeight());
 
         game.getStage().addActor(score);
@@ -201,6 +218,9 @@ public class TSSView extends ScreenAdapter {
         this.game.getAssetManager().load( "Rogue.png" , Texture.class);
         this.game.getAssetManager().load("Heart.png", Texture.class);
         this.game.getAssetManager().load("Bullet.png", Texture.class); //TODO add more bullet types if adding more weapons
+
+        this.game.getAssetManager().load("GameIntro.wav", Music.class);
+        this.game.getAssetManager().load("Game.wav", Music.class);
 
         //Tile map loading
         this.game.getAssetManager().setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
@@ -255,7 +275,7 @@ public class TSSView extends ScreenAdapter {
         TextureRegion healthRegion = new TextureRegion(health, 0, 0, width, health.getHeight());
 
         score.setPosition(10.0f, Gdx.graphics.getHeight() - healthRegion.getRegionHeight() - score.getHeight());
-        score.setText("Score: " + scoreValue);
+        score.setText("Score: " + TSSModel.getInstance().getScore());
 
         game.getBatch().draw(healthRegion, 10.0f, Gdx.graphics.getHeight() - healthRegion.getRegionHeight() * 1.1f);
     }
@@ -348,10 +368,6 @@ public class TSSView extends ScreenAdapter {
         enemies.remove(index);
     }
 
-    public void addScore(int score) {
-        this.scoreValue += score;
-    }
-
     @Override
     public void hide() {
         this.dispose();
@@ -363,6 +379,8 @@ public class TSSView extends ScreenAdapter {
         this.game.getStage().dispose();
         this.skin.dispose();
         this.shader.dispose();
+        game.getAssetManager().unload("Game.wav");
+        game.getAssetManager().unload("GameIntro.wav");
     }
 
     public TSSGame getGame() {

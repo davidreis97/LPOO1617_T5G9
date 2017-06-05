@@ -424,7 +424,7 @@ public class TSSController implements ContactListener {
                 TSSModel.getInstance().removeEnemy(i);
                 world.destroyBody(enemies.get(i).getBody());
                 enemies.remove(i);
-                TSSView.getInstance().addScore(100); //TODO magic value
+                TSSModel.getInstance().setScore(TSSModel.getInstance().getScore() + 100); //TODO magic value
             }
         }
     }

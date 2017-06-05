@@ -11,8 +11,8 @@ import static com.drfl.twinstickshooter.view.TSSView.TILESIZE;
 public class EnemyModel extends EntityModel {
 
     //Both in milliseconds
-    private static final int MOVE_COOLDOWN_MIN = 500;
-    private static final int MOVE_COOLDOWN_MAX = 2500;
+    private static final int MOVE_COOLDOWN_MIN = 250;
+    private static final int MOVE_COOLDOWN_MAX = 750;
     private static final float TIME_BETWEEN_SHOTS = 1.2f;
 
     /**

@@ -2,6 +2,8 @@ package com.drfl.twinstickshooter.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.loaders.MusicLoader;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -45,11 +47,6 @@ public class TSSMainMenu extends ScreenAdapter {
      */
     private final TSSGame game;
 
-//    /**
-//     * The singleton instance of the game view
-//     */
-//    private static TSSMainMenu instance;
-
     /**
      * The camera used to show the viewport.
      */
@@ -75,9 +72,26 @@ public class TSSMainMenu extends ScreenAdapter {
 
         loadAssets();
 
+        startMusic();
+
         camera = createCamera();
 
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+    }
+
+    private void startMusic() {
+
+        ((Music)game.getAssetManager().get("MenuIntro.wav")).setOnCompletionListener(new Music.OnCompletionListener() {
+            @Override
+            public void onCompletion(Music music) {
+                ((Music)game.getAssetManager().get("Menu.wav")).setLooping(true);
+                ((Music)game.getAssetManager().get("Menu.wav")).setVolume(0.5f);
+                ((Music)game.getAssetManager().get("Menu.wav")).play();
+            }
+        });
+
+        ((Music)game.getAssetManager().get("MenuIntro.wav")).setVolume(0.5f);
+        ((Music)game.getAssetManager().get("MenuIntro.wav")).play();
     }
 
     @Override
@@ -148,6 +162,8 @@ public class TSSMainMenu extends ScreenAdapter {
     private void loadAssets() {
 
         this.game.getAssetManager().load( "MainMenuBack.jpg" , Texture.class);
+        this.game.getAssetManager().load("MenuIntro.wav", Music.class);
+        this.game.getAssetManager().load("Menu.wav", Music.class);
         this.game.getAssetManager().finishLoading();
     }
 
@@ -217,6 +233,8 @@ public class TSSMainMenu extends ScreenAdapter {
     public void dispose() {
         game.getStage().dispose();
         game.getAssetManager().unload("MainMenuBack.jpg");
+        game.getAssetManager().unload("MenuIntro.wav");
+        game.getAssetManager().unload("Menu.wav");
         skin.dispose();
     }
 }
