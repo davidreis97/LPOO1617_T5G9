@@ -22,7 +22,8 @@ public class TSSState {
             case MAIN_MENU:
                 if(event == GameEvent.START) {
                     this.currState = GameState.PLAYING;
-                    TSSView gameScreen = new TSSView(game, new TSSServer());
+//                    TSSView gameScreen = new TSSView(game, new TSSServer());
+                    TSSView gameScreen = new TSSView(game);
                     gameScreen.setInstance(gameScreen);
                     game.setScreen(gameScreen);
                 }

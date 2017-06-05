@@ -28,14 +28,11 @@ import com.drfl.twinstickshooter.model.entities.MainCharModel;
 import com.drfl.twinstickshooter.view.entities.EnemyView;
 import com.drfl.twinstickshooter.view.entities.EntityView;
 import com.drfl.twinstickshooter.view.entities.ViewFactory;
-import com.esotericsoftware.minlog.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TSSView extends ScreenAdapter {
-
-    private enum ControlType {CONTROLLER, REMOTE, KBM};
 
     /**
      * Used to debug the position of the physics fixtures
@@ -64,10 +61,10 @@ public class TSSView extends ScreenAdapter {
      */
     private final TSSGame game;
 
-    /**
-     * The server this screen uses.
-     */
-    private final TSSServer server;
+//    /**
+//     * The server this screen uses.
+//     */
+//    private final TSSServer server;
 
     /**
      * The singleton instance of the game view
@@ -121,11 +118,6 @@ public class TSSView extends ScreenAdapter {
     private ShaderProgram shader = new ShaderProgram(vertexShader, fragmentShader);
 
     /**
-     * The type of input currently in use to control the game.
-     */
-    private ControlType inputMode;
-
-    /**
      * Array of enemy views to keep track of independent animation cycles
      */
     private ArrayList<EnemyView> enemies = new ArrayList<EnemyView>();
@@ -134,10 +126,10 @@ public class TSSView extends ScreenAdapter {
      * Create game view using libGDX screen
      * @param game game this screen belongs to
      */
-    public TSSView(TSSGame game, TSSServer server) {
+    public TSSView(TSSGame game) {
 
         this.game = game;
-        this.server = server;
+//        this.server = server;
 
         loadAssets();
 
@@ -149,7 +141,6 @@ public class TSSView extends ScreenAdapter {
         TSSController.initInstance();
         TSSController.getInstance().createTileEntities(map.getLayers().get("Collision"));
 
-        inputMode = chooseInput();
         camera = createCamera();
     }
 
@@ -159,24 +150,6 @@ public class TSSView extends ScreenAdapter {
 
     public static TSSView getInstance() {
         return instance;
-    }
-
-    /**
-     * Decides which input mode will be used.
-     * If a controller is connected, the controller is used to control the game. Otherwise, the server is used.
-     * @return The type of input currently in use to control the game.
-     */
-    private ControlType chooseInput() {
-
-        return ControlType.KBM;
-
-//        if(TSSGamePad.getInstance().controllerExists()) {
-//            Log.info("Controller found, using it as input");
-//            return ControlType.CONTROLLER;
-//        } else {
-//            Log.info("Controller NOT found, using SERVER as input");
-//            return ControlType.REMOTE;
-//        }
     }
 
     /**
@@ -267,15 +240,15 @@ public class TSSView extends ScreenAdapter {
      */
     private void handleInputs() {
 
-        if(inputMode == ControlType.CONTROLLER) {
+        if(game.getInputMode() == TSSGame.ControlType.CONTROLLER) {
 
             TSSController.getInstance().setMoveInput(TSSGamePad.getInstance().getLeftStickVector());
             TSSController.getInstance().setShootInput(TSSGamePad.getInstance().getRightStickVector());
-        } else if(inputMode == ControlType.REMOTE) {
+        } else if(game.getInputMode() == TSSGame.ControlType.REMOTE) {
 
-            TSSController.getInstance().setMoveInput(server.getMovement());
-            TSSController.getInstance().setShootInput(server.getShooting());
-        } else if(inputMode == ControlType.KBM) {
+            TSSController.getInstance().setMoveInput(game.getServer().getMovement());
+            TSSController.getInstance().setShootInput(game.getServer().getShooting());
+        } else if(game.getInputMode() == TSSGame.ControlType.KBM) {
 
             Vector2 moveDirection = new Vector2(0, 0);
 
@@ -359,7 +332,6 @@ public class TSSView extends ScreenAdapter {
     public void dispose() {
 
         this.shader.dispose();
-        this.server.dispose();
     }
 
     public TSSGame getGame() {

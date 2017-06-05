@@ -8,13 +8,17 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.drfl.twinstickshooter.TSSGame;
+import com.drfl.twinstickshooter.TSSGamePad;
 import com.drfl.twinstickshooter.TSSState;
+
+import java.util.ArrayList;
 
 public class TSSMainMenu extends ScreenAdapter {
 
@@ -53,6 +57,9 @@ public class TSSMainMenu extends ScreenAdapter {
     private final Viewport viewport;
 
     private TextButton startGame;
+    private SelectBox inputMethod;
+
+    ArrayList<String> inputOptions = new ArrayList<String>();
 
     Skin skin = new Skin(Gdx.files.internal("uiskin.json")); //TODO can use assetManager?
 
@@ -74,6 +81,10 @@ public class TSSMainMenu extends ScreenAdapter {
     @Override
     public void show() {
 
+        inputOptions.add("Keyboard / Mouse");
+        inputOptions.add("X360 Controller");
+        inputOptions.add("Android Controller");
+
         //TODO move to function
         startGame = new TextButton("Start Game", skin);
         startGame.setSize(0.25f * Gdx.graphics.getWidth(),0.15f * Gdx.graphics.getHeight());
@@ -85,12 +96,20 @@ public class TSSMainMenu extends ScreenAdapter {
             @Override
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
 
+                game.setInputMode(parseInputMode());
                 game.getStateM().processState(TSSState.GameEvent.START);
                 return false;
             }
         });
 
+        inputMethod = new SelectBox(skin);
+        inputMethod.setSize(0.25f * Gdx.graphics.getWidth(),0.10f * Gdx.graphics.getHeight());
+        inputMethod.setPosition(Gdx.graphics.getWidth() / 2.0f - inputMethod.getWidth() / 2.0f,Gdx.graphics.getHeight() - inputMethod.getHeight() - 0.10f * Gdx.graphics.getHeight() - 1.10f * startGame.getHeight());
+        inputMethod.setItems(inputOptions.toArray());
+
+
         game.getStage().addActor(startGame);
+        game.getStage().addActor(inputMethod);
     }
 
     private OrthographicCamera createCamera() {
@@ -106,6 +125,19 @@ public class TSSMainMenu extends ScreenAdapter {
 
         this.game.getAssetManager().load( "MainMenuBack.jpg" , Texture.class);
         this.game.getAssetManager().finishLoading();
+    }
+
+    private TSSGame.ControlType parseInputMode() {
+
+        if(inputMethod.getSelected().equals("Keyboard / Mouse")) {
+            return TSSGame.ControlType.KBM;
+        } else if(inputMethod.getSelected().equals("X360 Controller")) {
+            if(TSSGamePad.getInstance().controllerExists()) return TSSGame.ControlType.CONTROLLER;
+        } else if(inputMethod.getSelected().equals("Android Controller")) {
+            if(game.getServer().getConnections().length != 0) return TSSGame.ControlType.REMOTE;
+        }
+
+        return TSSGame.ControlType.KBM;
     }
 
     /**
@@ -129,6 +161,7 @@ public class TSSMainMenu extends ScreenAdapter {
         drawElements();
         game.getBatch().end();
 
+        game.getStage().act(delta);
         game.getStage().draw();
     }
 
