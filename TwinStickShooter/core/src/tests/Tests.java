@@ -2,41 +2,50 @@ package tests;
 
 import static org.junit.Assert.*;
 
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 
-import com.drfl.twinstickshooter.TSSGame;
 import com.drfl.twinstickshooter.controller.TSSController;
 import com.drfl.twinstickshooter.model.TSSModel;
 import com.drfl.twinstickshooter.model.entities.EnemySpawnerModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
-import com.drfl.twinstickshooter.view.entities.EnemyView;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(GdxTestRunner.class)
-public class Tests{
+public class Tests {
 
-    TSSController controller;
-    TSSModel model;
-    TSSGame game;
-
+    static TSSController controller;
+    static TSSModel model;
 
     @Before
-    public void setUpBefore(){
-        game = new TSSGame();
+    public void setUpBefore() {
 
-        model = TSSModel.getNewInstance();
+        model = TSSModel.initInstance();
         model.setMainChar(new MainCharModel(0,0,0));
 
-        controller = TSSController.getNewInstance();
+        controller = TSSController.initInstance();
     }
 
     @Test
-    public void testEnemyAutoShootPlayer(){
+    public void testEnemyPlacement() {
+
+        model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
+
+        controller.setTimeToNextSpawn(0f);
+        controller.update(0.01f);
+
+        assertTrue(model.getEnemies().size() > 0);
+
+        assertEquals(model.getEnemies().get(0).getX(),model.getEnemySpawners().get(0).getX(),0.1f);
+        assertEquals(model.getEnemies().get(0).getX(),model.getEnemySpawners().get(0).getX(),0.1f);
+    }
+
+    @Test
+    public void testEnemyAutoShootPlayer() {
+
         model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
         controller.spawnTestEnemy(0);
 
@@ -48,7 +57,8 @@ public class Tests{
     }
 
     @Test
-    public void testBulletsEnemy(){
+    public void testBulletsEnemy() {
+
         model.getEnemySpawners().add(new EnemySpawnerModel(1.5f,0));
         controller.spawnTestEnemy(0);
 
@@ -61,7 +71,8 @@ public class Tests{
     }
 
     @Test
-    public void testMovement(){
+    public void testMovement() {
+
         Vector2[] possibleMovements = {
                 new Vector2(0,0),
                 new Vector2(0,1),
@@ -73,25 +84,26 @@ public class Tests{
                 new Vector2(1,1),
                 new Vector2(1,-1)};
 
-        for (Vector2 movement : possibleMovements){
+        for (Vector2 movement : possibleMovements) {
+
             Vector2 initialPos = new Vector2(model.getMainChar().getX(),model.getMainChar().getY());
 
             controller.setMoveInput(movement);
             controller.update(1);
 
-            if(movement.x > 0){
+            if(movement.x > 0) {
                 assertTrue(initialPos.x < model.getMainChar().getX());
-            }else if(movement.x == 0){
+            } else if(movement.x == 0) {
                 assertTrue(initialPos.x == model.getMainChar().getX());
-            }else{
+            } else {
                 assertTrue(initialPos.x > model.getMainChar().getX());
             }
 
-            if(movement.y > 0){
+            if(movement.y > 0) {
                 assertTrue(initialPos.y < model.getMainChar().getY());
-            }else if(movement.y == 0){
+            } else if(movement.y == 0) {
                 assertTrue(initialPos.y == model.getMainChar().getY());
-            }else {
+            } else {
                 assertTrue(initialPos.y > model.getMainChar().getY());
             }
 
