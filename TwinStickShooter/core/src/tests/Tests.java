@@ -27,16 +27,33 @@ public class Tests{
 
     @Before
     public void setUpBefore(){
+
         game = new TSSGame();
 
-        model = TSSModel.getNewInstance();
+        model = TSSModel.initInstance();
         model.setMainChar(new MainCharModel(0,0,0));
 
-        controller = TSSController.getNewInstance();
+        controller = TSSController.initInstance();
+    }
+
+    @Test(timeout=2000)
+    public void testEnemyMovement(){
+        Vector2 finalPos, initialPos;
+        model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
+        controller.spawnTestEnemy(0);
+
+        do{
+            finalPos = new Vector2(model.getEnemies().get(0).getX(),model.getEnemies().get(0).getY());
+            controller.update(50);
+            initialPos = new Vector2(model.getEnemies().get(0).getX(),model.getEnemies().get(0).getY());
+        }while(finalPos == initialPos);
+
+        assertTrue(true);
     }
 
     @Test
     public void testEnemyAutoShootPlayer(){
+
         model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
         controller.spawnTestEnemy(0);
 
@@ -49,6 +66,7 @@ public class Tests{
 
     @Test
     public void testBulletsEnemy(){
+
         model.getEnemySpawners().add(new EnemySpawnerModel(1.5f,0));
         controller.spawnTestEnemy(0);
 
@@ -62,6 +80,7 @@ public class Tests{
 
     @Test
     public void testMovement(){
+
         Vector2[] possibleMovements = {
                 new Vector2(0,0),
                 new Vector2(0,1),
@@ -79,19 +98,19 @@ public class Tests{
             controller.setMoveInput(movement);
             controller.update(1);
 
-            if(movement.x > 0){
+            if(movement.x > 0) {
                 assertTrue(initialPos.x < model.getMainChar().getX());
-            }else if(movement.x == 0){
+            } else if(movement.x == 0) {
                 assertTrue(initialPos.x == model.getMainChar().getX());
-            }else{
+            } else {
                 assertTrue(initialPos.x > model.getMainChar().getX());
             }
 
             if(movement.y > 0){
                 assertTrue(initialPos.y < model.getMainChar().getY());
-            }else if(movement.y == 0){
+            } else if(movement.y == 0 ){
                 assertTrue(initialPos.y == model.getMainChar().getY());
-            }else {
+            } else {
                 assertTrue(initialPos.y > model.getMainChar().getY());
             }
 
