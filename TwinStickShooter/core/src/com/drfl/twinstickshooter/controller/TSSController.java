@@ -1,5 +1,6 @@
 package com.drfl.twinstickshooter.controller;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector2;
@@ -168,6 +169,7 @@ public class TSSController implements ContactListener {
         if(mainCharCD <= 0) {
             ((MainCharModel)mainCharBody.getUserData()).setTimeToNextShoot(TIME_BETWEEN_SHOTS);
             this.shoot(((MainCharModel)mainCharBody.getUserData()), shootInput);
+            if(!(shootInput.x == 0 && shootInput.y == 0)) ((Sound)TSSView.getInstance().getGame().getAssetManager().get("Shoot.mp3")).play(0.25f);
         } else {
             ((MainCharModel)mainCharBody.getUserData()).setTimeToNextShoot(mainCharCD - delta);
         }
@@ -191,6 +193,7 @@ public class TSSController implements ContactListener {
                 ((EnemyModel)enemy.getUserData()).resetTimeToNextShoot();
                 ((EnemyModel)enemy.getUserData()).setShootDirection(generateShootDirection((MainCharModel)mainCharBody.getUserData(), (EnemyModel)enemy.getUserData()));
                 shoot((EnemyModel)enemy.getUserData(), ((EnemyModel) enemy.getUserData()).getShootDirection());
+                ((Sound)TSSView.getInstance().getGame().getAssetManager().get("Shoot.mp3")).play(0.4f, 1.6f, 0); //TODO magic value
             }
 
             Vector2 direction = ((EnemyModel)enemy.getUserData()).getMoveDirection();
@@ -387,6 +390,7 @@ public class TSSController implements ContactListener {
         if(((BulletModel)bullet.getUserData()).getOwner().equals(EntityModel.ModelType.ENEMY)) {
             ((MainCharModel)mainChar.getUserData()).setHurt(true);
             ((MainCharModel)mainChar.getUserData()).removeHitpoints(5); //TODO remove magic value, use per bullet damage if different weapons
+            ((Sound)TSSView.getInstance().getGame().getAssetManager().get("Hurt.mp3")).play(0.4f);
         }
     }
 
@@ -415,6 +419,8 @@ public class TSSController implements ContactListener {
     public void removeDead() {
 
         if(((MainCharModel)mainCharBody.getUserData()).getHitpoints() <= 0) {
+            ((Sound) TSSView.getInstance().getGame().getAssetManager().get("Shoot.mp3")).stop();
+            ((Sound) TSSView.getInstance().getGame().getAssetManager().get("Hurt.mp3")).stop();
             TSSView.getInstance().getGame().getStateM().processState(TSSState.GameEvent.MC_DIED);
             return;
         }

@@ -2,6 +2,8 @@ package com.drfl.twinstickshooter;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.drfl.twinstickshooter.view.TSSMainMenu;
@@ -41,6 +43,10 @@ public class TSSGame extends Game {
         batch = new SpriteBatch();
         assetManager = new AssetManager();
         server = new TSSServer();
+
+        assetManager.load("Shoot.mp3", Sound.class);
+        assetManager.load("Hurt.mp3", Sound.class);
+        assetManager.finishLoading();
 
         startGame();
     }
