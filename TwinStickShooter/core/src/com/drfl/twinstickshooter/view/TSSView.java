@@ -18,7 +18,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.drfl.twinstickshooter.TSSGame;
 import com.drfl.twinstickshooter.TSSGamePad;
-import com.drfl.twinstickshooter.TSSServer;
 import com.drfl.twinstickshooter.controller.TSSController;
 import com.drfl.twinstickshooter.model.TSSModel;
 import com.drfl.twinstickshooter.model.entities.BulletModel;

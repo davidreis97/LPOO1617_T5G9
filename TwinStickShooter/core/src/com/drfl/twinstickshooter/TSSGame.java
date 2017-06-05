@@ -61,7 +61,7 @@ public class TSSGame extends Game {
      *
      * @return first site local host address or getLocalHost() if no site local host found
      */
-    private ArrayList<InetAddress> findSiteLocalAddress() {
+    public ArrayList<InetAddress> findSiteLocalAddress() {
 
         ArrayList<InetAddress> addresses = new ArrayList<InetAddress>();
 

@@ -13,8 +13,6 @@ import com.drfl.twinstickshooter.model.entities.EnemyModel;
 import com.drfl.twinstickshooter.model.entities.EntityModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
 import com.drfl.twinstickshooter.view.TSSView;
-import com.drfl.twinstickshooter.view.entities.AnimatedEntityView;
-import com.esotericsoftware.minlog.Log;
 
 import java.util.ArrayList;
 import java.util.Random;
