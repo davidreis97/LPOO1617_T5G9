@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -22,6 +23,7 @@ import com.drfl.twinstickshooter.controller.TSSController;
 import com.drfl.twinstickshooter.model.TSSModel;
 import com.drfl.twinstickshooter.model.entities.BulletModel;
 import com.drfl.twinstickshooter.model.entities.EnemyModel;
+import com.drfl.twinstickshooter.model.entities.EntityModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
 import com.drfl.twinstickshooter.view.entities.EnemyView;
 import com.drfl.twinstickshooter.view.entities.EntityView;
@@ -204,6 +206,7 @@ public class TSSView extends ScreenAdapter {
 
         this.game.getAssetManager().load( "Engineer.png" , Texture.class);
         this.game.getAssetManager().load( "Rogue.png" , Texture.class);
+        this.game.getAssetManager().load("Heart.png", Texture.class);
         this.game.getAssetManager().load("Bullet.png", Texture.class); //TODO add more bullet types if adding more weapons
 
         //Tile map loading
@@ -238,6 +241,7 @@ public class TSSView extends ScreenAdapter {
         drawTileMap(game.getBatch());
 
         game.getBatch().begin();
+        drawHUD();
         drawEntities();
         game.getBatch().end();
 
@@ -246,6 +250,16 @@ public class TSSView extends ScreenAdapter {
             debugCamera.scl(1 / PIXEL_TO_METER);
             debugRenderer.render(TSSController.getInstance().getWorld(), debugCamera);
         }
+    }
+
+    private void drawHUD() {
+
+        Texture health = game.getAssetManager().get("Heart.png");
+        int width = Math.round(health.getWidth() * TSSModel.getInstance().getMainChar().getHitpoints() / EntityModel.getHpMax());
+
+        TextureRegion healthRegion = new TextureRegion(health, 0, 0, width, health.getHeight());
+
+        game.getBatch().draw(healthRegion, 10.0f, Gdx.graphics.getHeight() - healthRegion.getRegionHeight() * 1.1f);
     }
 
     /**

@@ -7,6 +7,8 @@ public abstract class EntityModel {
     public enum ModelType {MAINCHAR, BULLET, SPAWNER, ENEMY};
     public enum AnimDirection {NONE, DOWN, LEFT, RIGHT, UP};
 
+    private static final int HP_MAX = 20;
+
     /**
      * The x-coordinate of this model in meters.
      */
@@ -35,7 +37,7 @@ public abstract class EntityModel {
     /**
      * Hitpoints for character entities
      */
-    protected int hitpoints = 20;
+    protected int hitpoints = HP_MAX;
 
     /**
      * Time until character entity can shoot again
@@ -148,5 +150,9 @@ public abstract class EntityModel {
 
     public void setHurt(boolean hurt) {
         isHurt = hurt;
+    }
+
+    public static int getHpMax() {
+        return HP_MAX;
     }
 }
