@@ -2,14 +2,17 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 
+import com.drfl.twinstickshooter.TSSGame;
 import com.drfl.twinstickshooter.controller.TSSController;
 import com.drfl.twinstickshooter.model.TSSModel;
 import com.drfl.twinstickshooter.model.entities.EnemySpawnerModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
+import com.drfl.twinstickshooter.view.entities.EnemyView;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,28 +20,19 @@ import org.junit.runner.RunWith;
 @RunWith(GdxTestRunner.class)
 public class Tests{
 
-    static TSSController controller;
-    static TSSModel model;
+    TSSController controller;
+    TSSModel model;
+    TSSGame game;
+
 
     @Before
     public void setUpBefore(){
+        game = new TSSGame();
+
         model = TSSModel.getNewInstance();
         model.setMainChar(new MainCharModel(0,0,0));
 
         controller = TSSController.getNewInstance();
-    }
-
-    @Test
-    public void testEnemyPlacement(){
-        model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
-
-        controller.setTimeToNextSpawn(0f);
-        controller.update(0.01f);
-
-        assertTrue(model.getEnemies().size() > 0);
-
-        assertEquals(model.getEnemies().get(0).getX(),model.getEnemySpawners().get(0).getX(),0.1f);
-        assertEquals(model.getEnemies().get(0).getX(),model.getEnemySpawners().get(0).getX(),0.1f);
     }
 
     @Test
