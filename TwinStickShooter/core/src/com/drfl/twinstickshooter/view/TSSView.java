@@ -197,7 +197,7 @@ public class TSSView extends ScreenAdapter {
      */
     private void loadAssets() { //TODO can show progress bar
 
-        this.game.getAssetManager().load( "Engineer.png" , Texture.class);
+        this.game.getAssetManager().load( "Pistolero.png" , Texture.class);
         this.game.getAssetManager().load( "Rogue.png" , Texture.class);
         this.game.getAssetManager().load("Heart.png", Texture.class);
         this.game.getAssetManager().load("Bullet.png", Texture.class); //TODO add more bullet types if adding more weapons

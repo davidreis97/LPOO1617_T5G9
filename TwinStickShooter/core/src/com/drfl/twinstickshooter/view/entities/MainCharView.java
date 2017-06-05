@@ -15,6 +15,6 @@ public class MainCharView extends AnimatedEntityView {
      *             asset manager to get textures.
      */
     public MainCharView(TSSGame game) {
-        super(game, (Texture) game.getAssetManager().get("Engineer.png"), 0.15f);
+        super(game, (Texture) game.getAssetManager().get("Pistolero.png"), 0.15f);
     }
 }

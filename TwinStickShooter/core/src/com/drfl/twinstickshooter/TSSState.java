@@ -1,12 +1,13 @@
 package com.drfl.twinstickshooter;
 
+import com.drfl.twinstickshooter.view.TSSGameOver;
 import com.drfl.twinstickshooter.view.TSSMainMenu;
 import com.drfl.twinstickshooter.view.TSSView;
 
 public class TSSState {
 
-    public enum GameState {MAIN_MENU, PLAYING};
-    public enum GameEvent {START, MC_DIED};
+    public enum GameState {MAIN_MENU, PLAYING, GAME_OVER};
+    public enum GameEvent {START, MC_DIED, MAIN};
 
     private GameState currState;
     private final TSSGame game;
@@ -22,7 +23,6 @@ public class TSSState {
             case MAIN_MENU:
                 if(event == GameEvent.START) {
                     this.currState = GameState.PLAYING;
-//                    TSSView gameScreen = new TSSView(game, new TSSServer());
                     TSSView gameScreen = new TSSView(game);
                     gameScreen.setInstance(gameScreen);
                     game.setScreen(gameScreen);
@@ -30,19 +30,17 @@ public class TSSState {
                 break;
             case PLAYING:
                 if(event == GameEvent.MC_DIED) {
-                    this.currState = GameState.MAIN_MENU;
-                    TSSMainMenu menuScreen = new TSSMainMenu(game);
-                    game.setScreen(menuScreen);
+                    this.currState = GameState.GAME_OVER;
+                    TSSGameOver over = new TSSGameOver(game);
+                    game.setScreen(over);
                 }
                 break;
+            case GAME_OVER:
+                if(event == GameEvent.MAIN) {
+                    this.currState = GameState.MAIN_MENU;
+                    TSSMainMenu menu = new TSSMainMenu(game);
+                    game.setScreen(menu);
+                }
         }
-    }
-
-    public GameState getCurrState() {
-        return currState;
-    }
-
-    public void setCurrState(GameState currState) {
-        this.currState = currState;
     }
 }
