@@ -125,6 +125,7 @@ public class TSSModel {
 
 //      bullet.setTimeToLive(.5f); //TODO needed if implementing weapons with decaying bullets
 
+        bullet.setBulletDirection(direction);
         bullets.add(bullet);
 
         return bullet;

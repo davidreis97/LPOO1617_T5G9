@@ -13,7 +13,7 @@ public class EnemyModel extends EntityModel {
     //Both in milliseconds
     private static final int MOVE_COOLDOWN_MIN = 500;
     private static final int MOVE_COOLDOWN_MAX = 2500;
-    private static final float TIME_BETWEEN_SHOTS = 1.0f;
+    private static final float TIME_BETWEEN_SHOTS = 1.2f;
 
     /**
      * RNG Seed
@@ -34,6 +34,7 @@ public class EnemyModel extends EntityModel {
      */
     public EnemyModel(float x, float y, int rotation) {
         super(x + TILESIZE * PIXEL_TO_METER / 2.0f, y + TILESIZE * PIXEL_TO_METER / 2.0f, rotation);
+        this.hitpoints = 20;
     }
 
     @Override

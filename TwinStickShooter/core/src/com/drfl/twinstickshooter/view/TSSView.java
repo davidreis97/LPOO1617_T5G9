@@ -16,6 +16,11 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.drfl.twinstickshooter.TSSGame;
 import com.drfl.twinstickshooter.TSSGamePad;
 import com.drfl.twinstickshooter.controller.TSSController;
@@ -59,11 +64,6 @@ public class TSSView extends ScreenAdapter {
      * The game this screen belongs to.
      */
     private final TSSGame game;
-
-//    /**
-//     * The server this screen uses.
-//     */
-//    private final TSSServer server;
 
     /**
      * The singleton instance of the game view
@@ -121,6 +121,13 @@ public class TSSView extends ScreenAdapter {
      */
     private ArrayList<EnemyView> enemies = new ArrayList<EnemyView>();
 
+    private final Viewport viewport;
+
+    Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+
+    private Label score;
+    private int scoreValue = 0;
+
     /**
      * Create game view using libGDX screen
      * @param game game this screen belongs to
@@ -128,7 +135,6 @@ public class TSSView extends ScreenAdapter {
     public TSSView(TSSGame game) {
 
         this.game = game;
-//        this.server = server;
 
         loadAssets();
 
@@ -141,6 +147,8 @@ public class TSSView extends ScreenAdapter {
         TSSController.getInstance().createTileEntities(map.getLayers().get("Collision"));
 
         camera = createCamera();
+
+        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
     }
 
     public static void setInstance(TSSView instance) {
@@ -149,6 +157,19 @@ public class TSSView extends ScreenAdapter {
 
     public static TSSView getInstance() {
         return instance;
+    }
+
+    @Override
+    public void show() {
+
+        game.setStage(new Stage(viewport));
+
+        Gdx.input.setInputProcessor(game.getStage());
+
+        score = new Label("Score: " + scoreValue, skin);
+//        score.setPosition(10.0f, Gdx.graphics.getHeight() - score.getHeight());
+
+        game.getStage().addActor(score);
     }
 
     /**
@@ -217,6 +238,8 @@ public class TSSView extends ScreenAdapter {
         drawEntities();
         game.getBatch().end();
 
+        game.getStage().draw();
+
         if (DEBUG_PHYSICS) {
             debugCamera = camera.combined.cpy();
             debugCamera.scl(1 / PIXEL_TO_METER);
@@ -230,6 +253,9 @@ public class TSSView extends ScreenAdapter {
         int width = Math.round(health.getWidth() * TSSModel.getInstance().getMainChar().getHitpoints() / EntityModel.getHpMax());
 
         TextureRegion healthRegion = new TextureRegion(health, 0, 0, width, health.getHeight());
+
+        score.setPosition(10.0f, Gdx.graphics.getHeight() - healthRegion.getRegionHeight() - score.getHeight());
+        score.setText("Score: " + scoreValue);
 
         game.getBatch().draw(healthRegion, 10.0f, Gdx.graphics.getHeight() - healthRegion.getRegionHeight() * 1.1f);
     }
@@ -322,6 +348,10 @@ public class TSSView extends ScreenAdapter {
         enemies.remove(index);
     }
 
+    public void addScore(int score) {
+        this.scoreValue += score;
+    }
+
     @Override
     public void hide() {
         this.dispose();
@@ -330,6 +360,8 @@ public class TSSView extends ScreenAdapter {
     @Override
     public void dispose() {
 
+        this.game.getStage().dispose();
+        this.skin.dispose();
         this.shader.dispose();
     }
 

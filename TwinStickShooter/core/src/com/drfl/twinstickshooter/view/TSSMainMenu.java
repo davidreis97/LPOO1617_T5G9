@@ -78,14 +78,14 @@ public class TSSMainMenu extends ScreenAdapter {
         camera = createCamera();
 
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
-
-        game.setStage(new Stage(viewport));
-
-        Gdx.input.setInputProcessor(game.getStage());
     }
 
     @Override
     public void show() {
+
+        game.setStage(new Stage(viewport));
+
+        Gdx.input.setInputProcessor(game.getStage());
 
         inputOptions.add("Keyboard / Mouse");
         inputOptions.add("X360 Controller");

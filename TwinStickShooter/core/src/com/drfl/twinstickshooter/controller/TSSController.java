@@ -355,7 +355,9 @@ public class TSSController implements ContactListener {
      * Bullet collided with enemy, remove bullet and hurt enemy
      */
     private void enemyCollide(Body bullet, Body enemy) {
+
         ((BulletModel)bullet.getUserData()).setFlaggedForRemoval(true);
+
         if(((BulletModel)bullet.getUserData()).getOwner().equals(EntityModel.ModelType.MAINCHAR)) {
             ((EnemyModel)enemy.getUserData()).setHurt(true);
             ((EnemyModel)enemy.getUserData()).removeHitpoints(5); //TODO remove magic value, use per bullet damage if different weapons
@@ -376,6 +378,11 @@ public class TSSController implements ContactListener {
         ((BulletModel)bullet.getUserData()).setFlaggedForRemoval(true);
 
         if(((MainCharModel)mainChar.getUserData()).isHurt()) return;
+
+        Vector2 knockback = ((BulletModel)bullet.getUserData()).getBulletDirection();
+
+        Vector2 impulse = new Vector2(mainCharBody.getMass() * knockback.x, mainCharBody.getMass() * knockback.y);
+        mainCharBody.applyLinearImpulse(impulse.x, impulse.y, true);
 
         if(((BulletModel)bullet.getUserData()).getOwner().equals(EntityModel.ModelType.ENEMY)) {
             ((MainCharModel)mainChar.getUserData()).setHurt(true);
@@ -409,6 +416,7 @@ public class TSSController implements ContactListener {
 
         if(((MainCharModel)mainCharBody.getUserData()).getHitpoints() <= 0) {
             TSSView.getInstance().getGame().getStateM().processState(TSSState.GameEvent.MC_DIED);
+            return;
         }
 
         for(int i = enemies.size() - 1; i >= 0; i--) {
@@ -416,6 +424,7 @@ public class TSSController implements ContactListener {
                 TSSModel.getInstance().removeEnemy(i);
                 world.destroyBody(enemies.get(i).getBody());
                 enemies.remove(i);
+                TSSView.getInstance().addScore(100); //TODO magic value
             }
         }
     }
