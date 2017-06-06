@@ -8,9 +8,10 @@ import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 
-//TODO make logging optional
-
 public class TSSServer {
+
+    private static final boolean DEBUG = false;
+
     private int port = 54555;
 
     private Server server;
@@ -44,7 +45,7 @@ public class TSSServer {
 
         TSSServer.movement = cip.movement;
         TSSServer.shooting = cip.shooting;
-        Log.info("Received Acceleration: " + cip.movement + " / Received Bullet: " + cip.shooting);
+        if(DEBUG) Log.info("Received Acceleration: " + cip.movement + " / Received Bullet: " + cip.shooting);
     }
 
     /**

@@ -2,6 +2,7 @@ package com.drfl.twinstickshooter.model.entities;
 
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.Random;
 
@@ -11,7 +12,7 @@ import static com.drfl.twinstickshooter.view.TSSView.TILESIZE;
 public class EnemyModel extends EntityModel {
 
     //Both in milliseconds
-    private static final int MOVE_COOLDOWN_MIN = 250;
+    private static final int MOVE_COOLDOWN_MIN = 300;
     private static final int MOVE_COOLDOWN_MAX = 750;
     private static final float TIME_BETWEEN_SHOTS = 1.2f;
 
@@ -24,6 +25,8 @@ public class EnemyModel extends EntityModel {
 
     private Vector2 moveDirection = new Vector2(0, 0);
     private Vector2 shootDirection = new Vector2(0, 0);
+
+    private Array<Vector2> previousDirection = new Array<Vector2>();
 
     /**
      * Creates a new ship model in a certain position and having a certain rotation.
@@ -59,6 +62,14 @@ public class EnemyModel extends EntityModel {
     }
 
     public void setMoveDirection(Vector2 moveDirection) {
+
+        if(this.previousDirection.size < 2) {
+            this.previousDirection.add(moveDirection.scl(-1));
+        } else {
+            this.previousDirection.get(0).set(this.previousDirection.get(1));
+            this.previousDirection.get(1).set(moveDirection.scl(-1));
+        }
+
         this.moveDirection = moveDirection;
     }
 
@@ -72,5 +83,9 @@ public class EnemyModel extends EntityModel {
 
     public void resetTimeToNextShoot() {
         this.timeToNextShoot = TIME_BETWEEN_SHOTS;
+    }
+
+    public Array<Vector2> getPreviousDirection() {
+        return previousDirection;
     }
 }

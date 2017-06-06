@@ -48,7 +48,7 @@ public class TSSController implements ContactListener {
     /**
      * Minimum time between consecutive shots in seconds
      */
-    private static final float TIME_BETWEEN_SHOTS = .2f; //TODO move to weaponModel if considering weapons with different cooldowns
+    private static final float TIME_BETWEEN_SHOTS = .2f; //TODO refactor to player model like enemy
 
     /**
      * Cooldown for enemy spawning
@@ -58,7 +58,7 @@ public class TSSController implements ContactListener {
     /**
      * The speed of bullets
      */
-    private static final float BULLET_SPEED = 20f; //TODO move to weaponModel if using different bullet speeds
+    private static final float BULLET_SPEED = 20f; //NOTEME move to weaponModel if using different bullet speeds
 
     /**
      * RNG Seed
@@ -148,7 +148,7 @@ public class TSSController implements ContactListener {
      */
     public void update(float delta) {
 
-//        TSSModel.getInstance().update(delta); //TODO can use for bullet decay time, others
+//        TSSModel.getInstance().update(delta); //NOTEME can use for bullet decay time, others
 
         //TODO refactor enemy/player handling
 
@@ -184,7 +184,11 @@ public class TSSController implements ContactListener {
                 ((EnemyModel)enemy.getUserData()).setTimeToNextDirection(currCooldown - delta);
             } else {
                 ((EnemyModel)enemy.getUserData()).resetTimeToNextDirection();
-                ((EnemyModel)enemy.getUserData()).setMoveDirection(generateMovement()); //TODO make movement in direction of player
+                Vector2 moveDir;
+                 do {
+                     moveDir = generateMovement();
+                } while(((EnemyModel)enemy.getUserData()).getPreviousDirection().contains(moveDir, false));
+                ((EnemyModel)enemy.getUserData()).setMoveDirection(moveDir);
             }
 
             if(shootCooldown > 0) {
@@ -231,7 +235,7 @@ public class TSSController implements ContactListener {
      *
      * @param body The body to be verified.
      */
-    private void verifyBounds(Body body) { //TODO close tile maps so OOB isn't possible
+    private void verifyBounds(Body body) {
         if (body.getPosition().x < 0)
             body.setTransform(MAP_WIDTH, body.getPosition().y, body.getAngle());
 
@@ -320,7 +324,7 @@ public class TSSController implements ContactListener {
     /**
      * Shoots a bullet
      */
-    public void shoot(EntityModel owner, Vector2 direction) { //TODO add owner of bullet, pass bullet type if different weapons
+    public void shoot(EntityModel owner, Vector2 direction) { //NOTEME pass bullet type if different weapons
 
         if(direction.x == 0 && direction.y == 0) return;
 
@@ -344,6 +348,9 @@ public class TSSController implements ContactListener {
         Body bodyA = contact.getFixtureA().getBody();
         Body bodyB = contact.getFixtureB().getBody();
 
+        if (bodyA.getUserData() instanceof TileEntity && bodyB.getUserData() instanceof EnemyModel) enemyWall(contact.getFixtureB().getBody());
+        if (bodyA.getUserData() instanceof EnemyModel && bodyB.getUserData() instanceof TileEntity) enemyWall(contact.getFixtureA().getBody());
+
         if (bodyA.getUserData() instanceof BulletModel && bodyB.getUserData() instanceof EnemyModel) enemyCollide(bodyA, bodyB);
         if (bodyA.getUserData() instanceof EnemyModel && bodyB.getUserData() instanceof BulletModel) enemyCollide(bodyB, bodyA);
 
@@ -352,6 +359,10 @@ public class TSSController implements ContactListener {
 
         if (bodyA.getUserData() instanceof BulletModel) bulletCollision(bodyA);
         if (bodyB.getUserData() instanceof BulletModel) bulletCollision(bodyB);
+    }
+
+    private void enemyWall(Body enemyBody) {
+        ((EnemyModel)enemyBody.getUserData()).setTimeToNextDirection(0);
     }
 
     /**

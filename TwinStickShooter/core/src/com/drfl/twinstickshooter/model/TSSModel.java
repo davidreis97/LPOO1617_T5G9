@@ -118,14 +118,14 @@ public class TSSModel {
 
         float angle = direction.angle() * (float) Math.PI / 180.0f - (float) Math.PI / 2.0f;
 
-        bullet.setPosition(owner.getX() - (float) Math.sin(angle), owner.getY() + (float) Math.cos(angle)); //TODO more precise position
+        bullet.setPosition(owner.getX() - (float) Math.sin(angle), owner.getY() + (float) Math.cos(angle));
         bullet.setRotation(angle);
 
         if(owner instanceof MainCharModel) {
             bullet.setOwner(EntityModel.ModelType.MAINCHAR);
         } else bullet.setOwner(EntityModel.ModelType.ENEMY);
 
-//      bullet.setTimeToLive(.5f); //TODO needed if implementing weapons with decaying bullets
+//      bullet.setTimeToLive(.5f); //NOTEME needed if implementing weapons with decaying bullets
 
         bullet.setBulletDirection(direction);
         bullets.add(bullet);

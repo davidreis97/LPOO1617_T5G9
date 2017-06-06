@@ -32,7 +32,7 @@ public abstract class EntityBody {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(model.getX(), model.getY());
-        bodyDef.fixedRotation = true; //TODO some objects might rotate?
+        bodyDef.fixedRotation = true;
         bodyDef.angle = model.getRotation();
         bodyDef.linearDamping = 5f;
 
@@ -51,6 +51,7 @@ public abstract class EntityBody {
         bodyDef.position.set(x, y);
 
         body = world.createBody(bodyDef);
+        body.setUserData(this);
     }
 
     /**

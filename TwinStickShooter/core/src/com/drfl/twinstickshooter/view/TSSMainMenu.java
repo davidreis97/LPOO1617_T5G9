@@ -64,7 +64,7 @@ public class TSSMainMenu extends ScreenAdapter {
 
     ArrayList<String> inputOptions = new ArrayList<String>();
 
-    Skin skin = new Skin(Gdx.files.internal("uiskin.json")); //TODO can use assetManager?
+    Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
     public TSSMainMenu(TSSGame game) {
 
@@ -97,6 +97,8 @@ public class TSSMainMenu extends ScreenAdapter {
     @Override
     public void show() {
 
+        //TODO refactor
+
         game.setStage(new Stage(viewport));
 
         Gdx.input.setInputProcessor(game.getStage());
@@ -105,12 +107,10 @@ public class TSSMainMenu extends ScreenAdapter {
         inputOptions.add("X360 Controller");
         inputOptions.add("Android Controller");
 
-        //TODO move to function
         startGame = new TextButton("Start Game", skin);
         startGame.setSize(0.25f * Gdx.graphics.getWidth(),0.15f * Gdx.graphics.getHeight());
         startGame.setPosition(Gdx.graphics.getWidth() / 2.0f - startGame.getWidth() / 2.0f,Gdx.graphics.getHeight() - startGame.getHeight() - 0.10f * Gdx.graphics.getHeight());
 
-        //TODO optional depending on input method?
         startGame.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {

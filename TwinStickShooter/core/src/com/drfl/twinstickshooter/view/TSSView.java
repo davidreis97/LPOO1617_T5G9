@@ -212,12 +212,12 @@ public class TSSView extends ScreenAdapter {
     /**
      * Loads the assets needed by this screen.
      */
-    private void loadAssets() { //TODO can show progress bar
+    private void loadAssets() {
 
         this.game.getAssetManager().load( "Pistolero.png" , Texture.class);
         this.game.getAssetManager().load( "Rogue.png" , Texture.class);
         this.game.getAssetManager().load("Heart.png", Texture.class);
-        this.game.getAssetManager().load("Bullet.png", Texture.class); //TODO add more bullet types if adding more weapons
+        this.game.getAssetManager().load("Bullet.png", Texture.class); //NOTEME add more bullet types if adding more weapons
 
         this.game.getAssetManager().load("GameIntro.wav", Music.class);
         this.game.getAssetManager().load("Game.wav", Music.class);
@@ -314,8 +314,6 @@ public class TSSView extends ScreenAdapter {
             TSSController.getInstance().setShootInput(new Vector2(Gdx.input.getX() * PIXEL_TO_METER - TSSModel.getInstance().getMainChar().getX(),
                     (VIEWPORT_HEIGHT - Gdx.input.getY() * PIXEL_TO_METER) - TSSModel.getInstance().getMainChar().getY())); //Flip Y on mouse
         }
-
-        //TODO option menu for choosing input method
     }
 
     /**

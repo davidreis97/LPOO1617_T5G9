@@ -8,11 +8,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.minlog.Log;
 
-//TODO make logging optional
 /**
  * Class responsible for interacting with a XBOX360 controller
  */
 public class TSSGamePad implements ControllerListener {
+
+    private static final boolean DEBUG = false;
 
     private boolean usesController = true;
 
@@ -107,25 +108,23 @@ public class TSSGamePad implements ControllerListener {
     @Override
     public boolean buttonDown(Controller controller, int buttonCode) {
 
-        Log.info("Button code: " + buttonCode);
+        if(DEBUG) Log.info("Button code: " + buttonCode);
 
         if(buttonCode == XBox360Pad.BUTTON_Y) {
-            Log.info("Y");
+            if(DEBUG) Log.info("Y");
         }else if(buttonCode == XBox360Pad.BUTTON_A) {
-            Log.info("A");
+            if(DEBUG) Log.info("A");
         }else if(buttonCode == XBox360Pad.BUTTON_X) {
-            Log.info("X");
+            if(DEBUG) Log.info("X");
         }else if(buttonCode == XBox360Pad.BUTTON_B){
-            Log.info("B");
+            if(DEBUG) Log.info("B");
         }
 
         else if(buttonCode == XBox360Pad.BUTTON_LB) {
-            Log.info("LB");
+            if(DEBUG) Log.info("LB");
         }else if(buttonCode == XBox360Pad.BUTTON_RB){
-            Log.info("RB");
+            if(DEBUG) Log.info("RB");
         }
-
-        //Does not implement all possible buttons, see XBox360Pad.java for more buttons
 
         return false;
     }
@@ -140,17 +139,16 @@ public class TSSGamePad implements ControllerListener {
     @Override
     public boolean povMoved(Controller controller, int povCode, PovDirection value) {
 
-        Log.info("POV: " + value);
+        if(DEBUG) Log.info("POV: " + value);
 
-        // This is the dpad
         if(value == XBox360Pad.BUTTON_DPAD_LEFT){
-            //Action
+
         }else if(value == XBox360Pad.BUTTON_DPAD_RIGHT){
-            //Action
+
         }else if(value == XBox360Pad.BUTTON_DPAD_UP) {
-            //Action
+
         }else if (value == XBox360Pad.BUTTON_DPAD_DOWN) {
-            //Action
+
         }
         return false;
     }

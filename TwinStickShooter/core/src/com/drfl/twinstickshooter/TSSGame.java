@@ -61,7 +61,6 @@ public class TSSGame extends Game {
         setScreen(menu);
     }
 
-    //TODO show IP on main menu
     /**
      * Finds the first site local host address
      *
