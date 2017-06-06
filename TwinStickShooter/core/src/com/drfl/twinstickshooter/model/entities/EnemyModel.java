@@ -3,6 +3,7 @@ package com.drfl.twinstickshooter.model.entities;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.drfl.twinstickshooter.model.TSSModel;
 
 import java.util.Random;
 
@@ -87,5 +88,11 @@ public class EnemyModel extends EntityModel {
 
     public Array<Vector2> getPreviousDirection() {
         return previousDirection;
+    }
+
+    @Override
+    public void removeHitpoints(int value) {
+        this.hitpoints -= value;
+        if(hitpoints <= 0) TSSModel.getInstance().setScore(TSSModel.getInstance().getScore() + 100); //TODO magic value
     }
 }

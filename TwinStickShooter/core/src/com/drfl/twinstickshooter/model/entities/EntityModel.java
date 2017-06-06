@@ -1,6 +1,7 @@
 package com.drfl.twinstickshooter.model.entities;
 
 import com.badlogic.gdx.math.Vector2;
+import com.drfl.twinstickshooter.model.TSSModel;
 
 /**
  * Abstract model for representing entities in a game model.
