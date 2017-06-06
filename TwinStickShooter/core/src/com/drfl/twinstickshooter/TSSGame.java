@@ -11,6 +11,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.drfl.twinstickshooter.view.TSSMainMenu;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -65,22 +68,12 @@ public class TSSGame extends Game {
 
         loadScore();
 
-//        addScore("", 1);
-
         stateM = new TSSState(TSSState.GameState.MAIN_MENU, this);
         TSSMainMenu menu = new TSSMainMenu(this);
         setScreen(menu);
     }
 
     private void loadScore() {
-
-//        try (BufferedWriter bw = new BufferedWriter(new FileWriter(Gdx.files.getLocalStoragePath() + "Score.json"))) {
-//
-//            bw.write(json.prettyPrint(scores));
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         FileHandle handle = Gdx.files.local("Score.json");
         if(handle.exists()) {
@@ -89,12 +82,29 @@ public class TSSGame extends Game {
         }
     }
 
-    private void addScore(String name, int score) {
+    public void saveScore() {
 
-        //TODO add score here
+        Json json = new Json();
 
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(Gdx.files.getLocalStoragePath() + "Score.json"))) {
+
+        bw.write(json.prettyPrint(scores));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addScore(String name, int score) {
+
+        this.scores.add(new TSSScore(name, score));
         this.scores.sort();
-        System.out.println(this.scores.toString());
+
+        if(scores.size > 10) {
+            scores.removeRange(10, scores.size - 1);
+        }
+
+        saveScore();
     }
 
     /**
@@ -205,5 +215,24 @@ public class TSSGame extends Game {
 
     public void setSoundVolume(float soundVolume) {
         this.soundVolume = soundVolume;
+    }
+
+    public Array<TSSScore> getScores() {
+        return scores;
+    }
+
+    public boolean checkHighScore(int score) {
+
+        if(this.scores.size < 10 && score > 0) {
+            return true;
+        } else {
+            for(TSSScore scores : this.scores) {
+                if(score > scores.getScore()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

@@ -1,14 +1,32 @@
 [
 {
 	class: com.drfl.twinstickshooter.TSSScore
-	name: Francisco
-	score: 15000
-	date: 2017/06/06
+	name: Lel
+	score: 700
+	date: 2017/06/07
 }
 {
 	class: com.drfl.twinstickshooter.TSSScore
-	name: Yay
-	score: 20000
-	date: 2017/06/06
+	name: Mine
+	score: 500
+	date: 2017/06/07
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
+	name: Tease
+	score: 200
+	date: 2017/06/07
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
+	name: EZSPECIAL
+	score: 100
+	date: 2017/06/07
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
+	name: None
+	score: 100
+	date: 2017/06/07
 }
 ]

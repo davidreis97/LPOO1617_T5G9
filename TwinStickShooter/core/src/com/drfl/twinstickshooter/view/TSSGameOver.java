@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.drfl.twinstickshooter.TSSGame;
 import com.drfl.twinstickshooter.TSSState;
+import com.drfl.twinstickshooter.model.TSSModel;
 
 public class TSSGameOver extends ScreenAdapter {
 
@@ -84,7 +85,10 @@ public class TSSGameOver extends ScreenAdapter {
             totalTime += delta;
 
             if(totalTime >= 2.5f) { //TODO magic value
-                game.getStateM().processState(TSSState.GameEvent.MAIN);
+                if(game.checkHighScore(TSSModel.getInstance().getScore())) {
+                    game.getStateM().processState(TSSState.GameEvent.HIGHSCORE);
+                } else game.getStateM().processState(TSSState.GameEvent.MAIN);
+
                 return;
             }
 

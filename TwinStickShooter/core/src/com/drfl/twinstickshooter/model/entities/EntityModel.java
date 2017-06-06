@@ -10,7 +10,7 @@ public abstract class EntityModel {
     public enum ModelType {MAINCHAR, BULLET, SPAWNER, ENEMY};
     public enum AnimDirection {NONE, DOWN, LEFT, RIGHT, UP};
 
-    private static final int HP_MAX = 40;
+    private static final int HP_MAX = 15;
 
     /**
      * The x-coordinate of this model in meters.

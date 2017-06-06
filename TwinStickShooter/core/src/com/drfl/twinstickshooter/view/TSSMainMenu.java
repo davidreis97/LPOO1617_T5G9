@@ -56,6 +56,8 @@ public class TSSMainMenu extends ScreenAdapter {
     private TSSGame.ControlType selectedController = TSSGame.ControlType.KBM;
 
     private TextButton startGame;
+    private TextButton scoreboard;
+    private TextButton exitGame;
     private SelectBox inputMethod;
     private Label controlWarning;
     private Label IPBox;
@@ -88,17 +90,9 @@ public class TSSMainMenu extends ScreenAdapter {
 
     private void startMusic() {
 
-        ((Music)game.getAssetManager().get("MenuIntro.wav")).setOnCompletionListener(new Music.OnCompletionListener() {
-            @Override
-            public void onCompletion(Music music) {
-                ((Music)game.getAssetManager().get("Menu.wav")).setLooping(true);
-                ((Music)game.getAssetManager().get("Menu.wav")).setVolume(game.getMusicVolume());
-                ((Music)game.getAssetManager().get("Menu.wav")).play();
-            }
-        });
-
-        ((Music)game.getAssetManager().get("MenuIntro.wav")).setVolume(game.getMusicVolume());
-        ((Music)game.getAssetManager().get("MenuIntro.wav")).play();
+        ((Music)game.getAssetManager().get("Menu.wav")).setLooping(true);
+        ((Music)game.getAssetManager().get("Menu.wav")).setVolume(game.getMusicVolume());
+        ((Music)game.getAssetManager().get("Menu.wav")).play();
     }
 
     @Override
@@ -128,16 +122,29 @@ public class TSSMainMenu extends ScreenAdapter {
             }
         });
 
+        scoreboard = new TextButton("Highscores", skin);
+        scoreboard.setSize(0.25f * Gdx.graphics.getWidth(),0.15f * Gdx.graphics.getHeight());
+        scoreboard.setPosition(Gdx.graphics.getWidth() / 2.0f - scoreboard.getWidth() / 2.0f,Gdx.graphics.getHeight() - scoreboard.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight());
+
+        scoreboard.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
+
+                game.getStateM().processState(TSSState.GameEvent.HIGHSCORE);
+                return false;
+            }
+        });
+
         inputMethod = new SelectBox(skin);
         inputMethod.setSize(0.25f * Gdx.graphics.getWidth(),0.05f * Gdx.graphics.getHeight());
         inputMethod.setPosition(Gdx.graphics.getWidth() / 2.0f - inputMethod.getWidth() / 2.0f,
-                Gdx.graphics.getHeight() - inputMethod.getHeight() - 0.10f * Gdx.graphics.getHeight() - 1.10f * startGame.getHeight());
+                Gdx.graphics.getHeight() - inputMethod.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - 1.10f * scoreboard.getHeight());
         inputMethod.setItems(inputOptions.toArray());
 
         controlWarning = new Label("", skin);
         controlWarning.setSize(0.25f * Gdx.graphics.getWidth(),0.05f * Gdx.graphics.getHeight());
         controlWarning.setPosition(Gdx.graphics.getWidth() / 2.0f - controlWarning.getWidth() / 2.0f,
-                Gdx.graphics.getHeight() - controlWarning.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - 1.10f * inputMethod.getHeight());
+                Gdx.graphics.getHeight() - controlWarning.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - scoreboard.getHeight() - 1.10f * inputMethod.getHeight());
         controlWarning.setColor(Color.RED);
 
         if(!game.findSiteLocalAddress().isEmpty()) {
@@ -149,17 +156,17 @@ public class TSSMainMenu extends ScreenAdapter {
         }
         IPBox.setSize(0.25f * Gdx.graphics.getWidth(),0.05f * Gdx.graphics.getHeight());
         IPBox.setPosition(Gdx.graphics.getWidth() / 2.0f - IPBox.getWidth() / 2.0f,
-                Gdx.graphics.getHeight() - IPBox.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - inputMethod.getHeight() - 1.10f * controlWarning.getHeight());
+                Gdx.graphics.getHeight() - IPBox.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - scoreboard.getHeight() - inputMethod.getHeight() - 1.10f * controlWarning.getHeight());
 
         musicLabel = new Label("Music Volume:", skin);
         musicLabel.setSize(0.25f * Gdx.graphics.getWidth(),0.05f * Gdx.graphics.getHeight());
         musicLabel.setPosition(Gdx.graphics.getWidth() / 2.0f - musicLabel.getWidth() / 2.0f,
-                Gdx.graphics.getHeight() - musicLabel.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - inputMethod.getHeight() - controlWarning.getHeight() - 1.10f * IPBox.getHeight());
+                Gdx.graphics.getHeight() - musicLabel.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - scoreboard.getHeight() - inputMethod.getHeight() - controlWarning.getHeight() - 1.10f * IPBox.getHeight());
 
         musicVolume = new Slider(0.0f, 1.0f, 0.05f, false, skin);
         musicVolume.setSize(0.25f * Gdx.graphics.getWidth(),0.05f * Gdx.graphics.getHeight());
         musicVolume.setPosition(Gdx.graphics.getWidth() / 2.0f - musicVolume.getWidth() / 2.0f,
-                Gdx.graphics.getHeight() - musicVolume.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - inputMethod.getHeight() - controlWarning.getHeight() - IPBox.getHeight() - 0.75f * musicLabel.getHeight());
+                Gdx.graphics.getHeight() - musicVolume.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - scoreboard.getHeight() - inputMethod.getHeight() - controlWarning.getHeight() - IPBox.getHeight() - 0.75f * musicLabel.getHeight());
         musicVolume.setValue(game.getMusicVolume());
         musicVolume.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
@@ -171,12 +178,12 @@ public class TSSMainMenu extends ScreenAdapter {
         soundLabel = new Label("SFX Volume:", skin);
         soundLabel.setSize(0.25f * Gdx.graphics.getWidth(),0.05f * Gdx.graphics.getHeight());
         soundLabel.setPosition(Gdx.graphics.getWidth() / 2.0f - soundLabel.getWidth() / 2.0f,
-                Gdx.graphics.getHeight() - soundLabel.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - inputMethod.getHeight() - controlWarning.getHeight() - IPBox.getHeight() - musicLabel.getHeight() - 1.10f * musicVolume.getHeight());
+                Gdx.graphics.getHeight() - soundLabel.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - scoreboard.getHeight() - inputMethod.getHeight() - controlWarning.getHeight() - IPBox.getHeight() - musicLabel.getHeight() - 1.10f * musicVolume.getHeight());
 
         soundVolume = new Slider(0.0f, 1.0f, 0.05f, false, skin);
         soundVolume.setSize(0.25f * Gdx.graphics.getWidth(),0.05f * Gdx.graphics.getHeight());
         soundVolume.setPosition(Gdx.graphics.getWidth() / 2.0f - soundVolume.getWidth() / 2.0f,
-                Gdx.graphics.getHeight() - soundVolume.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - inputMethod.getHeight() - controlWarning.getHeight() - IPBox.getHeight() - musicLabel.getHeight() - musicVolume.getHeight() - 0.75f * soundLabel.getHeight());
+                Gdx.graphics.getHeight() - soundVolume.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - scoreboard.getHeight() - inputMethod.getHeight() - controlWarning.getHeight() - IPBox.getHeight() - musicLabel.getHeight() - musicVolume.getHeight() - 0.75f * soundLabel.getHeight());
         soundVolume.setValue(game.getSoundVolume());
         soundVolume.addListener(new ClickListener() {
 
@@ -197,7 +204,21 @@ public class TSSMainMenu extends ScreenAdapter {
             }
         });
 
+        exitGame = new TextButton("Exit", skin);
+        exitGame.setSize(0.25f * Gdx.graphics.getWidth(),0.15f * Gdx.graphics.getHeight());
+        exitGame.setPosition(Gdx.graphics.getWidth() / 2.0f - exitGame.getWidth() / 2.0f,
+                Gdx.graphics.getHeight() - exitGame.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - scoreboard.getHeight() - inputMethod.getHeight() - controlWarning.getHeight() - IPBox.getHeight() - musicLabel.getHeight() - musicVolume.getHeight() - soundLabel.getHeight() - 1.10f * soundVolume.getHeight());
+        exitGame.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
+
+                game.getStateM().processState(TSSState.GameEvent.EXIT);
+                return false;
+            }
+        });
+
         game.getStage().addActor(startGame);
+        game.getStage().addActor(scoreboard);
         game.getStage().addActor(inputMethod);
         game.getStage().addActor(controlWarning);
         game.getStage().addActor(IPBox);
@@ -205,6 +226,7 @@ public class TSSMainMenu extends ScreenAdapter {
         game.getStage().addActor(musicVolume);
         game.getStage().addActor(soundLabel);
         game.getStage().addActor(soundVolume);
+        game.getStage().addActor(exitGame);
     }
 
     private OrthographicCamera createCamera() {
@@ -219,7 +241,6 @@ public class TSSMainMenu extends ScreenAdapter {
     private void loadAssets() {
 
         this.game.getAssetManager().load( "MainMenuBack.jpg" , Texture.class);
-        this.game.getAssetManager().load("MenuIntro.wav", Music.class);
         this.game.getAssetManager().load("Menu.wav", Music.class);
         this.game.getAssetManager().finishLoading();
     }
@@ -292,7 +313,6 @@ public class TSSMainMenu extends ScreenAdapter {
     public void dispose() {
         game.getStage().dispose();
         game.getAssetManager().unload("MainMenuBack.jpg");
-        game.getAssetManager().unload("MenuIntro.wav");
         game.getAssetManager().unload("Menu.wav");
         skin.dispose();
     }

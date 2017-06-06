@@ -47,7 +47,7 @@ public class TSSModel {
      */
     private List<BulletModel> bullets;
 
-    private int score;
+    private int score = 0;
 
     /**
      * A pool of bullets

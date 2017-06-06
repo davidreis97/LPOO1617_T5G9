@@ -30,12 +30,23 @@ public class TSSScore implements Comparable<TSSScore> {
     public int compareTo(TSSScore o) {
 
         if(this.score < o.score) {
-            System.out.println("compare");
             return 1;
         } else if(this.score > o.score) {
             return -1;
         }
 
         return 0;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public String getDate() {
+        return date;
     }
 }
