@@ -167,12 +167,12 @@ public class TSSView extends ScreenAdapter {
             @Override
             public void onCompletion(Music music) {
                 ((Music)game.getAssetManager().get("Game.wav")).setLooping(true);
-                ((Music)game.getAssetManager().get("Game.wav")).setVolume(0.5f); //TODO volume magic values
+                ((Music)game.getAssetManager().get("Game.wav")).setVolume(game.getMusicVolume());
                 ((Music)game.getAssetManager().get("Game.wav")).play();
             }
         });
 
-        ((Music)game.getAssetManager().get("GameIntro.wav")).setVolume(0.5f);
+        ((Music)game.getAssetManager().get("GameIntro.wav")).setVolume(game.getMusicVolume());
         ((Music)game.getAssetManager().get("GameIntro.wav")).play();
     }
 

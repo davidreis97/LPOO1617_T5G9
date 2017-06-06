@@ -33,6 +33,8 @@ public class TSSGame extends Game {
 	private AssetManager assetManager;
 	private Stage stage;
 	private TSSState stateM;
+	private float musicVolume = 0.60f;
+	private float soundVolume = 0.35f;
 
     /**
      * Initializes sprite batch and asset manager, starts the game
@@ -153,5 +155,21 @@ public class TSSGame extends Game {
 
     public TSSServer getServer() {
         return server;
+    }
+
+    public float getMusicVolume() {
+        return musicVolume;
+    }
+
+    public void setMusicVolume(float musicVolume) {
+        this.musicVolume = musicVolume;
+    }
+
+    public float getSoundVolume() {
+        return soundVolume;
+    }
+
+    public void setSoundVolume(float soundVolume) {
+        this.soundVolume = soundVolume;
     }
 }

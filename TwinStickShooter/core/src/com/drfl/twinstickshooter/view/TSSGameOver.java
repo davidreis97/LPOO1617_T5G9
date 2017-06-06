@@ -53,7 +53,7 @@ public class TSSGameOver extends ScreenAdapter {
 
         private void startMusic() {
 
-            ((Music)game.getAssetManager().get("GameOver.wav")).setVolume(0.5f);
+            ((Music)game.getAssetManager().get("GameOver.wav")).setVolume(game.getMusicVolume());
             ((Music)game.getAssetManager().get("GameOver.wav")).play();
         }
 

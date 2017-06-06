@@ -2,18 +2,17 @@ package com.drfl.twinstickshooter.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.loaders.MusicLoader;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -61,8 +60,16 @@ public class TSSMainMenu extends ScreenAdapter {
     private Label controlWarning;
     private Label IPBox;
     private String IPField;
+    private Label musicLabel;
+    private Slider musicVolume;
+    private Label soundLabel;
+    private Slider soundVolume;
 
     ArrayList<String> inputOptions = new ArrayList<String>();
+
+    private static final float SOUND_CD = 0.3f;
+
+    private float changeSound = SOUND_CD;
 
     Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
@@ -85,12 +92,12 @@ public class TSSMainMenu extends ScreenAdapter {
             @Override
             public void onCompletion(Music music) {
                 ((Music)game.getAssetManager().get("Menu.wav")).setLooping(true);
-                ((Music)game.getAssetManager().get("Menu.wav")).setVolume(0.5f);
+                ((Music)game.getAssetManager().get("Menu.wav")).setVolume(game.getMusicVolume());
                 ((Music)game.getAssetManager().get("Menu.wav")).play();
             }
         });
 
-        ((Music)game.getAssetManager().get("MenuIntro.wav")).setVolume(0.5f);
+        ((Music)game.getAssetManager().get("MenuIntro.wav")).setVolume(game.getMusicVolume());
         ((Music)game.getAssetManager().get("MenuIntro.wav")).play();
     }
 
@@ -144,10 +151,60 @@ public class TSSMainMenu extends ScreenAdapter {
         IPBox.setPosition(Gdx.graphics.getWidth() / 2.0f - IPBox.getWidth() / 2.0f,
                 Gdx.graphics.getHeight() - IPBox.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - inputMethod.getHeight() - 1.10f * controlWarning.getHeight());
 
+        musicLabel = new Label("Music Volume:", skin);
+        musicLabel.setSize(0.25f * Gdx.graphics.getWidth(),0.05f * Gdx.graphics.getHeight());
+        musicLabel.setPosition(Gdx.graphics.getWidth() / 2.0f - musicLabel.getWidth() / 2.0f,
+                Gdx.graphics.getHeight() - musicLabel.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - inputMethod.getHeight() - controlWarning.getHeight() - 1.10f * IPBox.getHeight());
+
+        musicVolume = new Slider(0.0f, 1.0f, 0.05f, false, skin);
+        musicVolume.setSize(0.25f * Gdx.graphics.getWidth(),0.05f * Gdx.graphics.getHeight());
+        musicVolume.setPosition(Gdx.graphics.getWidth() / 2.0f - musicVolume.getWidth() / 2.0f,
+                Gdx.graphics.getHeight() - musicVolume.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - inputMethod.getHeight() - controlWarning.getHeight() - IPBox.getHeight() - 0.75f * musicLabel.getHeight());
+        musicVolume.setValue(game.getMusicVolume());
+        musicVolume.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+                game.setMusicVolume(musicVolume.getValue());
+                ((Music)game.getAssetManager().get("Menu.wav")).setVolume(game.getMusicVolume());
+            }
+        });
+
+        soundLabel = new Label("SFX Volume:", skin);
+        soundLabel.setSize(0.25f * Gdx.graphics.getWidth(),0.05f * Gdx.graphics.getHeight());
+        soundLabel.setPosition(Gdx.graphics.getWidth() / 2.0f - soundLabel.getWidth() / 2.0f,
+                Gdx.graphics.getHeight() - soundLabel.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - inputMethod.getHeight() - controlWarning.getHeight() - IPBox.getHeight() - musicLabel.getHeight() - 1.10f * musicVolume.getHeight());
+
+        soundVolume = new Slider(0.0f, 1.0f, 0.05f, false, skin);
+        soundVolume.setSize(0.25f * Gdx.graphics.getWidth(),0.05f * Gdx.graphics.getHeight());
+        soundVolume.setPosition(Gdx.graphics.getWidth() / 2.0f - soundVolume.getWidth() / 2.0f,
+                Gdx.graphics.getHeight() - soundVolume.getHeight() - 0.10f * Gdx.graphics.getHeight() - startGame.getHeight() - inputMethod.getHeight() - controlWarning.getHeight() - IPBox.getHeight() - musicLabel.getHeight() - musicVolume.getHeight() - 0.75f * soundLabel.getHeight());
+        soundVolume.setValue(game.getSoundVolume());
+        soundVolume.addListener(new ClickListener() {
+
+            @Override
+            public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
+                return true;
+            }
+
+            @Override
+
+            public void touchUp(InputEvent e, float x, float y, int point, int button) {
+                game.setSoundVolume(soundVolume.getValue());
+                if(changeSound <= 0) {
+                    ((Sound)game.getAssetManager().get("Shoot.mp3")).stop();
+                    ((Sound)game.getAssetManager().get("Shoot.mp3")).play(game.getSoundVolume());
+                    changeSound = SOUND_CD;
+                }
+            }
+        });
+
         game.getStage().addActor(startGame);
         game.getStage().addActor(inputMethod);
         game.getStage().addActor(controlWarning);
         game.getStage().addActor(IPBox);
+        game.getStage().addActor(musicLabel);
+        game.getStage().addActor(musicVolume);
+        game.getStage().addActor(soundLabel);
+        game.getStage().addActor(soundVolume);
     }
 
     private OrthographicCamera createCamera() {
@@ -199,6 +256,8 @@ public class TSSMainMenu extends ScreenAdapter {
     public void render(float delta) {
 
 //        handleInputs();
+
+        if(changeSound > 0) changeSound -= delta;
 
         game.getBatch().setProjectionMatrix(camera.combined);
 
