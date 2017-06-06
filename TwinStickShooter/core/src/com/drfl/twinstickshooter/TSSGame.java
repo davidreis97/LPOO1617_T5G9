@@ -1,11 +1,14 @@
 package com.drfl.twinstickshooter;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.drfl.twinstickshooter.view.TSSMainMenu;
 
 import java.net.InetAddress;
@@ -14,6 +17,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 
 /**
@@ -35,6 +39,7 @@ public class TSSGame extends Game {
 	private TSSState stateM;
 	private float musicVolume = 0.60f;
 	private float soundVolume = 0.35f;
+	private Array<TSSScore> scores = new Array<TSSScore>();
 
     /**
      * Initializes sprite batch and asset manager, starts the game
@@ -58,9 +63,38 @@ public class TSSGame extends Game {
      */
     private void startGame() {
 
+        loadScore();
+
+//        addScore("", 1);
+
         stateM = new TSSState(TSSState.GameState.MAIN_MENU, this);
         TSSMainMenu menu = new TSSMainMenu(this);
         setScreen(menu);
+    }
+
+    private void loadScore() {
+
+//        try (BufferedWriter bw = new BufferedWriter(new FileWriter(Gdx.files.getLocalStoragePath() + "Score.json"))) {
+//
+//            bw.write(json.prettyPrint(scores));
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        FileHandle handle = Gdx.files.local("Score.json");
+        if(handle.exists()) {
+            Json json = new Json();
+            this.scores = json.fromJson(Array.class, handle);
+        }
+    }
+
+    private void addScore(String name, int score) {
+
+        //TODO add score here
+
+        this.scores.sort();
+        System.out.println(this.scores.toString());
     }
 
     /**

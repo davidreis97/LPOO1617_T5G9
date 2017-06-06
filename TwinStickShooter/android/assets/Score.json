@@ -1,0 +1,14 @@
+[
+{
+	class: com.drfl.twinstickshooter.TSSScore
+	name: Francisco
+	score: 15000
+	date: 2017/06/06
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
+	name: Yay
+	score: 20000
+	date: 2017/06/06
+}
+]

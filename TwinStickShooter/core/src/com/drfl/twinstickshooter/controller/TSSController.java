@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.drfl.twinstickshooter.TSSGame;
 import com.drfl.twinstickshooter.TSSState;
 import com.drfl.twinstickshooter.controller.entities.*;
 import com.drfl.twinstickshooter.model.TSSModel;
@@ -87,6 +88,11 @@ public class TSSController implements ContactListener {
     private ArrayList<EnemyBody> enemies = new ArrayList<EnemyBody>();
 
     /**
+     * The game this screen belongs to.
+     */
+    private final TSSGame game;
+
+    /**
      * Accumulator used to calculate the simulation step.
      */
     private float accumulator;
@@ -94,13 +100,15 @@ public class TSSController implements ContactListener {
     /**
      * Creates a new GameController that controls the physics of a TSSModel.
      */
-    private TSSController() {
+    private TSSController(TSSGame game) {
 
         world = new World(new Vector2(0, 0), true);
 
         mainCharBody = new MainCharBody(world, TSSModel.getInstance().getMainChar());
 
         world.setContactListener(this);
+
+        this.game = game;
     }
 
     public void createTileEntities(MapLayer collisionLayer) {
@@ -120,13 +128,13 @@ public class TSSController implements ContactListener {
     public static TSSController getInstance() {
 
         if (instance == null) {
-            instance = new TSSController();
+            return null;
         }
         return instance;
     }
 
-    public static TSSController initInstance() {
-        TSSController.instance = new TSSController();
+    public static TSSController initInstance(TSSGame game) {
+        TSSController.instance = new TSSController(game);
         return instance;
     }
 
@@ -169,7 +177,9 @@ public class TSSController implements ContactListener {
         if(mainCharCD <= 0) {
             ((MainCharModel)mainCharBody.getUserData()).setTimeToNextShoot(TIME_BETWEEN_SHOTS);
             this.shoot(((MainCharModel)mainCharBody.getUserData()), shootInput);
-            if(!(shootInput.x == 0 && shootInput.y == 0)) ((Sound)TSSView.getInstance().getGame().getAssetManager().get("Shoot.mp3")).play(TSSView.getInstance().getGame().getSoundVolume() * 0.65f);
+            if(!(shootInput.x == 0 && shootInput.y == 0)) {
+                if(game.getSoundVolume() != 0) ((Sound)TSSView.getInstance().getGame().getAssetManager().get("Shoot.mp3")).play(game.getSoundVolume() * 0.65f);
+            }
         } else {
             ((MainCharModel)mainCharBody.getUserData()).setTimeToNextShoot(mainCharCD - delta);
         }
@@ -197,7 +207,8 @@ public class TSSController implements ContactListener {
                 ((EnemyModel)enemy.getUserData()).resetTimeToNextShoot();
                 ((EnemyModel)enemy.getUserData()).setShootDirection(generateShootDirection((MainCharModel)mainCharBody.getUserData(), (EnemyModel)enemy.getUserData()));
                 shoot((EnemyModel)enemy.getUserData(), ((EnemyModel) enemy.getUserData()).getShootDirection());
-                ((Sound)TSSView.getInstance().getGame().getAssetManager().get("Shoot.mp3")).play(TSSView.getInstance().getGame().getSoundVolume(), 1.6f, 0); //TODO magic value
+                if(game.getSoundVolume() != 0)
+                ((Sound)TSSView.getInstance().getGame().getAssetManager().get("Shoot.mp3")).play(game.getSoundVolume(), 1.6f, 0); //TODO magic value
             }
 
             Vector2 direction = ((EnemyModel)enemy.getUserData()).getMoveDirection();
@@ -401,7 +412,8 @@ public class TSSController implements ContactListener {
         if(((BulletModel)bullet.getUserData()).getOwner().equals(EntityModel.ModelType.ENEMY)) {
             ((MainCharModel)mainChar.getUserData()).setHurt(true);
             ((MainCharModel)mainChar.getUserData()).removeHitpoints(5); //TODO remove magic value, use per bullet damage if different weapons
-            ((Sound)TSSView.getInstance().getGame().getAssetManager().get("Hurt.mp3")).play(TSSView.getInstance().getGame().getSoundVolume());
+            if(game.getSoundVolume() != 0)
+            ((Sound)TSSView.getInstance().getGame().getAssetManager().get("Hurt.mp3")).play(game.getSoundVolume());
         }
     }
 
