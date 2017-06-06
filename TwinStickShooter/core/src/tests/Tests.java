@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.drfl.twinstickshooter.TSSGame;
 import com.drfl.twinstickshooter.controller.TSSController;
 import com.drfl.twinstickshooter.model.TSSModel;
+import com.drfl.twinstickshooter.model.entities.EnemyModel;
 import com.drfl.twinstickshooter.model.entities.EnemySpawnerModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
 import com.drfl.twinstickshooter.view.entities.EnemyView;
@@ -34,6 +35,18 @@ public class Tests{
         model.setMainChar(new MainCharModel(0,0,0));
 
         controller = TSSController.initInstance();
+    }
+
+    @Test
+    public void testScore(){
+        model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
+        controller.spawnTestEnemy(0);
+
+        int score = model.getScore();
+
+        model.getEnemies().get(0).removeHitpoints(EnemyModel.getHpMax());
+
+        assertNotEquals(score,model.getScore());
     }
 
     @Test(timeout=2000)
