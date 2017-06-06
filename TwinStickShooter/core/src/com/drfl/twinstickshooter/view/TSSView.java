@@ -145,7 +145,7 @@ public class TSSView extends ScreenAdapter {
         TSSModel.initInstance();
         TSSModel.getInstance().createEntityModels(map.getLayers().get("Entities"));
 
-        TSSController.initInstance();
+        TSSController.initInstance(this.game);
         TSSController.getInstance().createTileEntities(map.getLayers().get("Collision"));
 
         camera = createCamera();

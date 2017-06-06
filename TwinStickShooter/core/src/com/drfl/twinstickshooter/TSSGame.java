@@ -17,6 +17,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 
 /**
@@ -64,6 +65,8 @@ public class TSSGame extends Game {
 
         loadScore();
 
+//        addScore("", 1);
+
         stateM = new TSSState(TSSState.GameState.MAIN_MENU, this);
         TSSMainMenu menu = new TSSMainMenu(this);
         setScreen(menu);
@@ -84,6 +87,14 @@ public class TSSGame extends Game {
             Json json = new Json();
             this.scores = json.fromJson(Array.class, handle);
         }
+    }
+
+    private void addScore(String name, int score) {
+
+        //TODO add score here
+
+        this.scores.sort();
+        System.out.println(this.scores.toString());
     }
 
     /**

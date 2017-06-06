@@ -30,10 +30,12 @@ public class Tests{
 
         game = new TSSGame();
 
+        game.setSoundVolume(0);
+
         model = TSSModel.initInstance();
         model.setMainChar(new MainCharModel(0,0,0));
 
-        controller = TSSController.initInstance();
+        controller = TSSController.initInstance(game);
     }
 
     @Test(timeout=2000)

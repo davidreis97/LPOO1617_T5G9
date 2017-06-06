@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class TSSScore {
+public class TSSScore implements Comparable<TSSScore> {
 
     private String name;
     private int score;
@@ -24,5 +24,18 @@ public class TSSScore {
     @Override
     public String toString() {
         return new String(this.name + "\n" + this.score + "\n" + this.date);
+    }
+
+    @Override
+    public int compareTo(TSSScore o) {
+
+        if(this.score < o.score) {
+            System.out.println("compare");
+            return 1;
+        } else if(this.score > o.score) {
+            return -1;
+        }
+
+        return 0;
     }
 }
