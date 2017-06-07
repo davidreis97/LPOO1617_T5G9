@@ -54,8 +54,8 @@ public class TSSGameOver extends ScreenAdapter {
 
         private void startMusic() {
 
-            ((Music)game.getAssetManager().get("GameOver.wav")).setVolume(game.getMusicVolume());
-            ((Music)game.getAssetManager().get("GameOver.wav")).play();
+            ((Music)game.getAssetManager().get("GameOver.ogg")).setVolume(game.getMusicVolume());
+            ((Music)game.getAssetManager().get("GameOver.ogg")).play();
         }
 
         private OrthographicCamera createCamera() {
@@ -70,7 +70,7 @@ public class TSSGameOver extends ScreenAdapter {
         private void loadAssets() {
 
             this.game.getAssetManager().load( "GameOver.png" , Texture.class);
-            this.game.getAssetManager().load("GameOver.wav", Music.class);
+            this.game.getAssetManager().load("GameOver.ogg", Music.class);
             this.game.getAssetManager().finishLoading();
         }
 
@@ -118,6 +118,6 @@ public class TSSGameOver extends ScreenAdapter {
         @Override
         public void dispose() {
             game.getAssetManager().unload("GameOver.png");
-            game.getAssetManager().unload("GameOver.wav");
+            game.getAssetManager().unload("GameOver.ogg");
         }
 }

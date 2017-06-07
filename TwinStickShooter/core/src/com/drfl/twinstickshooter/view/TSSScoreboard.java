@@ -72,9 +72,9 @@ public class TSSScoreboard extends ScreenAdapter {
 
     private void startMusic() {
 
-        ((Music)game.getAssetManager().get("Menu.wav")).setLooping(true);
-        ((Music)game.getAssetManager().get("Menu.wav")).setVolume(game.getMusicVolume());
-        ((Music)game.getAssetManager().get("Menu.wav")).play();
+        ((Music)game.getAssetManager().get("Menu.ogg")).setLooping(true);
+        ((Music)game.getAssetManager().get("Menu.ogg")).setVolume(game.getMusicVolume());
+        ((Music)game.getAssetManager().get("Menu.ogg")).play();
     }
 
     @Override
@@ -179,7 +179,7 @@ public class TSSScoreboard extends ScreenAdapter {
     private void loadAssets() {
 
         this.game.getAssetManager().load( "MainMenuBack.jpg" , Texture.class);
-        this.game.getAssetManager().load("Menu.wav", Music.class);
+        this.game.getAssetManager().load("Menu.ogg", Music.class);
         this.game.getAssetManager().finishLoading();
     }
 
@@ -229,7 +229,7 @@ public class TSSScoreboard extends ScreenAdapter {
     public void dispose() {
         game.getStage().dispose();
         game.getAssetManager().unload("MainMenuBack.jpg");
-        game.getAssetManager().unload("Menu.wav");
+        game.getAssetManager().unload("Menu.ogg");
         skin.dispose();
     }
 }

@@ -163,17 +163,17 @@ public class TSSView extends ScreenAdapter {
 
     private void startMusic() {
 
-        ((Music)game.getAssetManager().get("GameIntro.wav")).setOnCompletionListener(new Music.OnCompletionListener() {
+        ((Music)game.getAssetManager().get("GameIntro.ogg")).setOnCompletionListener(new Music.OnCompletionListener() {
             @Override
             public void onCompletion(Music music) {
-                ((Music)game.getAssetManager().get("Game.wav")).setLooping(true);
-                ((Music)game.getAssetManager().get("Game.wav")).setVolume(game.getMusicVolume());
-                ((Music)game.getAssetManager().get("Game.wav")).play();
+                ((Music)game.getAssetManager().get("Game.ogg")).setLooping(true);
+                ((Music)game.getAssetManager().get("Game.ogg")).setVolume(game.getMusicVolume());
+                ((Music)game.getAssetManager().get("Game.ogg")).play();
             }
         });
 
-        ((Music)game.getAssetManager().get("GameIntro.wav")).setVolume(game.getMusicVolume());
-        ((Music)game.getAssetManager().get("GameIntro.wav")).play();
+        ((Music)game.getAssetManager().get("GameIntro.ogg")).setVolume(game.getMusicVolume());
+        ((Music)game.getAssetManager().get("GameIntro.ogg")).play();
     }
 
     @Override
@@ -219,8 +219,8 @@ public class TSSView extends ScreenAdapter {
         this.game.getAssetManager().load("Heart.png", Texture.class);
         this.game.getAssetManager().load("Bullet.png", Texture.class); //NOTEME add more bullet types if adding more weapons
 
-        this.game.getAssetManager().load("GameIntro.wav", Music.class);
-        this.game.getAssetManager().load("Game.wav", Music.class);
+        this.game.getAssetManager().load("GameIntro.ogg", Music.class);
+        this.game.getAssetManager().load("Game.ogg", Music.class);
 
         //Tile map loading
         this.game.getAssetManager().setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
@@ -377,8 +377,8 @@ public class TSSView extends ScreenAdapter {
         this.game.getStage().dispose();
         this.skin.dispose();
         this.shader.dispose();
-        game.getAssetManager().unload("Game.wav");
-        game.getAssetManager().unload("GameIntro.wav");
+        game.getAssetManager().unload("Game.ogg");
+        game.getAssetManager().unload("GameIntro.ogg");
     }
 
     public TSSGame getGame() {
