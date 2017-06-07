@@ -122,11 +122,11 @@ public class TSSView extends ScreenAdapter {
      */
     private ArrayList<EnemyView> enemies = new ArrayList<EnemyView>();
 
-    private final Viewport viewport;
-
     Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
     private Label score;
+
+    private final Viewport viewport;
 
     /**
      * Create game view using libGDX screen
@@ -184,7 +184,6 @@ public class TSSView extends ScreenAdapter {
         Gdx.input.setInputProcessor(game.getStage());
 
         score = new Label("Score: 0", skin);
-//        score.setPosition(10.0f, Gdx.graphics.getHeight() - score.getHeight());
 
         game.getStage().addActor(score);
     }
