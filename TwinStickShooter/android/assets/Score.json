@@ -5,4 +5,10 @@
 	score: 200
 	date: 2017/06/07
 }
+{
+	class: com.drfl.twinstickshooter.TSSScore
+	name: a
+	score: 100
+	date: 2017/06/07
+}
 ]

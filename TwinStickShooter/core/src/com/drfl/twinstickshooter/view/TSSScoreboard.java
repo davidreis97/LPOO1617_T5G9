@@ -22,23 +22,6 @@ import com.drfl.twinstickshooter.model.TSSModel;
 public class TSSScoreboard extends ScreenAdapter {
 
     /**
-     * Tileset size. (must be square tiles)
-     */
-    public static final int TILESIZE = 32; //32x32
-
-    /**
-     * Every tile is a meter.
-     */
-    public static final float PIXEL_TO_METER = 1.0f / TILESIZE;
-
-    /**
-     * The width of the viewport in meters (equivalent to number of tiles). The height is
-     * automatically calculated using the screen ratio.
-     */
-    private static final float VIEWPORT_WIDTH = 40;
-    private static final float VIEWPORT_HEIGHT = 22.5f;
-
-    /**
      * The game this screen belongs to.
      */
     private final TSSGame game;
@@ -116,7 +99,7 @@ public class TSSScoreboard extends ScreenAdapter {
 
         nameTitle = new Label("Input name:", skin);
         nameTitle.setSize(0.25f * Gdx.graphics.getWidth(), nameTitle.getHeight());
-        nameTitle.setPosition(Gdx.graphics.getWidth() / 2.0f - nameTitle.getWidth() / 2.0f, nameTitle.getHeight() / 2.0f + nameField.getHeight());
+        nameTitle.setPosition(Gdx.graphics.getWidth() / 2.0f - nameTitle.getWidth() / 2.0f, nameTitle.getHeight() / 1.0f + nameField.getHeight());
 
         Array<TSSScore> scores = game.getScores();
 
@@ -169,7 +152,7 @@ public class TSSScoreboard extends ScreenAdapter {
 
     private OrthographicCamera createCamera() {
 
-        OrthographicCamera camera = new OrthographicCamera(VIEWPORT_WIDTH / PIXEL_TO_METER, VIEWPORT_HEIGHT / PIXEL_TO_METER);
+        OrthographicCamera camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
 

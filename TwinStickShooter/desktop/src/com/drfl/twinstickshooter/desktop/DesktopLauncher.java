@@ -12,6 +12,10 @@ public class DesktopLauncher {
 		config.useGL30 = false;
 		config.width = 1280;
 		config.height = 720;
+//        config.width = 1920;
+//        config.height = 1080;
+//        config.width = 1024;
+//        config.height = 768;
 		config.resizable = false;
 		
 		new LwjglApplication(new TSSGame(), config);

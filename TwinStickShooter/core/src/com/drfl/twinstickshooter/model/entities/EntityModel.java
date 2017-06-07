@@ -1,8 +1,5 @@
 package com.drfl.twinstickshooter.model.entities;
 
-import com.badlogic.gdx.math.Vector2;
-import com.drfl.twinstickshooter.model.TSSModel;
-
 /**
  * Abstract model for representing entities in a game model.
  */
@@ -10,7 +7,7 @@ public abstract class EntityModel {
     public enum ModelType {MAINCHAR, BULLET, SPAWNER, ENEMY};
     public enum AnimDirection {NONE, DOWN, LEFT, RIGHT, UP};
 
-    private static final int HP_MAX = 15;
+    private static final int HP_MAX = 5;
 
     /**
      * The x-coordinate of this model in meters.

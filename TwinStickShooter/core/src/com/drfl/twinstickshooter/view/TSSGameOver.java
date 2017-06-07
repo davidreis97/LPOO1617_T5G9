@@ -13,23 +13,6 @@ import com.drfl.twinstickshooter.model.TSSModel;
 public class TSSGameOver extends ScreenAdapter {
 
         /**
-         * Tileset size. (must be square tiles)
-         */
-        public static final int TILESIZE = 32; //32x32
-
-        /**
-         * Every tile is a meter.
-         */
-        public static final float PIXEL_TO_METER = 1.0f / TILESIZE;
-
-        /**
-         * The width of the viewport in meters (equivalent to number of tiles). The height is
-         * automatically calculated using the screen ratio.
-         */
-        private static final float VIEWPORT_WIDTH = 40;
-        private static final float VIEWPORT_HEIGHT = 22.5f;
-
-        /**
          * The game this screen belongs to.
          */
         private final TSSGame game;
@@ -60,7 +43,7 @@ public class TSSGameOver extends ScreenAdapter {
 
         private OrthographicCamera createCamera() {
 
-            OrthographicCamera camera = new OrthographicCamera(VIEWPORT_WIDTH / PIXEL_TO_METER, VIEWPORT_HEIGHT / PIXEL_TO_METER);
+            OrthographicCamera camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
             camera.update();
 
