@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.SerializationException;
 import com.drfl.twinstickshooter.view.TSSMainMenu;
 
 import java.io.BufferedWriter;
@@ -78,7 +79,12 @@ public class TSSGame extends Game {
         FileHandle handle = Gdx.files.local("Score.json");
         if(handle.exists()) {
             Json json = new Json();
-            this.scores = json.fromJson(Array.class, handle);
+            try {
+                this.scores = json.fromJson(Array.class, handle);
+            } catch(SerializationException e) {
+                this.scores = new Array<TSSScore>();
+                e.printStackTrace();
+            }
         }
     }
 
