@@ -35,6 +35,7 @@ public class TSSScoreboard extends ScreenAdapter {
 
     private TextField nameField;
     private Label nameTitle;
+    private Label warning;
     private TextButton accept;
     private Array<Label> scoreLabel = new Array<Label>();
 
@@ -71,11 +72,11 @@ public class TSSScoreboard extends ScreenAdapter {
 
         nameField = new TextField("", skin);
         nameField.setSize(0.25f * Gdx.graphics.getWidth(),0.05f * Gdx.graphics.getHeight());
-        nameField.setPosition(Gdx.graphics.getWidth() / 2.0f - nameField.getWidth() / 2.0f,  nameField.getHeight() / 2.0f);
+        nameField.setPosition(Gdx.graphics.getWidth() / 2.0f - nameField.getWidth() / 2.0f, nameField.getHeight() / 2.0f);
 
         accept = new TextButton("OK", skin);
         accept.setSize(accept.getWidth(),0.05f * Gdx.graphics.getHeight());
-        accept.setPosition(Gdx.graphics.getWidth() / 2.0f + nameField.getWidth() / 2.0f,  nameField.getHeight() / 2.0f);
+        accept.setPosition(Gdx.graphics.getWidth() / 2.0f + nameField.getWidth() / 2.0f, nameField.getHeight() / 2.0f);
         accept.addListener(new ClickListener() {
 
             @Override
@@ -91,15 +92,20 @@ public class TSSScoreboard extends ScreenAdapter {
                         TSSModel.getInstance().setScore(0);
 
                         game.getStateM().processState(TSSState.GameEvent.MAIN);
-                    }
+                    } else warning.setText("Invalid name!");
                 }
                 return false;
             }
         });
 
+        warning = new Label("", skin);
+        warning.setSize(warning.getWidth(),0.05f * Gdx.graphics.getHeight());
+        warning.setPosition(Gdx.graphics.getWidth() / 2.0f + nameField.getWidth() / 2.0f + accept.getWidth(), nameField.getHeight() / 2.0f);
+        warning.setColor(Color.RED);
+
         nameTitle = new Label("Input name:", skin);
         nameTitle.setSize(0.25f * Gdx.graphics.getWidth(), nameTitle.getHeight());
-        nameTitle.setPosition(Gdx.graphics.getWidth() / 2.0f - nameTitle.getWidth() / 2.0f, nameTitle.getHeight() / 1.0f + nameField.getHeight());
+        nameTitle.setPosition(Gdx.graphics.getWidth() / 2.0f - nameTitle.getWidth() / 2.0f,nameTitle.getHeight() + nameField.getHeight());
 
         Array<TSSScore> scores = game.getScores();
 
@@ -143,6 +149,7 @@ public class TSSScoreboard extends ScreenAdapter {
 
         game.getStage().addActor(nameField);
         game.getStage().addActor(accept);
+        game.getStage().addActor(warning);
         game.getStage().addActor(nameTitle);
 
         for(Label label : scoreLabel) {

@@ -1,15 +1,13 @@
 package com.drfl.twinstickshooter;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.drfl.twinstickshooter.view.TSSGameOver;
-import com.drfl.twinstickshooter.view.TSSMainMenu;
-import com.drfl.twinstickshooter.view.TSSScoreboard;
-import com.drfl.twinstickshooter.view.TSSView;
+import com.drfl.twinstickshooter.view.*;
 
 public class TSSState {
 
-    public enum GameState {MAIN_MENU, PLAYING, GAME_OVER, SCOREBOARD}
-    public enum GameEvent {START, MC_DIED, MAIN, HIGHSCORE, EXIT}
+    public enum GameState {MAIN_MENU, PLAYING, GAME_OVER, SCOREBOARD, MAP_SELECT}
+    public enum GameEvent {START, MC_DIED, MAIN, HIGHSCORE, EXIT, CHOOSE}
 
     private GameState currState;
     private final TSSGame game;
@@ -24,17 +22,25 @@ public class TSSState {
         switch(currState) {
 
             case MAIN_MENU:
-                if(event == GameEvent.START) { //Transit to game screen
-                    this.currState = GameState.PLAYING;
-                    TSSView gameScreen = new TSSView(game);
-                    gameScreen.setInstance(gameScreen);
-                    game.setScreen(gameScreen);
+                if(event == GameEvent.START) { //Transit to map select screen
+                    this.currState = GameState.MAP_SELECT;
+                    TSSMapSelect select = new TSSMapSelect(game);
+                    game.setScreen(select);
                 } else if(event == GameEvent.HIGHSCORE) { //Transit to scoreboard
                     this.currState = GameState.SCOREBOARD;
                     TSSScoreboard scoreScreen = new TSSScoreboard(game);
                     game.setScreen(scoreScreen);
                 } else if(event == GameEvent.EXIT) {
                     Gdx.app.exit();
+                }
+            break;
+
+            case MAP_SELECT:
+                if(event == GameEvent.CHOOSE) { //Transit to game screen
+                    this.currState = GameState.PLAYING;
+                    TSSView gameScreen = new TSSView(game);
+                    gameScreen.setInstance(gameScreen);
+                    game.setScreen(gameScreen);
                 }
             break;
 

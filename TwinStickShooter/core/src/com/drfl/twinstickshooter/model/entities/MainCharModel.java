@@ -8,6 +8,8 @@ import static com.drfl.twinstickshooter.view.TSSView.TILESIZE;
  */
 public class MainCharModel extends EntityModel {
 
+    private boolean isDead = false;
+
     /**
      * Creates a new ship model in a certain position and having a certain rotation.
      *
@@ -22,5 +24,13 @@ public class MainCharModel extends EntityModel {
     @Override
     public ModelType getType() {
         return ModelType.MAINCHAR;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
     }
 }

@@ -20,10 +20,18 @@ public class ViewFactory {
 
         if (!cache.containsKey(model.getType())) {
 
-            if (model.getType() == MAINCHAR) cache.put(model.getType(), new MainCharView(game));
-            if (model.getType() == BULLET) cache.put(model.getType(), new BulletView(game));
+            if (model.getType() == MAINCHAR) {
+                cache.put(model.getType(), new MainCharView(game));
+            }
+            if (model.getType() == BULLET) {
+                cache.put(model.getType(), new BulletView(game));
+            }
         }
 
         return cache.get(model.getType());
+    }
+
+    public static void initViewFactory() {
+        cache = new HashMap<EntityModel.ModelType, EntityView>();
     }
 }

@@ -444,7 +444,7 @@ public class TSSController implements ContactListener {
         if(((MainCharModel)mainCharBody.getUserData()).getHitpoints() <= 0) {
             ((Sound) TSSView.getInstance().getGame().getAssetManager().get("Shoot.mp3")).stop();
             ((Sound) TSSView.getInstance().getGame().getAssetManager().get("Hurt.mp3")).stop();
-            TSSView.getInstance().getGame().getStateM().processState(TSSState.GameEvent.MC_DIED);
+            ((MainCharModel)mainCharBody.getUserData()).setDead(true);
             return;
         }
 

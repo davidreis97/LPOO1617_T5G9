@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.drfl.twinstickshooter.TSSGame;
 import com.drfl.twinstickshooter.TSSGamePad;
+import com.drfl.twinstickshooter.TSSState;
 import com.drfl.twinstickshooter.controller.TSSController;
 import com.drfl.twinstickshooter.model.TSSModel;
 import com.drfl.twinstickshooter.model.entities.BulletModel;
@@ -123,6 +124,7 @@ public class TSSView extends ScreenAdapter {
     private ArrayList<EnemyView> enemies = new ArrayList<EnemyView>();
 
     Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+    Texture health;
 
     private Label score;
 
@@ -136,17 +138,17 @@ public class TSSView extends ScreenAdapter {
 
         this.game = game;
 
+        ViewFactory.initViewFactory();
+
         loadAssets();
 
         startMusic();
 
-        TiledMap map = game.getAssetManager().get("Badlands.tmx");
-
         TSSModel.initInstance();
-        TSSModel.getInstance().createEntityModels(map.getLayers().get("Entities"));
+        TSSModel.getInstance().createEntityModels(game.getCurrentMap().getLayers().get("Entities"));
 
         TSSController.initInstance(this.game);
-        TSSController.getInstance().createTileEntities(map.getLayers().get("Collision"));
+        TSSController.getInstance().createTileEntities(game.getCurrentMap().getLayers().get("Collision"));
 
         camera = createCamera();
 
@@ -221,10 +223,6 @@ public class TSSView extends ScreenAdapter {
         this.game.getAssetManager().load("GameIntro.ogg", Music.class);
         this.game.getAssetManager().load("Game.ogg", Music.class);
 
-        //Tile map loading
-        this.game.getAssetManager().setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        this.game.getAssetManager().load("Badlands.tmx", TiledMap.class);
-
         this.game.getAssetManager().finishLoading();
     }
 
@@ -235,6 +233,11 @@ public class TSSView extends ScreenAdapter {
      */
     @Override
     public void render(float delta) {
+
+        if(TSSModel.getInstance().getMainChar().isDead()) {
+            game.getStateM().processState(TSSState.GameEvent.MC_DIED);
+            return;
+        }
 
         TSSController.getInstance().removeFlagged();
         TSSController.getInstance().removeDead();
@@ -268,7 +271,7 @@ public class TSSView extends ScreenAdapter {
 
     private void drawHUD() {
 
-        Texture health = game.getAssetManager().get("Heart.png");
+        health = game.getAssetManager().get("Heart.png");
         int width = Math.round(health.getWidth() * TSSModel.getInstance().getMainChar().getHitpoints() / EntityModel.getHpMax());
 
         TextureRegion healthRegion = new TextureRegion(health, 0, 0, width, health.getHeight());
@@ -350,9 +353,7 @@ public class TSSView extends ScreenAdapter {
      */
     private void drawTileMap(SpriteBatch batch) {
 
-        TiledMap map = game.getAssetManager().get("Badlands.tmx");
-
-        OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map, batch);
+        OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(game.getCurrentMap(), batch);
         renderer.setView(camera);
         renderer.render();
     }
@@ -376,8 +377,13 @@ public class TSSView extends ScreenAdapter {
         this.game.getStage().dispose();
         this.skin.dispose();
         this.shader.dispose();
+        health.dispose();
         game.getAssetManager().unload("Game.ogg");
         game.getAssetManager().unload("GameIntro.ogg");
+        game.getAssetManager().unload("Pistolero.png");
+        game.getAssetManager().unload("Rogue.png");
+        game.getAssetManager().unload("Heart.png");
+        game.getAssetManager().unload("Bullet.png");
     }
 
     public TSSGame getGame() {

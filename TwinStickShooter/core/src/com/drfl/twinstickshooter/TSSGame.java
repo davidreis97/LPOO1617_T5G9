@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
@@ -44,6 +45,7 @@ public class TSSGame extends Game {
 	private float musicVolume = 0.60f;
 	private float soundVolume = 0.35f;
 	private Array<TSSScore> scores = new Array<TSSScore>();
+	private TiledMap currentMap;
 
     /**
      * Initializes sprite batch and asset manager, starts the game
@@ -160,6 +162,7 @@ public class TSSGame extends Game {
 		batch.dispose();
 		assetManager.dispose();
 		server.dispose();
+		currentMap.dispose();
 	}
 
     /**
@@ -240,5 +243,13 @@ public class TSSGame extends Game {
         }
 
         return false;
+    }
+
+    public TiledMap getCurrentMap() {
+        return currentMap;
+    }
+
+    public void setCurrentMap(TiledMap currentMap) {
+        this.currentMap = currentMap;
     }
 }
