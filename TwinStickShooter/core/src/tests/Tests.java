@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.Array;
 import com.drfl.twinstickshooter.TSSGame;
 import com.drfl.twinstickshooter.controller.TSSController;
 import com.drfl.twinstickshooter.model.TSSModel;
-import com.drfl.twinstickshooter.model.entities.EnemyModel;
 import com.drfl.twinstickshooter.model.entities.EnemySpawnerModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
 
@@ -41,27 +40,31 @@ public class Tests{
     public void testScore() {
 
         model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
-        controller.spawnTestEnemy(0);
+
+        controller.update(controller.getSpawnMaxCool()); //Guarantee enemy spawn
+        controller.update(controller.getSpawnMaxCool());
 
         int score = model.getScore();
 
-        model.getEnemies().get(0).removeHitpoints(EnemyModel.getHpMax());
+        model.getEnemies().get(0).removeHitpoints(model.getEnemies().get(0).getHitpoints());
 
-        assertNotEquals(score,model.getScore());
+        assertNotEquals(score, model.getScore());
     }
 
-    @Test(timeout=2000)
+    @Test(timeout = 2000)
     public void testEnemyMovement() {
 
         Vector2 finalPos, initialPos;
         model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
-        controller.spawnTestEnemy(0);
 
-        do{
-            finalPos = new Vector2(model.getEnemies().get(0).getX(),model.getEnemies().get(0).getY());
+        controller.update(controller.getSpawnMaxCool()); //Guarantee enemy spawn
+        controller.update(controller.getSpawnMaxCool());
+
+        do {
+            finalPos = new Vector2(model.getEnemies().get(0).getX(), model.getEnemies().get(0).getY());
             controller.update(50);
-            initialPos = new Vector2(model.getEnemies().get(0).getX(),model.getEnemies().get(0).getY());
-        }while(finalPos == initialPos);
+            initialPos = new Vector2(model.getEnemies().get(0).getX(), model.getEnemies().get(0).getY());
+        } while(finalPos == initialPos);
 
         assertTrue(true);
     }
@@ -70,7 +73,9 @@ public class Tests{
     public void testEnemyAutoShootPlayer() {
 
         model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
-        controller.spawnTestEnemy(0);
+
+        controller.update(controller.getSpawnMaxCool()); //Guarantee enemy spawn
+        controller.update(controller.getSpawnMaxCool());
 
         int oldHitpoints = model.getMainChar().getHitpoints();
 
@@ -83,7 +88,9 @@ public class Tests{
     public void testBulletsEnemy() {
 
         model.getEnemySpawners().add(new EnemySpawnerModel(1.5f,0));
-        controller.spawnTestEnemy(0);
+
+        controller.update(controller.getSpawnMaxCool()); //Guarantee enemy spawn
+        controller.update(controller.getSpawnMaxCool());
 
         int oldHitpoints = model.getEnemies().get(0).getHitpoints();
 

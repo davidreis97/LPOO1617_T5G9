@@ -1,8 +1,26 @@
 [
 {
 	class: com.drfl.twinstickshooter.TSSScore
+	name: Cold One
+	score: 1500
+	date: 2017/06/08
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
+	name: Controller G
+	score: 1400
+	date: 2017/06/08
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
 	name: Master
 	score: 1300
+	date: 2017/06/08
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
+	name: Pepperoni
+	score: 1000
 	date: 2017/06/08
 }
 {
@@ -39,24 +57,6 @@
 	class: com.drfl.twinstickshooter.TSSScore
 	name: Loser
 	score: 200
-	date: 2017/06/07
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: a
-	score: 100
-	date: 2017/06/07
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: Winner
-	score: 100
-	date: 2017/06/07
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: Hello
-	score: 100
 	date: 2017/06/07
 }
 ]

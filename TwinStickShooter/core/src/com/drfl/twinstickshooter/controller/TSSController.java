@@ -38,6 +38,30 @@ public class TSSController implements ContactListener {
 
     //NOTEME javadoc
     /**
+     * The speed of bullets for all entities.
+     */
+    private static final float BULLET_SPEED = 20f;
+
+    //NOTEME javadoc
+    /**
+     * Regular pitch for playing sounds
+     */
+    private static final float NORMAL_PITCH = 1.0f;
+
+    //NOTEME javadoc
+    /**
+     * Enemy bullet SFX pitch
+     */
+    private static final float ENEMY_BULLET_PITCH = 1.6f;
+
+    //NOTEME javadoc
+    /**
+     * Bullet damage
+     */
+    private static int BULLET_DAMAGE = 5;
+
+    //NOTEME javadoc
+    /**
      * Max cooldown for enemy spawning.
      */
     private static final float SPAWN_MAX_COOL = 4.0f;
@@ -47,12 +71,6 @@ public class TSSController implements ContactListener {
      * Current enemy spawning cooldown.
      */
     private float timeToNextSpawn = SPAWN_MAX_COOL;
-
-    //NOTEME javadoc
-    /**
-     * The speed of bullets for all entities.
-     */
-    private static final float BULLET_SPEED = 20f;
 
     //NOTEME javadoc
     /**
@@ -83,6 +101,12 @@ public class TSSController implements ContactListener {
      * Accumulator used to calculate the simulation step.
      */
     private float accumulator;
+
+    //NOTEME javadoc
+    /**
+     * Flags whether an enemy has been spawned recently, reset by accessing it through getter method.
+     */
+    private boolean spawned = false;
 
     //NOTEME javadoc
     /**
@@ -136,15 +160,6 @@ public class TSSController implements ContactListener {
                                 object.getProperties().get("y", float.class),
                                 object.getProperties().get("width", float.class),
                                 object.getProperties().get("height", float.class));
-        }
-    }
-
-    //TODO can remove?
-    public void spawnTestEnemy(int spawnIndex) {
-
-        if(spawnIndex != -1) {
-            EnemyModel enemy = TSSModel.getInstance().createTestEnemy(spawnIndex);
-            enemies.add(new EnemyBody(world, enemy));
         }
     }
 
@@ -236,7 +251,7 @@ public class TSSController implements ContactListener {
         doMove(mainCharBody, ((MainCharModel) mainCharBody.getUserData()).getMoveDirection());
 
         if(tryShoot((MainCharModel) mainCharBody.getUserData(), delta)) {
-            if(game.getSoundVolume() > 0 ) playSFX(((Sound) game.getAssetManager().get("Shoot.mp3")), game.getSoundVolume(), 1.0f, 0); //TODO magic value
+            if(game.getSoundVolume() > 0 ) playSFX(((Sound) game.getAssetManager().get("Shoot.mp3")), game.getSoundVolume(), NORMAL_PITCH, 0);
         }
     }
 
@@ -259,7 +274,7 @@ public class TSSController implements ContactListener {
             ((EnemyModel)enemy.getUserData()).setShootDirection(shootToPlayer((MainCharModel)mainCharBody.getUserData(), (EnemyModel)enemy.getUserData()));
 
             if(tryShoot((EnemyModel) enemy.getUserData(), delta)) {
-                if(game.getSoundVolume() > 0) playSFX((Sound) game.getAssetManager().get("Shoot.mp3"), game.getSoundVolume(), 1.6f, 0); //TODO magic value
+                if(game.getSoundVolume() > 0) playSFX((Sound) game.getAssetManager().get("Shoot.mp3"), game.getSoundVolume(), ENEMY_BULLET_PITCH, 0);
             }
         }
     }
@@ -280,8 +295,10 @@ public class TSSController implements ContactListener {
 
         int spawnIndex = TSSModel.getInstance().createSpawnIndex();
 
-        if(spawnIndex != -1) { //TODO remove magic value
+        if(spawnIndex != -1) {
+
             EnemyModel enemy = TSSModel.getInstance().createEnemy(spawnIndex);
+            this.spawned = true;
             enemies.add(new EnemyBody(world, enemy));
         }
 
@@ -455,7 +472,7 @@ public class TSSController implements ContactListener {
 
         if(bullet.getOwner().equals(EntityModel.ModelType.MAINCHAR)) {
             enemy.setHurt(true);
-            enemy.removeHitpoints(5); //TODO magic value
+            enemy.removeHitpoints(BULLET_DAMAGE);
         }
     }
 
@@ -478,7 +495,7 @@ public class TSSController implements ContactListener {
         if(bullet.getOwner().equals(EntityModel.ModelType.ENEMY)) {
 
             ((MainCharModel)mainChar.getUserData()).setHurt(true);
-            ((MainCharModel)mainChar.getUserData()).removeHitpoints(5); //TODO magic value
+            ((MainCharModel)mainChar.getUserData()).removeHitpoints(BULLET_DAMAGE);
             if(game.getSoundVolume() > 0) playSFX((Sound) game.getAssetManager().get("Hurt.mp3"), game.getSoundVolume(), 1.0f, 0);
         }
     }
@@ -518,12 +535,14 @@ public class TSSController implements ContactListener {
      * Removes entities whose HP is <= 0. For main char sets dead flag,
      * for enemies removes them from model and destroys Box2D body.
      */
-    public void removeDead() {
+    public Array<Integer> removeDead() {
+
+        Array<Integer> deadIndex = new Array<>();
 
         if(((MainCharModel)mainCharBody.getUserData()).getHitpoints() <= 0) {
             stopSFX();
             ((MainCharModel)mainCharBody.getUserData()).setDead(true);
-            return;
+            return deadIndex;
         }
 
         for(int i = enemies.size() - 1; i >= 0; i--) {
@@ -531,10 +550,13 @@ public class TSSController implements ContactListener {
             if(((EnemyModel)enemies.get(i).getUserData()).getHitpoints() <= 0) {
 
                 TSSModel.getInstance().removeEnemy(i);
+                deadIndex.add(i);
                 world.destroyBody(enemies.get(i).getBody());
                 enemies.remove(i);
             }
         }
+
+        return deadIndex;
     }
 
     //NOTEME javadoc
@@ -543,6 +565,26 @@ public class TSSController implements ContactListener {
      */
     public World getWorld() {
         return this.world;
+    }
+
+    //NOTEME javadoc
+    /**
+     * @return returns enemy spawn flag and resets it
+     */
+    public boolean isSpawned() {
+
+        if(this.spawned) {
+            this.spawned = false;
+            return true;
+        } else return false;
+    }
+
+    //NOTEME javadoc
+    /**
+     * @return enemy spawn max cooldown in seconds
+     */
+    public static float getSpawnMaxCool() {
+        return SPAWN_MAX_COOL;
     }
 
     @Override

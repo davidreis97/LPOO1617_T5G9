@@ -101,15 +101,6 @@ public class TSSModel {
         }
     }
 
-    public EnemyModel createTestEnemy(int index) {
-
-        enemySpawners.get(index).setSpawned(true);
-
-        enemies.add(new EnemyModel(enemySpawners.get(index).getX(), enemySpawners.get(index).getY(), 0));
-
-        return enemies.get(enemies.size() - 1);
-    }
-
     public BulletModel createBullet(EntityModel owner, Vector2 direction) {
 
         BulletModel bullet = bulletPool.obtain();
@@ -124,8 +115,6 @@ public class TSSModel {
         if(owner instanceof MainCharModel) {
             bullet.setOwner(EntityModel.ModelType.MAINCHAR);
         } else bullet.setOwner(EntityModel.ModelType.ENEMY);
-
-//      bullet.setTimeToLive(.5f); //NOTEME needed if implementing weapons with decaying bullets
 
         bullet.setBulletDirection(direction);
         bullets.add(bullet);
@@ -142,10 +131,7 @@ public class TSSModel {
     public EnemyModel createEnemy(int index) {
 
         enemySpawners.get(index).setSpawned(true);
-
         enemies.add(new EnemyModel(enemySpawners.get(index).getX(), enemySpawners.get(index).getY(), 0));
-
-        TSSView.getInstance().addEnemyView();
 
         return enemies.get(enemies.size() - 1);
     }
@@ -241,7 +227,6 @@ public class TSSModel {
 
         resetSpawner();
         enemies.remove(index);
-        TSSView.getInstance().removeEnemyView(index);
     }
 
     public static void setInstance(TSSModel instance) {

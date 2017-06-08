@@ -3,7 +3,6 @@ package com.drfl.twinstickshooter.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,8 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
@@ -20,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.drfl.twinstickshooter.TSSGame;
@@ -218,7 +216,7 @@ public class TSSView extends ScreenAdapter {
         this.game.getAssetManager().load( "Pistolero.png" , Texture.class);
         this.game.getAssetManager().load( "Rogue.png" , Texture.class);
         this.game.getAssetManager().load("Heart.png", Texture.class);
-        this.game.getAssetManager().load("Bullet.png", Texture.class); //NOTEME add more bullet types if adding more weapons
+        this.game.getAssetManager().load("Bullet.png", Texture.class);
 
         this.game.getAssetManager().load("GameIntro.ogg", Music.class);
         this.game.getAssetManager().load("Game.ogg", Music.class);
@@ -234,17 +232,21 @@ public class TSSView extends ScreenAdapter {
     @Override
     public void render(float delta) {
 
+
+
         if(TSSModel.getInstance().getMainChar().isDead()) {
             game.getStateM().processState(TSSState.GameEvent.MC_DIED);
             return;
         }
 
         TSSController.getInstance().removeFlagged();
-        TSSController.getInstance().removeDead();
+        this.cleanEnemyView(TSSController.getInstance().removeDead());
 
         handleInputs();
 
         TSSController.getInstance().update(delta);
+
+        if(TSSController.getInstance().isSpawned()) addEnemyView();
 
         game.getBatch().setProjectionMatrix(camera.combined);
 
@@ -362,8 +364,11 @@ public class TSSView extends ScreenAdapter {
         enemies.add(new EnemyView(game));
     }
 
-    public void removeEnemyView(int index) {
-        enemies.remove(index);
+    private void cleanEnemyView(Array<Integer> deadIndex) {
+
+        for(Integer index : deadIndex) {
+            enemies.remove(index);
+        }
     }
 
     @Override
