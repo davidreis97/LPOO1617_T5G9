@@ -1,0 +1,9 @@
+component_depth: 4
+languages:
+- java
+exclude:
+- /android/.*
+- /build/.*
+- /desktop/.*
+- /gradle/.*
+- /ios/.*

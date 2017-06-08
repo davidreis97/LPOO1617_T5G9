@@ -274,7 +274,7 @@ public class TSSView extends ScreenAdapter {
     private void drawHUD() {
 
         health = game.getAssetManager().get("Heart.png");
-        int width = Math.round(health.getWidth() * TSSModel.getInstance().getMainChar().getHitpoints() / EntityModel.getHpMax());
+        int width = Math.round(health.getWidth() * TSSModel.getInstance().getMainChar().getHitpoints() / TSSModel.getInstance().getMainChar().getHPMax());
 
         TextureRegion healthRegion = new TextureRegion(health, 0, 0, width, health.getHeight());
 

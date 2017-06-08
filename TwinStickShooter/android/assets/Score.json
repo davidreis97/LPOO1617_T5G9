@@ -7,6 +7,12 @@
 }
 {
 	class: com.drfl.twinstickshooter.TSSScore
+	name: KBM
+	score: 2300
+	date: 2017/06/08
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
 	name: Cold One
 	score: 1500
 	date: 2017/06/08
@@ -50,12 +56,6 @@
 {
 	class: com.drfl.twinstickshooter.TSSScore
 	name: Mouse
-	score: 500
-	date: 2017/06/08
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: Zealot
 	score: 500
 	date: 2017/06/08
 }

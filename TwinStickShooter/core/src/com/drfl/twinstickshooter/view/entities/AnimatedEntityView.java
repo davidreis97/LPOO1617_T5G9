@@ -110,7 +110,7 @@ public abstract class AnimatedEntityView extends EntityView {
     public void update(EntityModel model) {
 
         super.update(model);
-        EntityModel.AnimDirection modelDir = model.getDirection();
+        EntityModel.AnimDirection modelDir = model.getAnimDirection();
 
         if(hurtTime < 0) {
             model.setHurt(false);
@@ -125,7 +125,7 @@ public abstract class AnimatedEntityView extends EntityView {
         }
 
         this.direction = modelDir;
-        model.setDirection(EntityModel.AnimDirection.NONE);
+        model.setAnimDirection(EntityModel.AnimDirection.NONE);
     }
 
     /**

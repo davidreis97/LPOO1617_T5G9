@@ -31,13 +31,13 @@ public class TSSController implements ContactListener {
     /**
      * The tile map width in meters.
      */
-    private static final int MAP_WIDTH = 40;
+    private static final float MAP_WIDTH = 40;
 
     //NOTEME javadoc
     /**
      * The tile map height in meters.
      */
-    private static final int MAP_HEIGHT = 21;
+    private static final float MAP_HEIGHT = 22.5f;
 
     //NOTEME javadoc
     /**
@@ -384,16 +384,16 @@ public class TSSController implements ContactListener {
     private void entityAnimateDirection(EntityModel model, float angle) {
 
         if((angle >= 0 && angle <= 45) || (angle > 315 && angle <= 360)) {
-            model.setDirection(EntityModel.AnimDirection.RIGHT);
+            model.setAnimDirection(EntityModel.AnimDirection.RIGHT);
 
         } else if(angle > 45 && angle <= 135) {
-            model.setDirection(EntityModel.AnimDirection.UP);
+            model.setAnimDirection(EntityModel.AnimDirection.UP);
 
         } else if(angle > 135 && angle <= 225) {
-            model.setDirection(EntityModel.AnimDirection.LEFT);
+            model.setAnimDirection(EntityModel.AnimDirection.LEFT);
 
         } else if(angle > 225 && angle <= 315) {
-            model.setDirection(EntityModel.AnimDirection.DOWN);
+            model.setAnimDirection(EntityModel.AnimDirection.DOWN);
         }
     }
 
