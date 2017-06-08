@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.drfl.twinstickshooter.TSSGame;
 import com.drfl.twinstickshooter.TSSGamePad;
 import com.drfl.twinstickshooter.TSSState;
+import com.drfl.twinstickshooter.model.TSSModel;
 
 import java.util.ArrayList;
 
@@ -69,6 +70,8 @@ public class TSSMainMenu extends ScreenAdapter {
         camera = createCamera();
 
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+
+        TSSModel.getInstance().setScore(0);
     }
 
     private void startMusic() {

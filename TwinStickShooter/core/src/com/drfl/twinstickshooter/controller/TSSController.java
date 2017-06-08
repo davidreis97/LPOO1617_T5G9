@@ -13,75 +13,82 @@ import com.drfl.twinstickshooter.model.entities.BulletModel;
 import com.drfl.twinstickshooter.model.entities.EnemyModel;
 import com.drfl.twinstickshooter.model.entities.EntityModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
-import com.drfl.twinstickshooter.view.TSSView;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class TSSController implements ContactListener {
 
+    //NOTEME javadoc
     /**
-     * The singleton instance of this controller
+     * The singleton instance of the controller.
      */
     private static TSSController instance;
 
+    //NOTEME javadoc
     /**
-     * The arena width in meters.
+     * The tile map width in meters.
      */
-    public static final int MAP_WIDTH = 40;
+    private static final int MAP_WIDTH = 40;
 
+    //NOTEME javadoc
     /**
-     * The arena height in meters.
+     * The tile map height in meters.
      */
-    public static final int MAP_HEIGHT = 21;
+    private static final int MAP_HEIGHT = 21;
 
+    //NOTEME javadoc
     /**
-     * Cooldown for enemy spawning
+     * Max cooldown for enemy spawning.
      */
     private static final float SPAWN_MAX_COOL = 4.0f;
 
+    //NOTEME javadoc
     /**
-     * The speed of bullets
-     */
-    private static final float BULLET_SPEED = 20f; //NOTEME move to weaponModel if using different bullet speeds
-
-    /**
-     * RNG Seed
-     */
-    private Random rand = new Random();
-
-    /**
-     * Current enemy spawn cooldown
+     * Current enemy spawning cooldown.
      */
     private float timeToNextSpawn = SPAWN_MAX_COOL;
 
+    //NOTEME javadoc
+    /**
+     * The speed of bullets for all entities.
+     */
+    private static final float BULLET_SPEED = 20f;
+
+    //NOTEME javadoc
     /**
      * The physics world controlled by this controller.
      */
     private final World world;
 
+    //NOTEME javadoc
     /**
      * The main character body.
      */
     private final MainCharBody mainCharBody;
 
+    //NOTEME javadoc
     /**
-     * Enemy bodies
+     * Enemy bodies.
      */
-    private ArrayList<EnemyBody> enemies = new ArrayList<EnemyBody>();
+    private ArrayList<EnemyBody> enemies = new ArrayList<>();
 
+    //NOTEME javadoc
     /**
-     * The game this screen belongs to.
+     * The game associated with this controller.
      */
     private final TSSGame game;
 
+    //NOTEME javadoc
     /**
      * Accumulator used to calculate the simulation step.
      */
     private float accumulator;
 
+    //NOTEME javadoc
     /**
      * Creates a new GameController that controls the physics of a TSSModel.
+     *
+     * @param game the game associated with this controller
      */
     private TSSController(TSSGame game) {
 
@@ -94,6 +101,35 @@ public class TSSController implements ContactListener {
         this.game = game;
     }
 
+    //NOTEME javadoc
+    /**
+     * Returns a singleton instance of controller, instance must
+     * be initiated by a call to initInstance beforehand. Null is returned if not.
+     *
+     * @return the singleton instance
+     */
+    public static TSSController getInstance() {
+        return instance;
+    }
+
+    //NOTEME javadoc
+    /**
+     * Initiates a controller instance, associating it with a game.
+     *
+     * @param game the game associated with this controller
+     * @return the singleton instance
+     */
+    public static TSSController initInstance(TSSGame game) {
+        TSSController.instance = new TSSController(game);
+        return instance;
+    }
+
+    //NOTEME javadoc
+    /**
+     * Creates tile entities from a collision map layer loaded from a Tiled map.
+     *
+     * @param collisionLayer the collision layer of the Tiled map
+     */
     public void createTileEntities(MapLayer collisionLayer) {
         for(MapObject object : collisionLayer.getObjects()) {
             new TileEntity(world, object.getProperties().get("x", float.class),
@@ -103,24 +139,7 @@ public class TSSController implements ContactListener {
         }
     }
 
-    /**
-     * Returns a singleton instance of a game controller
-     *
-     * @return the singleton instance
-     */
-    public static TSSController getInstance() {
-
-        if (instance == null) {
-            return null;
-        }
-        return instance;
-    }
-
-    public static TSSController initInstance(TSSGame game) {
-        TSSController.instance = new TSSController(game);
-        return instance;
-    }
-
+    //TODO can remove?
     public void spawnTestEnemy(int spawnIndex) {
 
         if(spawnIndex != -1) {
@@ -129,7 +148,7 @@ public class TSSController implements ContactListener {
         }
     }
 
-    //NOTEME javadoc ready
+    //NOTEME javadoc
     /**
      * Moves an entity by applying a linear impulse. Also calls animation direction handling.
      *
@@ -139,11 +158,11 @@ public class TSSController implements ContactListener {
     private void doMove(EntityBody entity, Vector2 direction) {
 
         if(direction.x == 0 && direction.y == 0) return;
-        entityAnimateDirection(entity, direction);
+        entityAnimateDirection((EntityModel) entity.getUserData(), direction.angle());
         entity.applyLinearImpulse(entity.getMass() * direction.x, entity.getMass() * direction.y, true);
     }
 
-    //NOTEME javadoc ready
+    //NOTEME javadoc
     /**
      * Tries to shoot by testing the shot cooldown, returns whether it was able to shoot.
      *
@@ -167,7 +186,7 @@ public class TSSController implements ContactListener {
         return true;
     }
 
-    //NOTEME javadoc ready
+    //NOTEME javadoc
     /**
      * Tries to change enemy direction by testing move cooldown.
      *
@@ -187,25 +206,25 @@ public class TSSController implements ContactListener {
 
         Vector2 moveDir;
         do {
-            moveDir = generateMovement();
+            moveDir = model.generateMovement();
         } while(model.getOppositeDirection() == moveDir);
 
         model.setMoveDirection(moveDir);
     }
 
-    //NOTEME javadoc ready
+    //NOTEME javadoc
     /** Plays the sound. If the sound is already playing, it will be played again, concurrently.
      *
      * @param sound the sound to play
      * @param volume the volume in the range [0,1]
      * @param pitch the pitch multiplier, 1 == default, >1 == faster, <1 == slower, the value has to be between 0.5 and 2.0
-     * @param pan panning in the range -1 (full left) to 1 (full right). 0 is center position.
+     * @param pan panning in the range -1 (full left) to 1 (full right). 0 is center position
      * */
     private void playSFX(Sound sound, float volume, float pitch, float pan) {
         sound.play(volume, pitch, pan);
     }
 
-    //NOTEME javadoc ready
+    //NOTEME javadoc
     /**
      * Handles all player logic. Moves the player and then tries to shoot a bullet.
      * Plays sound effect if bullet shot.
@@ -221,7 +240,7 @@ public class TSSController implements ContactListener {
         }
     }
 
-    //NOTEME javadoc ready
+    //NOTEME javadoc
     /**
      * Handles all enemy logic. For each enemy tries to change current direction,
      * moves the enemy and then tries to shoot in the player's direction. Plays sound effect
@@ -237,7 +256,7 @@ public class TSSController implements ContactListener {
 
             doMove(enemy, ((EnemyModel)enemy.getUserData()).getMoveDirection());
 
-            ((EnemyModel)enemy.getUserData()).setShootDirection(generateShootDirection((MainCharModel)mainCharBody.getUserData(), (EnemyModel)enemy.getUserData()));
+            ((EnemyModel)enemy.getUserData()).setShootDirection(shootToPlayer((MainCharModel)mainCharBody.getUserData(), (EnemyModel)enemy.getUserData()));
 
             if(tryShoot((EnemyModel) enemy.getUserData(), delta)) {
                 if(game.getSoundVolume() > 0) playSFX((Sound) game.getAssetManager().get("Shoot.mp3"), game.getSoundVolume(), 1.6f, 0); //TODO magic value
@@ -245,7 +264,7 @@ public class TSSController implements ContactListener {
         }
     }
 
-    //NOTEME javadoc ready
+    //NOTEME javadoc
     /**
      * Try to spawn an enemy if cooldown is <= 0. Can only spawn if
      * a spawner has free space.
@@ -269,7 +288,26 @@ public class TSSController implements ContactListener {
         timeToNextSpawn = SPAWN_MAX_COOL;
     }
 
-    //NOTEME javadoc ready
+    //NOTEME javadoc
+    /**
+     * Updates entity models to correspond to current body position and angle.
+     * Checks if bodies are inside game area before updating.
+     *
+     * @param bodies array of body entities
+     */
+    private void updateBodies(Array<Body> bodies) {
+
+        for (Body body : bodies) {
+
+            if(body.getType().equals(BodyDef.BodyType.StaticBody)) continue;
+
+            this.verifyBounds(body);
+            ((EntityModel) body.getUserData()).setPosition(body.getPosition().x, body.getPosition().y);
+            ((EntityModel) body.getUserData()).setRotation(body.getAngle());
+        }
+    }
+
+    //NOTEME javadoc
     /**
      * Calculates the next physics step of duration delta (in seconds).
      *
@@ -289,24 +327,20 @@ public class TSSController implements ContactListener {
             accumulator -= 1/60f;
         }
 
-        Array<Body> bodies = new Array<Body>();
+        Array<Body> bodies = new Array<>();
         world.getBodies(bodies);
 
-        for (Body body : bodies) {
-            if(!body.getType().equals(BodyDef.BodyType.StaticBody)) {
-                this.verifyBounds(body);
-                ((EntityModel) body.getUserData()).setPosition(body.getPosition().x, body.getPosition().y);
-                ((EntityModel) body.getUserData()).setRotation(body.getAngle());
-            }
-        }
+        this.updateBodies(bodies);
     }
 
+    //NOTEME javadoc
     /**
-     * Verifies if the body is inside the tile map bounds.
+     * Verifies if the body is inside the Tiled map bounds.
      *
-     * @param body The body to be verified.
+     * @param body The body to be verified
      */
     private void verifyBounds(Body body) {
+
         if (body.getPosition().x < 0)
             body.setTransform(MAP_WIDTH, body.getPosition().y, body.getAngle());
 
@@ -320,50 +354,50 @@ public class TSSController implements ContactListener {
             body.setTransform(body.getPosition().x, 0, body.getAngle());
     }
 
-    private void entityAnimateDirection(EntityBody entity, Vector2 direction) {
-
-        float angle = direction.angle();
+    //NOTEME javadoc
+    /**
+     * Sets animation direction for an entity model based on its heading.
+     *
+     * @param model the entity model
+     * @param angle the angle of entity's heading
+     */
+    private void entityAnimateDirection(EntityModel model, float angle) {
 
         if((angle >= 0 && angle <= 45) || (angle > 315 && angle <= 360)) {
-            ((EntityModel)entity.getUserData()).setDirection(EntityModel.AnimDirection.RIGHT);
+            model.setDirection(EntityModel.AnimDirection.RIGHT);
 
         } else if(angle > 45 && angle <= 135) {
-            ((EntityModel)entity.getUserData()).setDirection(EntityModel.AnimDirection.UP);
+            model.setDirection(EntityModel.AnimDirection.UP);
 
         } else if(angle > 135 && angle <= 225) {
-            ((EntityModel)entity.getUserData()).setDirection(EntityModel.AnimDirection.LEFT);
+            model.setDirection(EntityModel.AnimDirection.LEFT);
 
         } else if(angle > 225 && angle <= 315) {
-            ((EntityModel)entity.getUserData()).setDirection(EntityModel.AnimDirection.DOWN);
+            model.setDirection(EntityModel.AnimDirection.DOWN);
         }
     }
 
-    private Vector2 generateShootDirection(MainCharModel target, EnemyModel shooter) {
-
+    //NOTEME javadoc
+    /**
+     * Returns a vector starting at enemy shooter's position
+     * and ending in player's current position.
+     *
+     * @param target the player
+     * @param shooter the enemy shooter
+     * @return vector between the two entities
+     */
+    private Vector2 shootToPlayer(MainCharModel target, EnemyModel shooter) {
         return new Vector2(target.getX() - shooter.getX(), target.getY() - shooter.getY());
     }
 
+    //NOTEME javadoc
     /**
-     * Randomly selects a 4-way direction
+     * Shoots a bullet by creating its model and body with specified direction and owner.
      *
-     * @return random direction vector
+     * @param owner entity who owns the bullet
+     * @param direction direction vector of bullet
      */
-    private Vector2 generateMovement() {
-
-        ArrayList<Vector2> directions = new ArrayList<Vector2>();
-        directions.add(new Vector2(0, 0));
-        directions.add(new Vector2(0, 1));
-        directions.add(new Vector2(0, -1));
-        directions.add(new Vector2(1, 0));
-        directions.add(new Vector2(-1, 0));
-
-        return directions.get(rand.nextInt(directions.size()));
-    }
-
-    /**
-     * Shoots a bullet
-     */
-    public void shoot(EntityModel owner, Vector2 direction) { //NOTEME pass bullet type if different weapons
+    public void shoot(EntityModel owner, Vector2 direction) {
 
         BulletModel bullet = TSSModel.getInstance().createBullet(owner, direction);
 
@@ -372,115 +406,143 @@ public class TSSController implements ContactListener {
         body.setLinearVelocity(BULLET_SPEED);
     }
 
+    //NOTEME javadoc
     /**
-     * @return The world controlled by this controller.
+     * Called when two fixtures begin to touch. Handles specific
+     * collision resolution.
+     *
+     * @param contact contact between two shapes
      */
-    public World getWorld() {
-        return world;
-    }
-
     @Override
     public void beginContact(Contact contact) {
 
         Body bodyA = contact.getFixtureA().getBody();
         Body bodyB = contact.getFixtureB().getBody();
 
-        if (bodyA.getUserData() instanceof TileEntity && bodyB.getUserData() instanceof EnemyModel) enemyWall(contact.getFixtureB().getBody());
-        if (bodyA.getUserData() instanceof EnemyModel && bodyB.getUserData() instanceof TileEntity) enemyWall(contact.getFixtureA().getBody());
+        if (bodyA.getUserData() instanceof TileEntity && bodyB.getUserData() instanceof EnemyModel) enemyWall((EnemyModel) contact.getFixtureB().getBody().getUserData());
+        if (bodyA.getUserData() instanceof EnemyModel && bodyB.getUserData() instanceof TileEntity) enemyWall((EnemyModel) contact.getFixtureA().getBody().getUserData());
 
-        if (bodyA.getUserData() instanceof BulletModel && bodyB.getUserData() instanceof EnemyModel) enemyCollide(bodyA, bodyB);
-        if (bodyA.getUserData() instanceof EnemyModel && bodyB.getUserData() instanceof BulletModel) enemyCollide(bodyB, bodyA);
+        if (bodyA.getUserData() instanceof BulletModel && bodyB.getUserData() instanceof EnemyModel) enemyCollide((BulletModel) bodyA.getUserData(), (EnemyModel) bodyB.getUserData());
+        if (bodyA.getUserData() instanceof EnemyModel && bodyB.getUserData() instanceof BulletModel) enemyCollide((BulletModel) bodyB.getUserData(), (EnemyModel) bodyA.getUserData());
 
-        if (bodyA.getUserData() instanceof BulletModel && bodyB.getUserData() instanceof MainCharModel) mainCharCollide(bodyA, bodyB);
-        if (bodyA.getUserData() instanceof MainCharModel && bodyB.getUserData() instanceof BulletModel) mainCharCollide(bodyB, bodyA);
+        if (bodyA.getUserData() instanceof BulletModel && bodyB.getUserData() instanceof MainCharModel) mainCharCollide((BulletModel) bodyA.getUserData(), bodyB);
+        if (bodyA.getUserData() instanceof MainCharModel && bodyB.getUserData() instanceof BulletModel) mainCharCollide((BulletModel) bodyB.getUserData(), bodyA);
 
-        if (bodyA.getUserData() instanceof BulletModel) bulletCollision(bodyA);
-        if (bodyB.getUserData() instanceof BulletModel) bulletCollision(bodyB);
+        if (bodyA.getUserData() instanceof BulletModel) ((BulletModel) bodyA.getUserData()).setFlaggedForRemoval(true);
+        if (bodyB.getUserData() instanceof BulletModel) ((BulletModel) bodyB.getUserData()).setFlaggedForRemoval(true);
     }
 
-    private void enemyWall(Body enemyBody) {
-        ((EnemyModel)enemyBody.getUserData()).setTimeToNextDirection(0);
-    }
-
+    //NOTEME javadoc
     /**
-     * Bullet collided with enemy, remove bullet and hurt enemy
+     * Set enemy's time to next direction to 0 since it hit a wall.
+     *
+     * @param enemy the enemy model
      */
-    private void enemyCollide(Body bullet, Body enemy) {
+    private void enemyWall(EnemyModel enemy) {
+        enemy.setTimeToNextDirection(0);
+    }
 
-        ((BulletModel)bullet.getUserData()).setFlaggedForRemoval(true);
+    //NOTEME javadoc
+    /**
+     * Bullet collided with enemy, flag bullet for removal and hurt enemy.
+     *
+     * @param bullet bullet model that hit the enemy
+     * @param enemy enemy model hit by bullet
+     */
+    private void enemyCollide(BulletModel bullet, EnemyModel enemy) {
 
-        if(((BulletModel)bullet.getUserData()).getOwner().equals(EntityModel.ModelType.MAINCHAR)) {
-            ((EnemyModel)enemy.getUserData()).setHurt(true);
-            ((EnemyModel)enemy.getUserData()).removeHitpoints(5); //TODO remove magic value, use per bullet damage if different weapons
+        bullet.setFlaggedForRemoval(true);
+
+        if(bullet.getOwner().equals(EntityModel.ModelType.MAINCHAR)) {
+            enemy.setHurt(true);
+            enemy.removeHitpoints(5); //TODO magic value
         }
     }
 
+    //NOTEME javadoc
     /**
-     * A bullet collided with something, remove it.
+     * Bullet collided with main char, flag bullet for removal, hurt main char and apply knockback.
+     * If main char is flagged as hurt nothing happens as it has invincibility frames.
      *
-     * @param bulletBody the bullet that collided
+     * @param bullet bullet model that hit main char
+     * @param mainChar main char hit by bullet
      */
-    private void bulletCollision(Body bulletBody) {
-        ((BulletModel)bulletBody.getUserData()).setFlaggedForRemoval(true);
-    }
+    private void mainCharCollide(BulletModel bullet, Body mainChar) {
 
-    private void mainCharCollide(Body bullet, Body mainChar) {
-
-        ((BulletModel)bullet.getUserData()).setFlaggedForRemoval(true);
+        bullet.setFlaggedForRemoval(true);
 
         if(((MainCharModel)mainChar.getUserData()).isHurt()) return;
 
-        Vector2 knockback = ((BulletModel)bullet.getUserData()).getBulletDirection();
+        doMove(mainCharBody, bullet.getBulletDirection()); //Knockback
 
-        Vector2 impulse = new Vector2(mainCharBody.getMass() * knockback.x, mainCharBody.getMass() * knockback.y);
-        mainCharBody.applyLinearImpulse(impulse.x, impulse.y, true);
+        if(bullet.getOwner().equals(EntityModel.ModelType.ENEMY)) {
 
-        if(((BulletModel)bullet.getUserData()).getOwner().equals(EntityModel.ModelType.ENEMY)) {
             ((MainCharModel)mainChar.getUserData()).setHurt(true);
-            ((MainCharModel)mainChar.getUserData()).removeHitpoints(5); //TODO remove magic value, use per bullet damage if different weapons
-            if(game.getSoundVolume() != 0)
-            ((Sound)TSSView.getInstance().getGame().getAssetManager().get("Hurt.mp3")).play(game.getSoundVolume());
+            ((MainCharModel)mainChar.getUserData()).removeHitpoints(5); //TODO magic value
+            if(game.getSoundVolume() > 0) playSFX((Sound) game.getAssetManager().get("Hurt.mp3"), game.getSoundVolume(), 1.0f, 0);
         }
     }
 
+    //NOTEME javadoc
     /**
-     * Removes objects that have been flagged for removal on the
-     * previous step.
+     * Removes entities flagged for removal by destroying their Box2D body and removing from the model.
      */
     public void removeFlagged() {
 
-        Array<Body> bodies = new Array<Body>();
+        Array<Body> bodies = new Array<>();
         world.getBodies(bodies);
 
         for (Body body : bodies) {
-            if(!body.getType().equals(BodyDef.BodyType.StaticBody)) {
-                if (((EntityModel)body.getUserData()).isFlaggedToBeRemoved()) {
-                    TSSModel.getInstance().remove((EntityModel) body.getUserData());
-                    world.destroyBody(body);
-                }
+
+            if(body.getType().equals(BodyDef.BodyType.StaticBody)) continue;
+
+            if (((EntityModel)body.getUserData()).isFlaggedToBeRemoved()) {
+                TSSModel.getInstance().remove((EntityModel) body.getUserData());
+                world.destroyBody(body);
             }
         }
     }
 
+    //NOTEME javadoc
     /**
-     * Handle game entities' hitpoints
+     * Stops all sound effects.
+     */
+    private void stopSFX() {
+
+        ((Sound) game.getAssetManager().get("Shoot.mp3")).stop();
+        ((Sound) game.getAssetManager().get("Hurt.mp3")).stop();
+    }
+
+    //NOTEME javadoc
+    /**
+     * Removes entities whose HP is <= 0. For main char sets dead flag,
+     * for enemies removes them from model and destroys Box2D body.
      */
     public void removeDead() {
 
         if(((MainCharModel)mainCharBody.getUserData()).getHitpoints() <= 0) {
-            ((Sound) TSSView.getInstance().getGame().getAssetManager().get("Shoot.mp3")).stop();
-            ((Sound) TSSView.getInstance().getGame().getAssetManager().get("Hurt.mp3")).stop();
+            stopSFX();
             ((MainCharModel)mainCharBody.getUserData()).setDead(true);
             return;
         }
 
         for(int i = enemies.size() - 1; i >= 0; i--) {
+
             if(((EnemyModel)enemies.get(i).getUserData()).getHitpoints() <= 0) {
+
                 TSSModel.getInstance().removeEnemy(i);
                 world.destroyBody(enemies.get(i).getBody());
                 enemies.remove(i);
             }
         }
+    }
+
+    //NOTEME javadoc
+    /**
+     * @return The world controlled by this controller
+     */
+    public World getWorld() {
+        return this.world;
     }
 
     @Override

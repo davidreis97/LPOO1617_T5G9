@@ -4,6 +4,7 @@ package com.drfl.twinstickshooter.model.entities;
 import com.badlogic.gdx.math.Vector2;
 import com.drfl.twinstickshooter.model.TSSModel;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;
@@ -71,6 +72,23 @@ public class EnemyModel extends EntityModel {
     public void removeHitpoints(int value) {
         this.hitpoints -= value;
         if(hitpoints <= 0) TSSModel.getInstance().setScore(TSSModel.getInstance().getScore() + 100); //TODO magic value
+    }
+
+    /**
+     * Randomly selects a 4-way direction
+     *
+     * @return random direction vector
+     */
+    public Vector2 generateMovement() {
+
+        ArrayList<Vector2> directions = new ArrayList<Vector2>();
+        directions.add(new Vector2(0, 0));
+        directions.add(new Vector2(0, 1));
+        directions.add(new Vector2(0, -1));
+        directions.add(new Vector2(1, 0));
+        directions.add(new Vector2(-1, 0));
+
+        return directions.get(rand.nextInt(directions.size()));
     }
 
     @Override
