@@ -239,7 +239,7 @@ public class TSSView extends ScreenAdapter {
             return;
         }
 
-        TSSController.getInstance().removeFlagged();
+        TSSController.getInstance().removeFlaggedBullets();
         this.cleanEnemyView(TSSController.getInstance().removeDead());
 
         handleInputs();

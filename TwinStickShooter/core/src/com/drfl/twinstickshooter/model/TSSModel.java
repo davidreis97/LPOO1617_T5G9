@@ -5,74 +5,84 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import com.drfl.twinstickshooter.model.entities.*;
-import com.drfl.twinstickshooter.view.TSSView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 /**
- * TSS world model
+ * MVC Model, handles the underlying data that supports both the Controller and View packages.
  */
-
 public class TSSModel {
 
+    //NOTEME javadoc
     /**
-     * The singleton instance of the game model
+     * The singleton instance of the game model.
      */
     private static TSSModel instance;
 
-    /**
-     * Character controlled by the player
-     */
-    private MainCharModel mc;
-
+    //NOTEME javadoc
     /**
      * RNG Seed
      */
-    private Random rand = new Random();
+    private static final Random rand = new Random();
 
+    //NOTEME javadoc
     /**
-     * Map enemy spawners.
+     * Main character model.
      */
-    private ArrayList<EnemySpawnerModel> enemySpawners = new ArrayList<EnemySpawnerModel>();
+    private MainCharModel mc;
 
+    //NOTEME javadoc
     /**
-     * Enemy entities
+     * Enemy spawners.
      */
-    private ArrayList<EnemyModel> enemies = new ArrayList<EnemyModel>();
+    private ArrayList<EnemySpawnerModel> enemySpawners = new ArrayList<>();
 
+    //NOTEME javadoc
     /**
-     * The bullets currently on screen.
+     * Enemy models.
+     */
+    private ArrayList<EnemyModel> enemies = new ArrayList<>();
+
+    //NOTEME javadoc
+    /**
+     * Bullet models.
      */
     private List<BulletModel> bullets;
 
-    private int score = 0;
-
+    //NOTEME javadoc
     /**
-     * A pool of bullets
+     * A pool of bullet models.
      */
     Pool<BulletModel> bulletPool = new Pool<BulletModel>() {
         @Override
         protected BulletModel newObject() {
-            return new BulletModel(0, 0, 0);
+            return new BulletModel(0, 0, 0); //TODO add Vector2
         }
     };
 
+    //NOTEME javadoc
+    /**
+     * Game score
+     */
+    private int score = 0;
+
+    //NOTEME javadoc
     /**
      * Constructs game with initial bullets array, other entities
-     * are created by TSSView calling createEntityModels with the entities layer
-     * from the tile map.
+     * are created by calling createEntityModels with the entities layer
+     * from a Tiled map.
      */
     private TSSModel() {
-
         bullets = new ArrayList<BulletModel>();
     }
 
+    //NOTEME javadoc
     /**
-     * Returns a singleton instance of the game model
+     * Returns a singleton instance of model.
      *
-     * @return the singleton instance
+     * @return The singleton instance
      */
     public static TSSModel getInstance() {
 
@@ -80,27 +90,46 @@ public class TSSModel {
         return instance;
     }
 
+    //NOTEME javadoc
+    /**
+     * Initializes a model instance.
+     *
+     * @return The singleton instance
+     */
     public static TSSModel initInstance() {
         TSSModel.instance = new TSSModel();
         return instance;
     }
 
+    //NOTEME javadoc
     /**
-     * Creates entity models from a Tiled file using an object layer named "Entities".
+     * Creates entity models from a Tiled map object layer. Object type is used to
+     * instantiate entity models (MainChar / Spawner)
+     *
+     * @param entitiesLayer Tiled map object layer containing entities
      */
     public void createEntityModels(MapLayer entitiesLayer) {
+
         for(MapObject object : entitiesLayer.getObjects()) {
 
             if(object.getProperties().get("type", String.class).equals("MainChar")) {
-                mc = new MainCharModel(object.getProperties().get("x", float.class), object.getProperties().get("y", float.class), 0);
+                mc = new MainCharModel(object.getProperties().get("x", float.class), object.getProperties().get("y", float.class), 0); //TODO vector2
             }
 
             if(object.getProperties().get("type", String.class).equals("Spawner")) {
-                enemySpawners.add(new EnemySpawnerModel(object.getProperties().get("x", float.class), object.getProperties().get("y", float.class)));
+                enemySpawners.add(new EnemySpawnerModel(object.getProperties().get("x", float.class), object.getProperties().get("y", float.class))); //TODO vector2
             }
         }
     }
 
+    //NOTEME javadoc
+    /**
+     * Creates a bullet model positioned near its owner and a certain heading.
+     *
+     * @param owner The entity who owns the bullet
+     * @param direction The heading of the bullet
+     * @return The bullet model created
+     */
     public BulletModel createBullet(EntityModel owner, Vector2 direction) {
 
         BulletModel bullet = bulletPool.obtain();
@@ -109,7 +138,7 @@ public class TSSModel {
 
         float angle = direction.angle() * (float) Math.PI / 180.0f - (float) Math.PI / 2.0f;
 
-        bullet.setPosition(owner.getPosition().x - (float) Math.sin(angle), owner.getPosition().y + (float) Math.cos(angle));
+        bullet.setPosition(owner.getPosition().x - (float) Math.sin(angle), owner.getPosition().y + (float) Math.cos(angle)); //TODO vector2
         bullet.setRotation(angle);
 
         if(owner instanceof MainCharModel) {
@@ -122,33 +151,36 @@ public class TSSModel {
         return bullet;
     }
 
+    //NOTEME javadoc
     /**
-     * Creates an enemy model with a specified spawner's coordinates
+     * Creates an enemy model from a spawner. Sets spawner flag so it can't spawn until
+     * an enemy dies and refreshes it.
      *
-     * @param index index of spawner to use coordinates of
-     * @return enemy model created
+     * @param index The spawner index
+     * @return The enemy model created
      */
     public EnemyModel createEnemy(int index) {
 
         enemySpawners.get(index).setSpawned(true);
-        enemies.add(new EnemyModel(enemySpawners.get(index).getPosition().x, enemySpawners.get(index).getPosition().y, 0));
+        enemies.add(new EnemyModel(enemySpawners.get(index).getPosition().x, enemySpawners.get(index).getPosition().y, 0)); //TODO vector2
 
         return enemies.get(enemies.size() - 1);
     }
 
+    //NOTEME javadoc
     /**
-     * Find a free spawner to use for spawning an enemy
+     * Tries to find an enemy spawner flagged as free.
      *
-     * @return index of random free spawner, -1 if no free spawners
+     * @return Index of random free spawner, -1 if no free spawners
      */
-    public int createSpawnIndex() {
+    public int searchSpawnIndex() {
 
         if(enemySpawners.isEmpty()) return -1;
 
-        ArrayList<Integer> freeIndex = new ArrayList<Integer>();
+        ArrayList<Integer> freeIndex = new ArrayList<>();
 
         for(int i = 0; i < this.enemySpawners.size(); i++) {
-            if(this.enemySpawners.get(i).isSpawned() == false) {
+            if(!this.enemySpawners.get(i).isSpawned()) {
                 freeIndex.add(i);
             }
         }
@@ -160,57 +192,23 @@ public class TSSModel {
         }
     }
 
+    //NOTEME javadoc
     /**
-     * @return the main character model.
-     */
-    public MainCharModel getMainChar() {
-        return mc;
-    }
-
-    /**
-     * @return the main character model.
-     */
-    public void setMainChar(MainCharModel mc) {
-        this.mc = mc;
-    }
-
-    /**
-     * @return the bullet list
-     */
-    public List<BulletModel> getBullets() {
-        return bullets;
-    }
-
-    /**
-     * @return the list of enemy spawners
-     */
-    public ArrayList<EnemySpawnerModel> getEnemySpawners() {
-        return enemySpawners;
-    }
-
-    /**
-     * @return the list of enemies
-     */
-    public ArrayList<EnemyModel> getEnemies() {
-        return enemies;
-    }
-
-    /**
-     * Removes a model from this game.
+     * Remove bullet model and free it in pool.
      *
-     * @param model the model to be removed
+     * @param bullet The bullet model to remove
      */
-    public void remove(EntityModel model) {
-        if (model instanceof BulletModel) {
-            bullets.remove(model);
-            bulletPool.free((BulletModel) model);
-        }
+    public void removeBullet(BulletModel bullet) {
+        bullets.remove(bullet);
+        bulletPool.free(bullet);
     }
 
+    //NOTEME javadoc
     /**
-     * Resets one spawner so it can spawn another enemy
+     * Resets first non free spawner so it can spawn again.
      */
     private void resetSpawner() {
+
         for(EnemySpawnerModel spawner : enemySpawners) {
             if(spawner.isSpawned()) {
                 spawner.setSpawned(false);
@@ -219,9 +217,11 @@ public class TSSModel {
         }
     }
 
+    //NOTEME javadoc
     /**
-     * Removes enemy model and enemy view at specified index
-     * @param index index on entities array
+     * Removes enemy model at a certain index.
+     *
+     * @param index The index of enemy model to remove
      */
     public void removeEnemy(int index) {
 
@@ -229,14 +229,58 @@ public class TSSModel {
         enemies.remove(index);
     }
 
-    public static void setInstance(TSSModel instance) {
-        TSSModel.instance = instance;
+    //NOTEME javadoc
+    /**
+     * @return The main character model
+     */
+    public MainCharModel getMainChar() {
+        return mc;
     }
 
+    //NOTEME javadoc
+    /**
+     * @param mc The main character model to set
+     */
+    public void setMainChar(MainCharModel mc) {
+        this.mc = mc;
+    }
+
+    //NOTEME javadoc
+    /**
+     * @return The bullet model list
+     */
+    public List<BulletModel> getBullets() {
+        return bullets;
+    }
+
+    //NOTEME javadoc
+    /**
+     * @return The enemy spawner model list
+     */
+    public ArrayList<EnemySpawnerModel> getEnemySpawners() {
+        return enemySpawners;
+    }
+
+    //NOTEME javadoc
+    /**
+     * @return The enemy model list
+     */
+    public ArrayList<EnemyModel> getEnemies() {
+        return enemies;
+    }
+
+    //NOTEME javadoc
+    /**
+     * @return The game score
+     */
     public int getScore() {
         return score;
     }
 
+    //NOTEME javadoc
+    /**
+     * @param score The game score to set
+     */
     public void setScore(int score) {
         this.score = score;
     }

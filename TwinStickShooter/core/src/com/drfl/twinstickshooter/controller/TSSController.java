@@ -141,7 +141,7 @@ public class TSSController implements ContactListener {
 
     //NOTEME javadoc
     /**
-     * Initiates a controller instance, associating it with a game.
+     * Initializes a controller instance, associating it with a game.
      *
      * @param game The game associated with this controller
      * @return The singleton instance
@@ -296,7 +296,7 @@ public class TSSController implements ContactListener {
             return;
         }
 
-        int spawnIndex = TSSModel.getInstance().createSpawnIndex();
+        int spawnIndex = TSSModel.getInstance().searchSpawnIndex();
 
         if(spawnIndex != -1) {
 
@@ -505,19 +505,19 @@ public class TSSController implements ContactListener {
 
     //NOTEME javadoc
     /**
-     * Removes entities flagged for removal by destroying their Box2D body and removing from the model.
+     * Removes bullet entities flagged for removal by destroying their Box2D body and removing them from the model.
      */
-    public void removeFlagged() {
+    public void removeFlaggedBullets() {
 
         Array<Body> bodies = new Array<>();
         world.getBodies(bodies);
 
         for (Body body : bodies) {
 
-            if(body.getType().equals(BodyDef.BodyType.StaticBody)) continue;
+            if(!(body.getUserData() instanceof BulletModel)) continue;
 
-            if (((EntityModel)body.getUserData()).isFlaggedToBeRemoved()) {
-                TSSModel.getInstance().remove((EntityModel) body.getUserData());
+            if (((BulletModel)body.getUserData()).isFlaggedToBeRemoved()) {
+                TSSModel.getInstance().removeBullet((BulletModel) body.getUserData());
                 world.destroyBody(body);
             }
         }

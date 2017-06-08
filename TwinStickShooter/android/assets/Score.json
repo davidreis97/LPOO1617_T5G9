@@ -31,6 +31,18 @@
 }
 {
 	class: com.drfl.twinstickshooter.TSSScore
+	name: Fake News
+	score: 900
+	date: 2017/06/08
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
+	name: KBM
+	score: 800
+	date: 2017/06/08
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
 	name: Pepe
 	score: 500
 	date: 2017/06/07
@@ -45,18 +57,6 @@
 	class: com.drfl.twinstickshooter.TSSScore
 	name: Henlo Bird
 	score: 300
-	date: 2017/06/07
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: Hertz
-	score: 300
-	date: 2017/06/08
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: EZSPECIAL
-	score: 200
 	date: 2017/06/07
 }
 ]
