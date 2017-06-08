@@ -140,7 +140,7 @@ public abstract class EntityBody {
      * @return The world position of the body's origin
      */
     public Vector2 getPosition() {
-        return body.getPosition();
+        return body.getPosition().cpy();
     }
 
     //NOTEME javadoc

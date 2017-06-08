@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;
+
 /**
  * MVC Model, handles the underlying data that supports both the Controller and View packages.
  */
@@ -55,10 +57,10 @@ public class TSSModel {
     /**
      * A pool of bullet models.
      */
-    Pool<BulletModel> bulletPool = new Pool<BulletModel>() {
+    private Pool<BulletModel> bulletPool = new Pool<BulletModel>() {
         @Override
         protected BulletModel newObject() {
-            return new BulletModel(0, 0, 0); //TODO add Vector2
+            return new BulletModel(new Vector2(0, 0), 0);
         }
     };
 
@@ -113,11 +115,11 @@ public class TSSModel {
         for(MapObject object : entitiesLayer.getObjects()) {
 
             if(object.getProperties().get("type", String.class).equals("MainChar")) {
-                mc = new MainCharModel(object.getProperties().get("x", float.class), object.getProperties().get("y", float.class), 0); //TODO vector2
+                mc = new MainCharModel(new Vector2(object.getProperties().get("x", float.class) * PIXEL_TO_METER, object.getProperties().get("y", float.class) * PIXEL_TO_METER), 0);
             }
 
             if(object.getProperties().get("type", String.class).equals("Spawner")) {
-                enemySpawners.add(new EnemySpawnerModel(object.getProperties().get("x", float.class), object.getProperties().get("y", float.class))); //TODO vector2
+                enemySpawners.add(new EnemySpawnerModel(new Vector2(object.getProperties().get("x", float.class) * PIXEL_TO_METER, object.getProperties().get("y", float.class) * PIXEL_TO_METER)));
             }
         }
     }
@@ -138,7 +140,7 @@ public class TSSModel {
 
         float angle = direction.angle() * (float) Math.PI / 180.0f - (float) Math.PI / 2.0f;
 
-        bullet.setPosition(owner.getPosition().x - (float) Math.sin(angle), owner.getPosition().y + (float) Math.cos(angle)); //TODO vector2
+        bullet.setPosition(new Vector2(owner.getPosition().x - (float) Math.sin(angle), owner.getPosition().y + (float) Math.cos(angle)));
         bullet.setRotation(angle);
 
         if(owner instanceof MainCharModel) {
@@ -162,7 +164,7 @@ public class TSSModel {
     public EnemyModel createEnemy(int index) {
 
         enemySpawners.get(index).setSpawned(true);
-        enemies.add(new EnemyModel(enemySpawners.get(index).getPosition().x, enemySpawners.get(index).getPosition().y, 0)); //TODO vector2
+        enemies.add(new EnemyModel(new Vector2(enemySpawners.get(index).getPosition().x, enemySpawners.get(index).getPosition().y), 0));
 
         return enemies.get(enemies.size() - 1);
     }

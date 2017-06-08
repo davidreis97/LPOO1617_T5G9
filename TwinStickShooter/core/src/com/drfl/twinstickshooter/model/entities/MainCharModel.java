@@ -1,5 +1,7 @@
 package com.drfl.twinstickshooter.model.entities;
 
+import com.badlogic.gdx.math.Vector2;
+
 import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;
 import static com.drfl.twinstickshooter.view.TSSView.TILESIZE;
 
@@ -15,12 +17,11 @@ public class MainCharModel extends EntityModel {
     /**
      * Creates a new ship model in a certain position and having a certain rotation.
      *
-     * @param x the x-coordinate in meters
-     * @param y the y-coordinate in meters
      * @param rotation the rotation in radians
      */
-    public MainCharModel(float x, float y, int rotation) {
-        super(x / TILESIZE + TILESIZE * PIXEL_TO_METER / 2.0f, y / TILESIZE + TILESIZE * PIXEL_TO_METER / 2.0f, rotation);
+    public MainCharModel(Vector2 coords, int rotation) {
+//        super(new Vector2(coords.x / TILESIZE + TILESIZE * PIXEL_TO_METER / 2.0f, coords.y / TILESIZE + TILESIZE * PIXEL_TO_METER / 2.0f), rotation);
+        super(new Vector2(coords.x + TILESIZE * PIXEL_TO_METER / 2.0f, coords.y + TILESIZE * PIXEL_TO_METER / 2.0f), rotation);
     }
 
     @Override

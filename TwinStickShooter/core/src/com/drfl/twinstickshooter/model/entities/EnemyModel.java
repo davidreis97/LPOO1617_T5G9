@@ -30,12 +30,10 @@ public class EnemyModel extends EntityModel {
     /**
      * Creates a new ship model in a certain position and having a certain rotation.
      *
-     * @param x the x-coordinate in meters
-     * @param y the y-coordinate in meters
      * @param rotation the rotation in radians
      */
-    public EnemyModel(float x, float y, int rotation) {
-        super(x + TILESIZE * PIXEL_TO_METER / 2.0f, y + TILESIZE * PIXEL_TO_METER / 2.0f, rotation);
+    public EnemyModel(Vector2 coords, int rotation) {
+        super(new Vector2(coords.x + TILESIZE * PIXEL_TO_METER / 2.0f, coords.y + TILESIZE * PIXEL_TO_METER / 2.0f), rotation);
         this.hitpoints = 20; //TODO magic value
         this.timeToNextShoot = TIME_BETWEEN_SHOTS;
     }
@@ -62,11 +60,11 @@ public class EnemyModel extends EntityModel {
 
         oppositeDirection = moveDirection.scl(-1);
 
-        this.moveDirection = moveDirection;
+        super.setMoveDirection(moveDirection);
     }
 
     public Vector2 getOppositeDirection() {
-        return oppositeDirection;
+        return oppositeDirection.cpy();
     }
 
     @Override

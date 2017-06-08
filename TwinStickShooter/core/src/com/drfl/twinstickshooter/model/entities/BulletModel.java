@@ -10,12 +10,10 @@ public class BulletModel extends EntityModel {
     /**
      * Constructs a bullet model belonging to a game model.
      *
-     * @param x The x-coordinate of this bullet.
-     * @param y The y-coordinate of this bullet.
      * @param rotation The rotation of this bullet.
      */
-    public BulletModel(float x, float y, float rotation) {
-        super(x, y, rotation);
+    public BulletModel(Vector2 coords, float rotation) {
+        super(coords, rotation);
     }
 
     @Override
@@ -36,6 +34,6 @@ public class BulletModel extends EntityModel {
     }
 
     public Vector2 getBulletDirection() {
-        return bulletDirection;
+        return bulletDirection.cpy();
     }
 }

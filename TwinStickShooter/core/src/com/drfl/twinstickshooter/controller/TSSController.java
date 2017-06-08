@@ -322,7 +322,7 @@ public class TSSController implements ContactListener {
             if(body.getType().equals(BodyDef.BodyType.StaticBody)) continue;
 
             this.verifyBounds(body);
-            ((EntityModel) body.getUserData()).setPosition(body.getPosition().x, body.getPosition().y);
+            ((EntityModel) body.getUserData()).setPosition(body.getPosition());
             ((EntityModel) body.getUserData()).setRotation(body.getAngle());
         }
     }

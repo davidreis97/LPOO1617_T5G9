@@ -52,14 +52,14 @@ public class TSSServer {
      * @return Vector2 representing player movement.
      */
     public static Vector2 getMovement() {
-        return movement;
+        return movement.cpy();
     }
 
     /**
      * @return Vector2 representing direction of shooting.
      */
     public static Vector2 getShooting() {
-        return shooting;
+        return shooting.cpy();
     }
 
     /**

@@ -6,23 +6,18 @@ import com.badlogic.gdx.math.Vector2;
  * Abstract model for representing entities in a game model.
  */
 public abstract class EntityModel {
-    public enum ModelType {MAINCHAR, BULLET, SPAWNER, ENEMY};
-    public enum AnimDirection {NONE, DOWN, LEFT, RIGHT, UP};
+    public enum ModelType {MAINCHAR, BULLET, SPAWNER, ENEMY}
+    public enum AnimDirection {NONE, DOWN, LEFT, RIGHT, UP}
 
     private static final int HP_MAX = 40;
 
-    protected Vector2 shootDirection = new Vector2(0, 0);
-    protected Vector2 moveDirection = new Vector2(0, 0);
+    private Vector2 shootDirection = new Vector2(0, 0);
+    private Vector2 moveDirection = new Vector2(0, 0);
 
     /**
-     * The x-coordinate of this model in meters.
+     * The coordinates of an entity model in meters.
      */
-    private float x;
-
-    /**
-     * The y-coordinate of this model in meters.
-     */
-    private float y;
+    private Vector2 coords;
 
     /**
      * The current rotation of this model in radians.
@@ -42,45 +37,28 @@ public abstract class EntityModel {
     /**
      * Hitpoints for character entities
      */
-    protected int hitpoints = HP_MAX;
+    int hitpoints = HP_MAX;
 
     /**
      * Time until character entity can shoot again
      */
-    protected float timeToNextShoot = 0;
+    float timeToNextShoot = 0;
 
-    protected boolean isHurt = false;
+    private boolean isHurt = false;
 
     /**
      * Constructs a model with a position and a rotation.
      *
-     * @param x The x-coordinate of this entity in meters.
-     * @param y The y-coordinate of this entity in meters.
      * @param rotation The current rotation of this entity in radians.
      */
-    EntityModel(float x, float y, float rotation) {
-        this.x = x;
-        this.y = y;
+    EntityModel(Vector2 coords, float rotation) {
+        this.coords = coords;
         this.rotation = rotation;
     }
 
     public Vector2 getPosition() {
-        return new Vector2(x, y);
+        return coords.cpy();
     }
-
-//    /**
-//     * @return The x-coordinate of this entity in meters.
-//     */
-//    public float getX() {
-//        return x;
-//    }
-//
-//    /**
-//     * @return The y-coordinate of this entity in meters.
-//     */
-//    public float getY() {
-//        return y;
-//    }
 
     /**
      * @return The rotation of this entity in radians.
@@ -89,13 +67,8 @@ public abstract class EntityModel {
         return rotation;
     }
 
-    /**
-     * @param x The x-coordinate of this entity in meters.
-     * @param y The y-coordinate of this entity in meters.
-     */
-    public void setPosition(float x, float y) {
-        this.x = x;
-        this.y = y;
+    public void setPosition(Vector2 coords) {
+        this.coords = coords;
     }
 
     /**
@@ -170,7 +143,7 @@ public abstract class EntityModel {
     }
 
     public Vector2 getShootDirection() {
-        return shootDirection;
+        return shootDirection.cpy();
     }
 
     public void setShootDirection(Vector2 shootDirection) {
@@ -178,7 +151,7 @@ public abstract class EntityModel {
     }
 
     public Vector2 getMoveDirection() {
-        return moveDirection;
+        return moveDirection.cpy();
     }
 
     public void setMoveDirection(Vector2 moveDirection) {

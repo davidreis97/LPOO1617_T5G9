@@ -1,5 +1,7 @@
 package com.drfl.twinstickshooter.model.entities;
 
+import com.badlogic.gdx.math.Vector2;
+
 import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;
 import static com.drfl.twinstickshooter.view.TSSView.TILESIZE;
 
@@ -13,11 +15,10 @@ public class EnemySpawnerModel extends EntityModel {
     /**
      * Creates a new enemy spawner in a certain position.
      *
-     * @param x the x-coordinate in meters
-     * @param y the y-coordinate in meters
      */
-    public EnemySpawnerModel(float x, float y) {
-        super(x / TILESIZE + TILESIZE * PIXEL_TO_METER / 2.0f, y / TILESIZE + TILESIZE * PIXEL_TO_METER / 2.0f, 0);
+    public EnemySpawnerModel(Vector2 coords) {
+//        super(new Vector2(coords.x / TILESIZE + TILESIZE * PIXEL_TO_METER / 2.0f, coords.y / TILESIZE + TILESIZE * PIXEL_TO_METER / 2.0f), 0);
+        super(new Vector2(coords.x + TILESIZE * PIXEL_TO_METER / 2.0f, coords.y + TILESIZE * PIXEL_TO_METER / 2.0f), 0);
     }
 
     public boolean isSpawned() {

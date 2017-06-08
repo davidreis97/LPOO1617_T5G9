@@ -31,7 +31,7 @@ public class Tests{
         game.setSoundVolume(0);
 
         model = TSSModel.initInstance();
-        model.setMainChar(new MainCharModel(0,0,0));
+        model.setMainChar(new MainCharModel(new Vector2(0, 0),0));
 
         controller = TSSController.initInstance(game);
     }
@@ -39,7 +39,7 @@ public class Tests{
     @Test
     public void testScore() {
 
-        model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
+        model.getEnemySpawners().add(new EnemySpawnerModel(new Vector2(5, 0)));
 
         controller.update(TSSController.getSpawnMaxCool()); //Guarantee enemy spawn
         controller.update(TSSController.getSpawnMaxCool());
@@ -55,7 +55,7 @@ public class Tests{
     public void testEnemyMovement() {
 
         Vector2 finalPos, initialPos;
-        model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
+        model.getEnemySpawners().add(new EnemySpawnerModel(new Vector2(5, 0)));
 
         controller.update(TSSController.getSpawnMaxCool()); //Guarantee enemy spawn
         controller.update(TSSController.getSpawnMaxCool());
@@ -72,7 +72,7 @@ public class Tests{
     @Test
     public void testEnemyAutoShootPlayer() {
 
-        model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
+        model.getEnemySpawners().add(new EnemySpawnerModel(new Vector2(5, 0)));
 
         int oldHitpoints = model.getMainChar().getHitpoints();
 
@@ -88,7 +88,7 @@ public class Tests{
     @Test
     public void testBulletsEnemy() {
 
-        model.getEnemySpawners().add(new EnemySpawnerModel(1.5f,0));
+        model.getEnemySpawners().add(new EnemySpawnerModel(new Vector2(1.5f, 0)));
 
         controller.update(TSSController.getSpawnMaxCool()); //Guarantee enemy spawn
         controller.update(TSSController.getSpawnMaxCool());
