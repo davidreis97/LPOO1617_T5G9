@@ -47,7 +47,7 @@ public class TSSScoreboard extends ScreenAdapter {
 
         loadAssets();
 
-        startMusic(); //TODO music
+        startMusic();
 
         camera = createCamera();
 

@@ -13,7 +13,19 @@
 }
 {
 	class: com.drfl.twinstickshooter.TSSScore
+	name: X360
+	score: 2300
+	date: 2017/06/08
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
 	name: Cold One
+	score: 1500
+	date: 2017/06/08
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
+	name: KBM
 	score: 1500
 	date: 2017/06/08
 }
@@ -45,18 +57,6 @@
 	class: com.drfl.twinstickshooter.TSSScore
 	name: KBM
 	score: 800
-	date: 2017/06/08
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: Pepe
-	score: 500
-	date: 2017/06/07
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: Mouse
-	score: 500
 	date: 2017/06/08
 }
 ]

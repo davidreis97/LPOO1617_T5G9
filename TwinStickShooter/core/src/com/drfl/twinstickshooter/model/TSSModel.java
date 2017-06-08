@@ -82,7 +82,7 @@ public class TSSModel {
 
     //NOTEME javadoc
     /**
-     * Returns a singleton instance of model.
+     * Returns a singleton instance of the model.
      *
      * @return The singleton instance
      */

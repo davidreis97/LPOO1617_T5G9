@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.SerializationException;
 import com.drfl.twinstickshooter.view.TSSMainMenu;
+import com.drfl.twinstickshooter.server.TSSServer;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -22,7 +23,6 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Enumeration;
 
 /**
@@ -30,7 +30,7 @@ import java.util.Enumeration;
  */
 public class TSSGame extends Game {
 
-    public enum ControlType {CONTROLLER, REMOTE, KBM};
+    public enum ControlType {CONTROLLER, REMOTE, KBM}
 
     /**
      * The type of input currently in use to control the game.
@@ -46,7 +46,7 @@ public class TSSGame extends Game {
 //	private float soundVolume = 0.35f; //TODO set this back
     private float musicVolume = 0;
     private float soundVolume = 0;
-	private Array<TSSScore> scores = new Array<TSSScore>();
+	private Array<TSSScore> scores = new Array<>();
 	private TiledMap currentMap;
 
     /**
@@ -92,7 +92,7 @@ public class TSSGame extends Game {
         }
     }
 
-    public void saveScore() {
+    private void saveScore() {
 
         Json json = new Json();
 
@@ -124,7 +124,7 @@ public class TSSGame extends Game {
      */
     public ArrayList<InetAddress> findSiteLocalAddress() {
 
-        ArrayList<InetAddress> addresses = new ArrayList<InetAddress>();
+        ArrayList<InetAddress> addresses = new ArrayList<>();
 
         try {
             for (Enumeration ifaces = NetworkInterface.getNetworkInterfaces(); ifaces.hasMoreElements();) {
@@ -172,13 +172,6 @@ public class TSSGame extends Game {
      */
     public AssetManager getAssetManager() {
         return assetManager;
-    }
-
-    /**
-     * assetManager asset manager used for loading texture and sounds
-     */
-    public void setAssetManager(AssetManager assetManager) {
-        this.assetManager = assetManager;
     }
 
     /**

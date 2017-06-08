@@ -1,4 +1,4 @@
-package tests;
+package com.drfl.twinstickshooter.tests;
 
 import static org.junit.Assert.*;
 
@@ -16,13 +16,39 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * Unit tests for the Model/Controller packages
+ */
 @RunWith(GdxTestRunner.class)
-public class Tests{
+public class Tests {
 
+    //NOTEME javadoc
+    /**
+     * Physics step to use for tests.
+     */
+    private static final float UPDATE_STEP = 50;
+
+    //NOTEME javadoc
+    /**
+     * Controller instance.
+     */
     private TSSController controller;
+
+    //NOTEME javadoc
+    /**
+     * Model instance.
+     */
     private TSSModel model;
+
+    //NOTEME javadoc
+    /**
+     * Game instance.
+     */
     private TSSGame game;
 
+    /**
+     * Runs before each test.
+     */
     @Before
     public void setUpBefore() {
 
@@ -36,6 +62,10 @@ public class Tests{
         controller = TSSController.initInstance(game);
     }
 
+    //NOTEME javadoc
+    /**
+     * Spawns enemy and tests that score goes up if enemy's health drops to 0 or less.
+     */
     @Test
     public void testScore() {
 
@@ -51,6 +81,10 @@ public class Tests{
         assertNotEquals(score, model.getScore());
     }
 
+    //NOTEME javadoc
+    /**
+     * Spawns enemy and tests that enemy changes position over time.
+     */
     @Test(timeout = 2000)
     public void testEnemyMovement() {
 
@@ -62,13 +96,18 @@ public class Tests{
 
         do {
             finalPos = model.getEnemies().get(0).getPosition();
-            controller.update(50);
+            controller.update(UPDATE_STEP);
             initialPos = model.getEnemies().get(0).getPosition();
         } while(finalPos == initialPos);
 
         assertTrue(true);
     }
 
+    //NOTEME javadoc
+    /**
+     * Spawns enemy and tests shooting by allowing the enemy
+     * to hit the player and checking that player health drops.
+     */
     @Test
     public void testEnemyAutoShootPlayer() {
 
@@ -79,12 +118,16 @@ public class Tests{
         controller.update(TSSController.getSpawnMaxCool()); //Guarantee enemy spawn
         controller.update(TSSController.getSpawnMaxCool());
 
-        controller.update(50); //Guarantee enemy shoot
-        controller.update(50);
+        controller.update(UPDATE_STEP); //Guarantee enemy shoot
+        controller.update(UPDATE_STEP);
 
         assertTrue(oldHitpoints > model.getMainChar().getHitpoints());
     }
 
+    //NOTEME javadoc
+    /**
+     * Spawns enemy and tests if player hitting it with a bullet results in enemy losing health.
+     */
     @Test
     public void testBulletsEnemy() {
 
@@ -96,11 +139,16 @@ public class Tests{
         int oldHitpoints = model.getEnemies().get(0).getHitpoints();
 
         controller.shoot(model.getMainChar(),new Vector2(1,0));
-        controller.update(50);
+        controller.update(UPDATE_STEP);
 
         assertTrue(oldHitpoints > model.getEnemies().get(0).getHitpoints());
     }
 
+    //NOTEME javadoc
+    /**
+     * Tests 8-directional movement of the main character by
+     * checking whether the character moved as expected.
+     */
     @Test
     public void testMovement() {
 
