@@ -16,6 +16,9 @@ import com.drfl.twinstickshooter.model.entities.MainCharModel;
 
 import java.util.ArrayList;
 
+/**
+ * MVC Controller, handles Box2D physics for the whole game.
+ */
 public class TSSController implements ContactListener {
 
     //NOTEME javadoc
@@ -112,7 +115,7 @@ public class TSSController implements ContactListener {
     /**
      * Creates a new GameController that controls the physics of a TSSModel.
      *
-     * @param game the game associated with this controller
+     * @param game The game associated with this controller
      */
     private TSSController(TSSGame game) {
 
@@ -130,7 +133,7 @@ public class TSSController implements ContactListener {
      * Returns a singleton instance of controller, instance must
      * be initiated by a call to initInstance beforehand. Null is returned if not.
      *
-     * @return the singleton instance
+     * @return The singleton instance
      */
     public static TSSController getInstance() {
         return instance;
@@ -140,8 +143,8 @@ public class TSSController implements ContactListener {
     /**
      * Initiates a controller instance, associating it with a game.
      *
-     * @param game the game associated with this controller
-     * @return the singleton instance
+     * @param game The game associated with this controller
+     * @return The singleton instance
      */
     public static TSSController initInstance(TSSGame game) {
         TSSController.instance = new TSSController(game);
@@ -152,12 +155,12 @@ public class TSSController implements ContactListener {
     /**
      * Creates tile entities from a collision map layer loaded from a Tiled map.
      *
-     * @param collisionLayer the collision layer of the Tiled map
+     * @param collisionLayer The collision layer of the Tiled map
      */
     public void createTileEntities(MapLayer collisionLayer) {
         for(MapObject object : collisionLayer.getObjects()) {
-            new TileEntity(world, object.getProperties().get("x", float.class),
-                                object.getProperties().get("y", float.class),
+            new TileEntity(world, new Vector2(object.getProperties().get("x", float.class),
+                                object.getProperties().get("y", float.class)),
                                 object.getProperties().get("width", float.class),
                                 object.getProperties().get("height", float.class));
         }
@@ -167,23 +170,23 @@ public class TSSController implements ContactListener {
     /**
      * Moves an entity by applying a linear impulse. Also calls animation direction handling.
      *
-     * @param entity the entity body affected
-     * @param direction 2D movement vector
+     * @param entity The entity body affected
+     * @param direction The 2D movement vector
      */
     private void doMove(EntityBody entity, Vector2 direction) {
 
         if(direction.x == 0 && direction.y == 0) return;
         entityAnimateDirection((EntityModel) entity.getUserData(), direction.angle());
-        entity.applyLinearImpulse(entity.getMass() * direction.x, entity.getMass() * direction.y, true);
+        entity.applyLinearImpulse(new Vector2(entity.getMass() * direction.x, entity.getMass() * direction.y), true);
     }
 
     //NOTEME javadoc
     /**
      * Tries to shoot by testing the shot cooldown, returns whether it was able to shoot.
      *
-     * @param model entity model data
-     * @param delta how many seconds to decrement cooldown
-     * @return whether a shot happened
+     * @param model The entity model data
+     * @param delta How many seconds to decrement cooldown
+     * @return Whether a shot happened
      */
     private boolean tryShoot(EntityModel model, float delta) {
 
@@ -205,8 +208,8 @@ public class TSSController implements ContactListener {
     /**
      * Tries to change enemy direction by testing move cooldown.
      *
-     * @param model enemy model data
-     * @param delta how many seconds to decrement cooldown
+     * @param model The enemy model data
+     * @param delta How many seconds to decrement cooldown
      */
     private void enemyTryChangeDirection(EnemyModel model, float delta) {
 
@@ -230,10 +233,10 @@ public class TSSController implements ContactListener {
     //NOTEME javadoc
     /** Plays the sound. If the sound is already playing, it will be played again, concurrently.
      *
-     * @param sound the sound to play
-     * @param volume the volume in the range [0,1]
-     * @param pitch the pitch multiplier, 1 == default, >1 == faster, <1 == slower, the value has to be between 0.5 and 2.0
-     * @param pan panning in the range -1 (full left) to 1 (full right). 0 is center position
+     * @param sound The sound to play
+     * @param volume The volume in the range [0,1]
+     * @param pitch The pitch multiplier, 1 == default, >1 == faster, <1 == slower, the value has to be between 0.5 and 2.0
+     * @param pan Panning in the range -1 (full left) to 1 (full right). 0 is center position
      * */
     private void playSFX(Sound sound, float volume, float pitch, float pan) {
         sound.play(volume, pitch, pan);
@@ -244,7 +247,7 @@ public class TSSController implements ContactListener {
      * Handles all player logic. Moves the player and then tries to shoot a bullet.
      * Plays sound effect if bullet shot.
      *
-     * @param delta how many seconds to decrement player cooldowns
+     * @param delta How many seconds to decrement player cooldowns
      */
     private void playerDoLogic(float delta) {
 
@@ -261,7 +264,7 @@ public class TSSController implements ContactListener {
      * moves the enemy and then tries to shoot in the player's direction. Plays sound effect
      * if bullet shot.
      *
-     * @param delta how many seconds to decrement enemy's cooldowns
+     * @param delta How many seconds to decrement enemy's cooldowns
      */
     private void enemiesDoLogic(float delta) {
 
@@ -284,7 +287,7 @@ public class TSSController implements ContactListener {
      * Try to spawn an enemy if cooldown is <= 0. Can only spawn if
      * a spawner has free space.
      *
-     * @param delta how many seconds to decrement cooldown
+     * @param delta How many seconds to decrement cooldown
      */
     private void trySpawnEnemy(float delta) {
 
@@ -310,7 +313,7 @@ public class TSSController implements ContactListener {
      * Updates entity models to correspond to current body position and angle.
      * Checks if bodies are inside game area before updating.
      *
-     * @param bodies array of body entities
+     * @param bodies The array of body entities
      */
     private void updateBodies(Array<Body> bodies) {
 
@@ -375,8 +378,8 @@ public class TSSController implements ContactListener {
     /**
      * Sets animation direction for an entity model based on its heading.
      *
-     * @param model the entity model
-     * @param angle the angle of entity's heading
+     * @param model The entity model
+     * @param angle The angle of entity's heading
      */
     private void entityAnimateDirection(EntityModel model, float angle) {
 
@@ -399,20 +402,20 @@ public class TSSController implements ContactListener {
      * Returns a vector starting at enemy shooter's position
      * and ending in player's current position.
      *
-     * @param target the player
-     * @param shooter the enemy shooter
-     * @return vector between the two entities
+     * @param target The player
+     * @param shooter The enemy shooter
+     * @return The vector between the two entities
      */
     private Vector2 shootToPlayer(MainCharModel target, EnemyModel shooter) {
-        return new Vector2(target.getX() - shooter.getX(), target.getY() - shooter.getY());
+        return new Vector2(target.getPosition().x - shooter.getPosition().x, target.getPosition().y - shooter.getPosition().y);
     }
 
     //NOTEME javadoc
     /**
      * Shoots a bullet by creating its model and body with specified direction and owner.
      *
-     * @param owner entity who owns the bullet
-     * @param direction direction vector of bullet
+     * @param owner The entity who owns the bullet
+     * @param direction The direction vector of the bullet
      */
     public void shoot(EntityModel owner, Vector2 direction) {
 
@@ -428,7 +431,7 @@ public class TSSController implements ContactListener {
      * Called when two fixtures begin to touch. Handles specific
      * collision resolution.
      *
-     * @param contact contact between two shapes
+     * @param contact Contact between two shapes
      */
     @Override
     public void beginContact(Contact contact) {
@@ -453,7 +456,7 @@ public class TSSController implements ContactListener {
     /**
      * Set enemy's time to next direction to 0 since it hit a wall.
      *
-     * @param enemy the enemy model
+     * @param enemy The enemy model
      */
     private void enemyWall(EnemyModel enemy) {
         enemy.setTimeToNextDirection(0);
@@ -463,8 +466,8 @@ public class TSSController implements ContactListener {
     /**
      * Bullet collided with enemy, flag bullet for removal and hurt enemy.
      *
-     * @param bullet bullet model that hit the enemy
-     * @param enemy enemy model hit by bullet
+     * @param bullet The bullet model that hit the enemy
+     * @param enemy The enemy model hit by bullet
      */
     private void enemyCollide(BulletModel bullet, EnemyModel enemy) {
 
@@ -481,8 +484,8 @@ public class TSSController implements ContactListener {
      * Bullet collided with main char, flag bullet for removal, hurt main char and apply knockback.
      * If main char is flagged as hurt nothing happens as it has invincibility frames.
      *
-     * @param bullet bullet model that hit main char
-     * @param mainChar main char hit by bullet
+     * @param bullet The bullet model that hit main char
+     * @param mainChar The main char hit by bullet
      */
     private void mainCharCollide(BulletModel bullet, Body mainChar) {
 
@@ -569,7 +572,7 @@ public class TSSController implements ContactListener {
 
     //NOTEME javadoc
     /**
-     * @return returns enemy spawn flag and resets it
+     * @return Enemy spawn flag and resets it
      */
     public boolean isSpawned() {
 
@@ -581,7 +584,7 @@ public class TSSController implements ContactListener {
 
     //NOTEME javadoc
     /**
-     * @return enemy spawn max cooldown in seconds
+     * @return Enemy spawn max cooldown in seconds
      */
     public static float getSpawnMaxCool() {
         return SPAWN_MAX_COOL;

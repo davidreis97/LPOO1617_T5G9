@@ -64,19 +64,23 @@ public abstract class EntityModel {
         this.rotation = rotation;
     }
 
-    /**
-     * @return The x-coordinate of this entity in meters.
-     */
-    public float getX() {
-        return x;
+    public Vector2 getPosition() {
+        return new Vector2(x, y);
     }
 
-    /**
-     * @return The y-coordinate of this entity in meters.
-     */
-    public float getY() {
-        return y;
-    }
+//    /**
+//     * @return The x-coordinate of this entity in meters.
+//     */
+//    public float getX() {
+//        return x;
+//    }
+//
+//    /**
+//     * @return The y-coordinate of this entity in meters.
+//     */
+//    public float getY() {
+//        return y;
+//    }
 
     /**
      * @return The rotation of this entity in radians.

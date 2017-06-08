@@ -109,7 +109,7 @@ public class TSSModel {
 
         float angle = direction.angle() * (float) Math.PI / 180.0f - (float) Math.PI / 2.0f;
 
-        bullet.setPosition(owner.getX() - (float) Math.sin(angle), owner.getY() + (float) Math.cos(angle));
+        bullet.setPosition(owner.getPosition().x - (float) Math.sin(angle), owner.getPosition().y + (float) Math.cos(angle));
         bullet.setRotation(angle);
 
         if(owner instanceof MainCharModel) {
@@ -131,7 +131,7 @@ public class TSSModel {
     public EnemyModel createEnemy(int index) {
 
         enemySpawners.get(index).setSpawned(true);
-        enemies.add(new EnemyModel(enemySpawners.get(index).getX(), enemySpawners.get(index).getY(), 0));
+        enemies.add(new EnemyModel(enemySpawners.get(index).getPosition().x, enemySpawners.get(index).getPosition().y, 0));
 
         return enemies.get(enemies.size() - 1);
     }

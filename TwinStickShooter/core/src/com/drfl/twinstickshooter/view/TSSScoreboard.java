@@ -88,9 +88,7 @@ public class TSSScoreboard extends ScreenAdapter {
                     if(!nameField.getText().isEmpty()) {
 
                         game.addScore(nameField.getText(), TSSModel.getInstance().getScore());
-
-//                        TSSModel.getInstance().setScore(0);
-
+                        
                         game.getStateM().processState(TSSState.GameEvent.MAIN);
                     } else warning.setText("Invalid name!");
                 }

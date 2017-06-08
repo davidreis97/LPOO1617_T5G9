@@ -7,67 +7,105 @@ import com.drfl.twinstickshooter.model.entities.EntityModel;
 import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;
 
 /**
- * Abstract class that represents an abstract Box2D body.
+ * Abstract class for representing Controller entities which implement Box2D body functionalities.
  */
 public abstract class EntityBody {
 
-    final static short MAINCHAR_BODY = 0x0001;
-    final static short BULLET_BODY = 0x0002;
-    final static short TILE_ENTITY = 0x0004;
-    final static short ENEMY_BODY = 0x0008;
-    final static short COLLIDE_ALL = (MAINCHAR_BODY | BULLET_BODY | TILE_ENTITY | ENEMY_BODY);
-
+    //NOTEME javadoc
     /**
-     * The Box2D body that supports this body.
+     * Bit flag representing main char body.
+     */
+    static final short MAINCHAR_BODY = 0x0001;
+
+    //NOTEME javadoc
+    /**
+     * Bit flag representing bullet body.
+     */
+    static final short BULLET_BODY = 0x0002;
+
+    //NOTEME javadoc
+    /**
+     * Bit flag representing tile body.
+     */
+    static final short TILE_ENTITY = 0x0004;
+
+    //NOTEME javadoc
+    /**
+     * Bit flag representing enemy body.
+     */
+    static final short ENEMY_BODY = 0x0008;
+
+    //NOTEME javadoc
+    /**
+     * Flag representing all possible collision bits.
+     */
+    static final short COLLIDE_ALL = (short) (MAINCHAR_BODY | BULLET_BODY | TILE_ENTITY | ENEMY_BODY);
+
+    //NOTEME javadoc
+    /**
+     * Linear damping used for all dynamic bodies.
+     */
+    private static final float DAMPING = 5;
+
+    //NOTEME javadoc
+    /**
+     * The Box2D body that supports this entity's body.
      */
     final Body body;
 
+    //NOTEME javadoc
     /**
-     * Constructs a body representing a model in a certain world.
+     * Constructs an entity body representing a model in a certain world.
      *
-     * @param world The world this body lives on.
-     * @param model The model representing the body.
+     * @param world The world this body lives on
+     * @param model The model representing the body
      */
     EntityBody(World world, EntityModel model) {
+
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(model.getX(), model.getY());
+        bodyDef.position.set(model.getPosition().x, model.getPosition().y);
         bodyDef.fixedRotation = true;
         bodyDef.angle = model.getRotation();
-        bodyDef.linearDamping = 5f;
+        bodyDef.linearDamping = DAMPING;
 
         body = world.createBody(bodyDef);
         body.setUserData(model);
     }
 
+    //NOTEME javadoc
     /**
-     * Constructs a body representing a model in a certain world.
+     * Constructs a tile entity belonging to a certain world.
      *
-     * @param world The world this body lives on.
+     * @param world The world the tile entity belongs to
      */
-    EntityBody(World world, float x, float y) {
+    EntityBody(World world, Vector2 coords) {
+
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x, y);
+        bodyDef.position.set(coords.x, coords.y);
 
         body = world.createBody(bodyDef);
         body.setUserData(this);
     }
 
+    //NOTEME javadoc
     /**
      * Helper method to create a polygon fixture represented by a set of vertexes.
-     * @param body The body the fixture is to be attached to.
+     *
+     * @param body The body the fixture is to be attached to
      * @param vertexes The vertexes defining the fixture in pixels so it is
-     *                 easier to get them from a bitmap image.
-     * @param width The width of the bitmap the vertexes where extracted from.
-     * @param height The height of the bitmap the vertexes where extracted from.
-     * @param density The density of the fixture. How heavy it is in relation to its area.
-     * @param friction The friction of the fixture. How slippery it is.
-     * @param restitution The restitution of the fixture. How much it bounces.
-     * @param category
-     * @param mask
+     *                 easier to get them from a bitmap image
+     * @param width The width of the bitmap the vertexes where extracted from
+     * @param height The height of the bitmap the vertexes where extracted from
+     * @param density The density of the fixture. How heavy it is in relation to its area
+     * @param friction The friction of the fixture. How slippery it is
+     * @param restitution The restitution of the fixture. How much it bounces
+     * @param category The collision category bits
+     * @param mask The collision mask bits. This states the categories that this shape would accept for collision
      */
     final void createFixture(Body body, float[] vertexes, int width, int height, float density, float friction, float restitution, short category, short mask) {
+
         // Transform pixels into meters, center and invert the y-coordinate
         for (int i = 0; i < vertexes.length; i++) {
             if (i % 2 == 0) vertexes[i] -= width / 2;   // center the vertex x-coordinate
@@ -95,117 +133,67 @@ public abstract class EntityBody {
         polygon.dispose();
     }
 
+    //NOTEME javadoc
     /**
-     * Wraps the getX method from the Box2D body class.
+     * Wraps the getPosition method from the Box2D body class.
      *
-     * @return the x-coordinate of this body.
+     * @return The world position of the body's origin
      */
-    public float getX() {
-        return body.getPosition().x;
+    public Vector2 getPosition() {
+        return body.getPosition();
     }
 
+    //NOTEME javadoc
     /**
-     * Wraps the getY method from the Box2D body class.
+     * Wraps the getMass method from the Box2D body class.
      *
-     * @return the y-coordinate of this body.
-     */
-    public float getY() {
-        return body.getPosition().y;
-    }
-
-    /**
-     * Wraps the getAngle method from the Box2D body class.
-     *
-     * @return the angle of rotation of this body.
-     */
-    public float getAngle() {
-        return body.getAngle();
-    }
-
-    /**
-     * Get the total mass of the body.
-     *
-     * @return The mass, usually in kilograms (kg).
+     * @return The mass, usually in kilograms (kg)
      */
     public float getMass() {
         return body.getMass();
     }
 
+    //NOTEME javadoc
     /**
-     * Wraps the setTransform method from the Box2D body class.
+     * Wraps the setLinearVelocity method from the Box2D body class.
      *
-     * @param x the new x-coordinate for this body
-     * @param y the new y-coordinate for this body
-     * @param angle the new rotation angle for this body
-     */
-    public void setTransform(float x, float y, float angle) {
-        body.setTransform(x, y, angle);
-    }
-
-    /**
-     * Sets the angular velocity of this object in the direction it is rotated.
-     *
-     * @param velocity the new linear velocity angle for this body
+     * @param velocity The new linear velocity for this body
      */
     public void setLinearVelocity(float velocity) {
-        body.setLinearVelocity((float)(velocity * -Math.sin(getAngle())), (float) (velocity * Math.cos(getAngle())));
+        body.setLinearVelocity((float) (velocity * -Math.sin(body.getAngle())), (float) (velocity * Math.cos(body.getAngle())));
     }
 
+    //NOTEME javadoc
     /**
-     * Set the linear damping of the body.
+     * Wraps the setLinearDamping method from the Box2D body class.
+     *
+     * @param damping The linear damping
      */
     public void setLinearDamping(float damping) {
         body.setLinearDamping(damping);
     }
 
-//    /**
-//     * Wraps the setAngularVelocity method from the Box2D body class.
-//     *
-//     * @param omega the new angular velocity angle for this body
-//     */
-//    public void setAngularVelocity(float omega) {
-//        body.setAngularVelocity(omega);
-//    }
-
+    //NOTEME javadoc
     /**
-     * Wraps the applyForceToCenter method from the Box2D body class.
+     * Wraps the applyLinearImpulse method from the Box2D body class.
+     * Point of application is always the center of the body.
      *
-     * @param forceX the x-component of the force to be applied
-     * @param forceY the y-component of the force to be applied
-     * @param awake should the body be awaken
+     * @param impulse The world impulse vector, usually in N-seconds or kg-m/s
+     * @param wake Wake the body
      */
-    public void applyForceToCenter(float forceX, float forceY, boolean awake) {
-
-        body.applyForceToCenter(forceX, forceY, awake);
+    public void applyLinearImpulse(Vector2 impulse, boolean wake) {
+        body.applyLinearImpulse(impulse, body.getWorldCenter(), wake);
     }
 
-    public void applyLinearImpulse(float impulseX, float impulseY, boolean awake) {
-
-        Vector2 center = body.getWorldCenter();
-        Vector2 impulse = new Vector2(impulseX, impulseY);
-        body.applyLinearImpulse(impulse, center, awake);
-    }
-
+    //NOTEME javadoc
+    /**
+     * @return The Box2D body used by an entity body.
+     */
     public Body getBody() {
         return body;
     }
 
-    /**
-     * @param velX the x-component of the velocity
-     * @param velY the y-component of the velocity
-     */
-    public void setLinearVelocity(float velX, float velY) {
-
-        body.setLinearVelocity(velX, velY);
-    }
-
-    /**
-     * @return The linear velocity vector.
-     */
-    public Vector2 getLinearVelocity() {
-        return body.getLinearVelocity();
-    }
-
+    //NOTEME javadoc
     /**
      * Wraps the getUserData method from the Box2D body class.
      *

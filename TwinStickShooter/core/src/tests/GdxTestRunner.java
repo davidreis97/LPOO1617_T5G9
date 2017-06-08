@@ -32,7 +32,7 @@ import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 
 public class GdxTestRunner extends BlockJUnit4ClassRunner implements ApplicationListener {
 
-	private Map<FrameworkMethod, RunNotifier> invokeInRender = new HashMap<FrameworkMethod, RunNotifier>();
+	private Map<FrameworkMethod, RunNotifier> invokeInRender = new HashMap<>();
 
 	public GdxTestRunner(Class<?> klass) throws InitializationError {
 		super(klass);
@@ -81,9 +81,6 @@ public class GdxTestRunner extends BlockJUnit4ClassRunner implements Application
 		waitUntilInvokedInRenderMethod();
 	}
 
-	/**
-	    *
-	    */
 	private void waitUntilInvokedInRenderMethod() {
 		try {
 			while (true) {

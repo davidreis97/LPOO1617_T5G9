@@ -315,8 +315,8 @@ public class TSSView extends ScreenAdapter {
             }
 
             TSSModel.getInstance().getMainChar().setMoveDirection(moveDirection);
-            TSSModel.getInstance().getMainChar().setShootDirection(new Vector2(Gdx.input.getX() * PIXEL_TO_METER - TSSModel.getInstance().getMainChar().getX(),
-                    (VIEWPORT_HEIGHT - Gdx.input.getY() * PIXEL_TO_METER) - TSSModel.getInstance().getMainChar().getY())); //Flip Y on mouse
+            TSSModel.getInstance().getMainChar().setShootDirection(new Vector2(Gdx.input.getX() * PIXEL_TO_METER - TSSModel.getInstance().getMainChar().getPosition().x,
+                    (VIEWPORT_HEIGHT - Gdx.input.getY() * PIXEL_TO_METER) - TSSModel.getInstance().getMainChar().getPosition().y)); //Flip Y on mouse
         }
     }
 

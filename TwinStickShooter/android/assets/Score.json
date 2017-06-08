@@ -1,6 +1,12 @@
 [
 {
 	class: com.drfl.twinstickshooter.TSSScore
+	name: Leet
+	score: 2800
+	date: 2017/06/08
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
 	name: Cold One
 	score: 1500
 	date: 2017/06/08
@@ -50,12 +56,6 @@
 {
 	class: com.drfl.twinstickshooter.TSSScore
 	name: EZSPECIAL
-	score: 200
-	date: 2017/06/07
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: Loser
 	score: 200
 	date: 2017/06/07
 }
