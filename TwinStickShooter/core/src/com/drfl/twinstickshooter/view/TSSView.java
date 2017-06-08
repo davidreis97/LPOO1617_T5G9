@@ -289,12 +289,12 @@ public class TSSView extends ScreenAdapter {
 
         if(game.getInputMode() == TSSGame.ControlType.CONTROLLER) {
 
-            TSSController.getInstance().setMoveInput(TSSGamePad.getInstance().getLeftStickVector());
-            TSSController.getInstance().setShootInput(TSSGamePad.getInstance().getRightStickVector());
+            TSSModel.getInstance().getMainChar().setMoveDirection(TSSGamePad.getInstance().getLeftStickVector());
+            TSSModel.getInstance().getMainChar().setShootDirection(TSSGamePad.getInstance().getRightStickVector());
         } else if(game.getInputMode() == TSSGame.ControlType.REMOTE) {
 
-            TSSController.getInstance().setMoveInput(game.getServer().getMovement());
-            TSSController.getInstance().setShootInput(game.getServer().getShooting());
+            TSSModel.getInstance().getMainChar().setMoveDirection(game.getServer().getMovement());
+            TSSModel.getInstance().getMainChar().setShootDirection(game.getServer().getShooting());
         } else if(game.getInputMode() == TSSGame.ControlType.KBM) {
 
             Vector2 moveDirection = new Vector2(0, 0);
@@ -312,8 +312,8 @@ public class TSSView extends ScreenAdapter {
                 moveDirection.x = 1.0f;
             }
 
-            TSSController.getInstance().setMoveInput(moveDirection);
-            TSSController.getInstance().setShootInput(new Vector2(Gdx.input.getX() * PIXEL_TO_METER - TSSModel.getInstance().getMainChar().getX(),
+            TSSModel.getInstance().getMainChar().setMoveDirection(moveDirection);
+            TSSModel.getInstance().getMainChar().setShootDirection(new Vector2(Gdx.input.getX() * PIXEL_TO_METER - TSSModel.getInstance().getMainChar().getX(),
                     (VIEWPORT_HEIGHT - Gdx.input.getY() * PIXEL_TO_METER) - TSSModel.getInstance().getMainChar().getY())); //Flip Y on mouse
         }
     }

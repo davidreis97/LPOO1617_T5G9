@@ -1,5 +1,7 @@
 package com.drfl.twinstickshooter.model.entities;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * Abstract model for representing entities in a game model.
  */
@@ -8,6 +10,9 @@ public abstract class EntityModel {
     public enum AnimDirection {NONE, DOWN, LEFT, RIGHT, UP};
 
     private static final int HP_MAX = 40;
+
+    protected Vector2 shootDirection = new Vector2(0, 0);
+    protected Vector2 moveDirection = new Vector2(0, 0);
 
     /**
      * The x-coordinate of this model in meters.
@@ -144,6 +149,10 @@ public abstract class EntityModel {
         this.timeToNextShoot = timeToNextShoot;
     }
 
+    public float getShootCooldown() {
+        return 0;
+    }
+
     public boolean isHurt() {
         return isHurt;
     }
@@ -154,5 +163,21 @@ public abstract class EntityModel {
 
     public static int getHpMax() {
         return HP_MAX;
+    }
+
+    public Vector2 getShootDirection() {
+        return shootDirection;
+    }
+
+    public void setShootDirection(Vector2 shootDirection) {
+        this.shootDirection = shootDirection;
+    }
+
+    public Vector2 getMoveDirection() {
+        return moveDirection;
+    }
+
+    public void setMoveDirection(Vector2 moveDirection) {
+        this.moveDirection = moveDirection;
     }
 }

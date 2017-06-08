@@ -1,6 +1,36 @@
 [
 {
 	class: com.drfl.twinstickshooter.TSSScore
+	name: Master
+	score: 1300
+	date: 2017/06/08
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
+	name: Pepe
+	score: 500
+	date: 2017/06/07
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
+	name: Mouse
+	score: 500
+	date: 2017/06/08
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
+	name: Henlo Bird
+	score: 300
+	date: 2017/06/07
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
+	name: Hertz
+	score: 300
+	date: 2017/06/08
+}
+{
+	class: com.drfl.twinstickshooter.TSSScore
 	name: EZSPECIAL
 	score: 200
 	date: 2017/06/07
@@ -26,12 +56,6 @@
 {
 	class: com.drfl.twinstickshooter.TSSScore
 	name: Hello
-	score: 100
-	date: 2017/06/07
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: Henlo
 	score: 100
 	date: 2017/06/07
 }

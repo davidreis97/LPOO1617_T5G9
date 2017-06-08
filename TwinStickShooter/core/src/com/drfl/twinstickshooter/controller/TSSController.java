@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.drfl.twinstickshooter.TSSGame;
-import com.drfl.twinstickshooter.TSSState;
 import com.drfl.twinstickshooter.controller.entities.*;
 import com.drfl.twinstickshooter.model.TSSModel;
 import com.drfl.twinstickshooter.model.entities.BulletModel;
@@ -27,16 +26,6 @@ public class TSSController implements ContactListener {
     private static TSSController instance;
 
     /**
-     * User movement input in x,y.
-     */
-    private static Vector2 moveInput = new Vector2(0, 0);
-
-    /**
-     * User shoot input in x,y.
-     */
-    private static Vector2 shootInput = new Vector2(0, 0);
-
-    /**
      * The arena width in meters.
      */
     public static final int MAP_WIDTH = 40;
@@ -47,14 +36,9 @@ public class TSSController implements ContactListener {
     public static final int MAP_HEIGHT = 21;
 
     /**
-     * Minimum time between consecutive shots in seconds
-     */
-    private static final float TIME_BETWEEN_SHOTS = .2f; //TODO refactor to player model like enemy
-
-    /**
      * Cooldown for enemy spawning
      */
-    private static final float ENEMY_SPAWN_CD = 4.0f;
+    private static final float SPAWN_MAX_COOL = 4.0f;
 
     /**
      * The speed of bullets
@@ -69,18 +53,17 @@ public class TSSController implements ContactListener {
     /**
      * Current enemy spawn cooldown
      */
-    private float timeToNextSpawn = ENEMY_SPAWN_CD;
+    private float timeToNextSpawn = SPAWN_MAX_COOL;
 
     /**
      * The physics world controlled by this controller.
      */
-//    private final World world;
-    private World world;
+    private final World world;
+
     /**
      * The main character body.
      */
-//    private final MainCharBody mainCharBody;
-    private MainCharBody mainCharBody;
+    private final MainCharBody mainCharBody;
 
     /**
      * Enemy bodies
@@ -138,91 +121,168 @@ public class TSSController implements ContactListener {
         return instance;
     }
 
-    public void setTimeToNextSpawn(float timeToNextSpawn) {
-        this.timeToNextSpawn = timeToNextSpawn;
-    }
+    public void spawnTestEnemy(int spawnIndex) {
 
-    public void spawnTestEnemy(int spawnIndex){
         if(spawnIndex != -1) {
             EnemyModel enemy = TSSModel.getInstance().createTestEnemy(spawnIndex);
             enemies.add(new EnemyBody(world, enemy));
         }
     }
 
+    //NOTEME javadoc ready
+    /**
+     * Moves an entity by applying a linear impulse. Also calls animation direction handling.
+     *
+     * @param entity the entity body affected
+     * @param direction 2D movement vector
+     */
+    private void doMove(EntityBody entity, Vector2 direction) {
+
+        if(direction.x == 0 && direction.y == 0) return;
+        entityAnimateDirection(entity, direction);
+        entity.applyLinearImpulse(entity.getMass() * direction.x, entity.getMass() * direction.y, true);
+    }
+
+    //NOTEME javadoc ready
+    /**
+     * Tries to shoot by testing the shot cooldown, returns whether it was able to shoot.
+     *
+     * @param model entity model data
+     * @param delta how many seconds to decrement cooldown
+     * @return whether a shot happened
+     */
+    private boolean tryShoot(EntityModel model, float delta) {
+
+        float shootCooldown = model.getTimeToNextShoot();
+
+        if(shootCooldown > 0) {
+            model.setTimeToNextShoot(shootCooldown - delta);
+            return false;
+        }
+
+        if(model.getShootDirection().x == 0 && model.getShootDirection().y == 0) return false;
+
+        model.setTimeToNextShoot(model.getShootCooldown());
+        this.shoot(model, model.getShootDirection());
+        return true;
+    }
+
+    //NOTEME javadoc ready
+    /**
+     * Tries to change enemy direction by testing move cooldown.
+     *
+     * @param model enemy model data
+     * @param delta how many seconds to decrement cooldown
+     */
+    private void enemyTryChangeDirection(EnemyModel model, float delta) {
+
+        float cooldown = model.getTimeToNextDirection();
+
+        if(cooldown > 0) {
+            model.setTimeToNextDirection(cooldown - delta);
+            return;
+        }
+
+        model.resetTimeToNextDirection();
+
+        Vector2 moveDir;
+        do {
+            moveDir = generateMovement();
+        } while(model.getOppositeDirection() == moveDir);
+
+        model.setMoveDirection(moveDir);
+    }
+
+    //NOTEME javadoc ready
+    /** Plays the sound. If the sound is already playing, it will be played again, concurrently.
+     *
+     * @param sound the sound to play
+     * @param volume the volume in the range [0,1]
+     * @param pitch the pitch multiplier, 1 == default, >1 == faster, <1 == slower, the value has to be between 0.5 and 2.0
+     * @param pan panning in the range -1 (full left) to 1 (full right). 0 is center position.
+     * */
+    private void playSFX(Sound sound, float volume, float pitch, float pan) {
+        sound.play(volume, pitch, pan);
+    }
+
+    //NOTEME javadoc ready
+    /**
+     * Handles all player logic. Moves the player and then tries to shoot a bullet.
+     * Plays sound effect if bullet shot.
+     *
+     * @param delta how many seconds to decrement player cooldowns
+     */
+    private void playerDoLogic(float delta) {
+
+        doMove(mainCharBody, ((MainCharModel) mainCharBody.getUserData()).getMoveDirection());
+
+        if(tryShoot((MainCharModel) mainCharBody.getUserData(), delta)) {
+            if(game.getSoundVolume() > 0 ) playSFX(((Sound) game.getAssetManager().get("Shoot.mp3")), game.getSoundVolume(), 1.0f, 0); //TODO magic value
+        }
+    }
+
+    //NOTEME javadoc ready
+    /**
+     * Handles all enemy logic. For each enemy tries to change current direction,
+     * moves the enemy and then tries to shoot in the player's direction. Plays sound effect
+     * if bullet shot.
+     *
+     * @param delta how many seconds to decrement enemy's cooldowns
+     */
+    private void enemiesDoLogic(float delta) {
+
+        for(EnemyBody enemy : enemies) {
+
+            enemyTryChangeDirection((EnemyModel) enemy.getUserData(), delta);
+
+            doMove(enemy, ((EnemyModel)enemy.getUserData()).getMoveDirection());
+
+            ((EnemyModel)enemy.getUserData()).setShootDirection(generateShootDirection((MainCharModel)mainCharBody.getUserData(), (EnemyModel)enemy.getUserData()));
+
+            if(tryShoot((EnemyModel) enemy.getUserData(), delta)) {
+                if(game.getSoundVolume() > 0) playSFX((Sound) game.getAssetManager().get("Shoot.mp3"), game.getSoundVolume(), 1.6f, 0); //TODO magic value
+            }
+        }
+    }
+
+    //NOTEME javadoc ready
+    /**
+     * Try to spawn an enemy if cooldown is <= 0. Can only spawn if
+     * a spawner has free space.
+     *
+     * @param delta how many seconds to decrement cooldown
+     */
+    private void trySpawnEnemy(float delta) {
+
+        if(this.timeToNextSpawn > 0) {
+            timeToNextSpawn -= delta;
+            return;
+        }
+
+        int spawnIndex = TSSModel.getInstance().createSpawnIndex();
+
+        if(spawnIndex != -1) { //TODO remove magic value
+            EnemyModel enemy = TSSModel.getInstance().createEnemy(spawnIndex);
+            enemies.add(new EnemyBody(world, enemy));
+        }
+
+        timeToNextSpawn = SPAWN_MAX_COOL;
+    }
+
+    //NOTEME javadoc ready
     /**
      * Calculates the next physics step of duration delta (in seconds).
      *
-     * @param delta The size of this physics step in seconds.
+     * @param delta The size of this physics step in seconds
      */
     public void update(float delta) {
 
-//        TSSModel.getInstance().update(delta); //NOTEME can use for bullet decay time, others
+        this.playerDoLogic(delta);
+        this.enemiesDoLogic(delta);
 
-        //TODO refactor enemy/player handling
+        this.trySpawnEnemy(delta);
 
-        this.spawnEnemy();
-        if(timeToNextSpawn > 0) timeToNextSpawn -= delta;
-
-        //Player movement/animation
-        if(!(moveInput.x == 0 && moveInput.y == 0)) {
-
-            entityAnimate(mainCharBody, moveInput);
-            Vector2 impulse = new Vector2(mainCharBody.getMass() * moveInput.x, mainCharBody.getMass() * moveInput.y);
-            mainCharBody.applyLinearImpulse(impulse.x, impulse.y, true);
-        }
-
-        //Main character shoot
-        float mainCharCD = ((MainCharModel)mainCharBody.getUserData()).getTimeToNextShoot();
-
-        if(mainCharCD <= 0) {
-            ((MainCharModel)mainCharBody.getUserData()).setTimeToNextShoot(TIME_BETWEEN_SHOTS);
-            this.shoot(((MainCharModel)mainCharBody.getUserData()), shootInput);
-            if(!(shootInput.x == 0 && shootInput.y == 0)) {
-                if(game.getSoundVolume() != 0) ((Sound)TSSView.getInstance().getGame().getAssetManager().get("Shoot.mp3")).play(game.getSoundVolume() * 0.65f);
-            }
-        } else {
-            ((MainCharModel)mainCharBody.getUserData()).setTimeToNextShoot(mainCharCD - delta);
-        }
-
-        //Enemy movement/animation/shooting
-        for(EnemyBody enemy : enemies) {
-
-            float currCooldown = ((EnemyModel)enemy.getUserData()).getTimeToNextDirection();
-            float shootCooldown = ((EnemyModel)enemy.getUserData()).getTimeToNextShoot();
-
-            if(currCooldown > 0) {
-                ((EnemyModel)enemy.getUserData()).setTimeToNextDirection(currCooldown - delta);
-            } else {
-                ((EnemyModel)enemy.getUserData()).resetTimeToNextDirection();
-                Vector2 moveDir;
-                 do {
-                     moveDir = generateMovement();
-                } while(((EnemyModel)enemy.getUserData()).getPreviousDirection().contains(moveDir, false));
-                ((EnemyModel)enemy.getUserData()).setMoveDirection(moveDir);
-            }
-
-            if(shootCooldown > 0) {
-                ((EnemyModel)enemy.getUserData()).setTimeToNextShoot(shootCooldown - delta);
-            } else {
-                ((EnemyModel)enemy.getUserData()).resetTimeToNextShoot();
-                ((EnemyModel)enemy.getUserData()).setShootDirection(generateShootDirection((MainCharModel)mainCharBody.getUserData(), (EnemyModel)enemy.getUserData()));
-                shoot((EnemyModel)enemy.getUserData(), ((EnemyModel) enemy.getUserData()).getShootDirection());
-                if(game.getSoundVolume() != 0)
-                ((Sound)TSSView.getInstance().getGame().getAssetManager().get("Shoot.mp3")).play(game.getSoundVolume(), 1.6f, 0); //TODO magic value
-            }
-
-            Vector2 direction = ((EnemyModel)enemy.getUserData()).getMoveDirection();
-
-            if(direction.x == 0 && direction.y == 0) continue;
-
-            entityAnimate(enemy, direction);
-
-            Vector2 impulse = new Vector2(enemy.getMass() * direction.x, enemy.getMass() * direction.y);
-            enemy.applyLinearImpulse(impulse.x, impulse.y, true);
-        }
-
-        float frameTime = Math.min(delta, 0.25f);
-        accumulator += frameTime;
+        accumulator += Math.min(delta, 0.25f);
 
         while (accumulator >= 1/60f) {
             world.step(1/60f, 6, 2);
@@ -234,7 +294,7 @@ public class TSSController implements ContactListener {
 
         for (Body body : bodies) {
             if(!body.getType().equals(BodyDef.BodyType.StaticBody)) {
-                verifyBounds(body);
+                this.verifyBounds(body);
                 ((EntityModel) body.getUserData()).setPosition(body.getPosition().x, body.getPosition().y);
                 ((EntityModel) body.getUserData()).setRotation(body.getAngle());
             }
@@ -260,7 +320,7 @@ public class TSSController implements ContactListener {
             body.setTransform(body.getPosition().x, 0, body.getAngle());
     }
 
-    private void entityAnimate(EntityBody entity, Vector2 direction) {
+    private void entityAnimateDirection(EntityBody entity, Vector2 direction) {
 
         float angle = direction.angle();
 
@@ -301,43 +361,9 @@ public class TSSController implements ContactListener {
     }
 
     /**
-     * Try to spawn an enemy if cooldown seconds have passed. Can only spawn
-     * if a spawner has space.
-     */
-    private void spawnEnemy() {
-
-        if(timeToNextSpawn > 0) return;
-
-        int spawnIndex = TSSModel.getInstance().createSpawnIndex();
-
-        if(spawnIndex != -1) { //TODO remove magic value
-            EnemyModel enemy = TSSModel.getInstance().createEnemy(spawnIndex);
-            enemies.add(new EnemyBody(world, enemy));
-        }
-
-        timeToNextSpawn = ENEMY_SPAWN_CD;
-    }
-
-    /**
-     * @param moveInput Set movement vector of main char
-     */
-    public void setMoveInput(Vector2 moveInput) {
-        this.moveInput = moveInput;
-    }
-
-    /**
-     * @param shootInput Set shoot vector of main char
-     */
-    public void setShootInput(Vector2 shootInput) {
-        this.shootInput = shootInput.nor();
-    }
-
-    /**
      * Shoots a bullet
      */
     public void shoot(EntityModel owner, Vector2 direction) { //NOTEME pass bullet type if different weapons
-
-        if(direction.x == 0 && direction.y == 0) return;
 
         BulletModel bullet = TSSModel.getInstance().createBullet(owner, direction);
 
@@ -470,9 +496,5 @@ public class TSSController implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
-    }
-
-    public static void setInstance(TSSController instance) {
-        TSSController.instance = instance;
     }
 }

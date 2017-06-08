@@ -2,7 +2,6 @@ package tests;
 
 import static org.junit.Assert.*;
 
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
@@ -13,7 +12,7 @@ import com.drfl.twinstickshooter.model.TSSModel;
 import com.drfl.twinstickshooter.model.entities.EnemyModel;
 import com.drfl.twinstickshooter.model.entities.EnemySpawnerModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
-import com.drfl.twinstickshooter.view.entities.EnemyView;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,9 +24,8 @@ public class Tests{
     TSSModel model;
     TSSGame game;
 
-
     @Before
-    public void setUpBefore(){
+    public void setUpBefore() {
 
         game = new TSSGame();
 
@@ -40,7 +38,8 @@ public class Tests{
     }
 
     @Test
-    public void testScore(){
+    public void testScore() {
+
         model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
         controller.spawnTestEnemy(0);
 
@@ -52,7 +51,8 @@ public class Tests{
     }
 
     @Test(timeout=2000)
-    public void testEnemyMovement(){
+    public void testEnemyMovement() {
+
         Vector2 finalPos, initialPos;
         model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
         controller.spawnTestEnemy(0);
@@ -67,7 +67,7 @@ public class Tests{
     }
 
     @Test
-    public void testEnemyAutoShootPlayer(){
+    public void testEnemyAutoShootPlayer() {
 
         model.getEnemySpawners().add(new EnemySpawnerModel(5,0));
         controller.spawnTestEnemy(0);
@@ -80,7 +80,7 @@ public class Tests{
     }
 
     @Test
-    public void testBulletsEnemy(){
+    public void testBulletsEnemy() {
 
         model.getEnemySpawners().add(new EnemySpawnerModel(1.5f,0));
         controller.spawnTestEnemy(0);
@@ -94,7 +94,7 @@ public class Tests{
     }
 
     @Test
-    public void testMovement(){
+    public void testMovement() {
 
         Vector2[] possibleMovements = {
                 new Vector2(0,0),
@@ -107,10 +107,12 @@ public class Tests{
                 new Vector2(1,1),
                 new Vector2(1,-1)};
 
-        for (Vector2 movement : possibleMovements){
+        for (Vector2 movement : possibleMovements) {
+
             Vector2 initialPos = new Vector2(model.getMainChar().getX(),model.getMainChar().getY());
 
-            controller.setMoveInput(movement);
+            model.getMainChar().setMoveDirection(movement);
+
             controller.update(1);
 
             if(movement.x > 0) {

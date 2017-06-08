@@ -8,6 +8,8 @@ import static com.drfl.twinstickshooter.view.TSSView.TILESIZE;
  */
 public class MainCharModel extends EntityModel {
 
+    private static final float TIME_BETWEEN_SHOTS = 0.2f;
+
     private boolean isDead = false;
 
     /**
@@ -32,5 +34,9 @@ public class MainCharModel extends EntityModel {
 
     public void setDead(boolean dead) {
         isDead = dead;
+    }
+
+    public float getShootCooldown() {
+        return TIME_BETWEEN_SHOTS;
     }
 }

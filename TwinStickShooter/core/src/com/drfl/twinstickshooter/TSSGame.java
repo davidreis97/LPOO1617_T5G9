@@ -42,8 +42,10 @@ public class TSSGame extends Game {
 	private AssetManager assetManager;
 	private Stage stage;
 	private TSSState stateM;
-	private float musicVolume = 0.60f;
-	private float soundVolume = 0.35f;
+//	private float musicVolume = 0.60f;
+//	private float soundVolume = 0.35f; //TODO set this back
+    private float musicVolume = 0;
+    private float soundVolume = 0;
 	private Array<TSSScore> scores = new Array<TSSScore>();
 	private TiledMap currentMap;
 
@@ -162,7 +164,7 @@ public class TSSGame extends Game {
 		batch.dispose();
 		assetManager.dispose();
 		server.dispose();
-		currentMap.dispose();
+		if(currentMap != null) currentMap.dispose();
 	}
 
     /**
