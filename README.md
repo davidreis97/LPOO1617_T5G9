@@ -3,8 +3,10 @@ Francisco Teixeira Lopes - 201106912 - ei11056@fe.up.pt
 
 David Alexandre Gomes Reis - 201607927 - up201607927@fe.up.pt
 
-[![BCH compliance](https://bettercodehub.com/edge/badge/davidreis97/LPOO1617_T5G9?token=4c896aa8e6f8e7d1f536652d1daba905df0a5acc)](https://bettercodehub.com/)
+Setup and Installation details available on the folder "SetupAndInstallation"
 
-![alt tag](Coverage.png)
+[Architecture Design](https://github.com/davidreis97/LPOO1617_T5G9/blob/final-project/Docs/Architecture%20Design.pdf)
 
-![alt tag](PIT%20report.png)
+[GUI Design](https://github.com/davidreis97/LPOO1617_T5G9/blob/final-project/Docs/GUI%20Design.pdf)
+
+[Test Design](https://github.com/davidreis97/LPOO1617_T5G9/blob/final-project/Docs/TestDesign.pdf)
