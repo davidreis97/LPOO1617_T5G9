@@ -152,14 +152,6 @@ public class TSSView extends ScreenAdapter {
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
     }
 
-    public static void setInstance(TSSView instance) {
-        TSSView.instance = instance;
-    }
-
-    public static TSSView getInstance() {
-        return instance;
-    }
-
     private void startMusic() {
 
         ((Music)game.getAssetManager().get("GameIntro.ogg")).setOnCompletionListener(new Music.OnCompletionListener() {

@@ -5,4 +5,10 @@
 	score: 2200
 	date: 2017/06/09
 }
+{
+	class: com.drfl.twinstickshooter.game.TSSScore
+	name: X360
+	score: 2000
+	date: 2017/06/09
+}
 ]
