@@ -64,8 +64,6 @@ public class TSSScoreboard extends ScreenAdapter {
     @Override
     public void show() {
 
-        //TODO refactor
-
         game.setStage(new Stage(viewport));
 
         Gdx.input.setInputProcessor(game.getStage());
