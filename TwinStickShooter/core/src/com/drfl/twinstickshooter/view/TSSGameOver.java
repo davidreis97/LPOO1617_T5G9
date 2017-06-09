@@ -6,8 +6,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.drfl.twinstickshooter.TSSGame;
-import com.drfl.twinstickshooter.TSSState;
+import com.drfl.twinstickshooter.game.TSSGame;
+import com.drfl.twinstickshooter.game.TSSState;
 import com.drfl.twinstickshooter.model.TSSModel;
 
 public class TSSGameOver extends ScreenAdapter {

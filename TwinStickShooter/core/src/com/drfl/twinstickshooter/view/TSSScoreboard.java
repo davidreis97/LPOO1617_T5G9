@@ -14,9 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.drfl.twinstickshooter.TSSGame;
-import com.drfl.twinstickshooter.TSSScore;
-import com.drfl.twinstickshooter.TSSState;
+import com.drfl.twinstickshooter.game.TSSGame;
+import com.drfl.twinstickshooter.game.TSSScore;
+import com.drfl.twinstickshooter.game.TSSState;
 import com.drfl.twinstickshooter.model.TSSModel;
 
 public class TSSScoreboard extends ScreenAdapter {

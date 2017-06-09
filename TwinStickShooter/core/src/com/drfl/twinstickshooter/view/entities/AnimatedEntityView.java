@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.drfl.twinstickshooter.TSSGame;
+import com.drfl.twinstickshooter.game.TSSGame;
 import com.drfl.twinstickshooter.model.entities.EntityModel;
 
 import static com.drfl.twinstickshooter.view.TSSView.TILESIZE;

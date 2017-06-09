@@ -2,7 +2,7 @@ package com.drfl.twinstickshooter.view.entities;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.drfl.twinstickshooter.TSSGame;
+import com.drfl.twinstickshooter.game.TSSGame;
 import com.drfl.twinstickshooter.model.entities.EntityModel;
 
 import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;

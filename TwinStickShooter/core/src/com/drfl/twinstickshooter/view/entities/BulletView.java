@@ -2,7 +2,7 @@ package com.drfl.twinstickshooter.view.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.drfl.twinstickshooter.TSSGame;
+import com.drfl.twinstickshooter.game.TSSGame;
 
 /**
  * A view representing bullets.

@@ -18,8 +18,8 @@ import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.drfl.twinstickshooter.TSSGame;
-import com.drfl.twinstickshooter.TSSState;
+import com.drfl.twinstickshooter.game.TSSGame;
+import com.drfl.twinstickshooter.game.TSSState;
 
 public class TSSMapSelect extends ScreenAdapter {
 

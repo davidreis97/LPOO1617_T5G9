@@ -1,6 +1,5 @@
-package com.drfl.twinstickshooter;
+package com.drfl.twinstickshooter.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.drfl.twinstickshooter.view.*;
 

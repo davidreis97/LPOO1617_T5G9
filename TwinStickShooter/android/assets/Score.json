@@ -1,62 +1,8 @@
 [
 {
-	class: com.drfl.twinstickshooter.TSSScore
-	name: Leet
-	score: 2800
-	date: 2017/06/08
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
+	class: com.drfl.twinstickshooter.game.TSSScore
 	name: KBM
-	score: 2300
-	date: 2017/06/08
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: X360
-	score: 2300
-	date: 2017/06/08
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: Cold One
-	score: 1500
-	date: 2017/06/08
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: KBM
-	score: 1500
-	date: 2017/06/08
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: Controller G
-	score: 1400
-	date: 2017/06/08
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: Master
-	score: 1300
-	date: 2017/06/08
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: Pepperoni
-	score: 1000
-	date: 2017/06/08
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: Fake News
-	score: 900
-	date: 2017/06/08
-}
-{
-	class: com.drfl.twinstickshooter.TSSScore
-	name: KBM
-	score: 800
-	date: 2017/06/08
+	score: 2200
+	date: 2017/06/09
 }
 ]

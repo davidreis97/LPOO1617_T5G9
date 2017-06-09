@@ -1,6 +1,6 @@
 package com.drfl.twinstickshooter.view.entities;
 
-import com.drfl.twinstickshooter.TSSGame;
+import com.drfl.twinstickshooter.game.TSSGame;
 import com.drfl.twinstickshooter.model.entities.EntityModel;
 
 import java.util.HashMap;
