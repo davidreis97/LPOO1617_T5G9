@@ -68,7 +68,6 @@ public abstract class AnimatedEntityView extends EntityView {
         stateTime += Gdx.graphics.getDeltaTime();
         if(hurtTime > 0) hurtTime -= Gdx.graphics.getDeltaTime();
 
-        //TODO divide into functions
         switch(this.direction) {
             case DOWN:
                 sprite.setRegion(downAnim.getKeyFrame(stateTime, true));

@@ -236,4 +236,23 @@ public class TSSMenuHelper {
 
         return imageButton;
     }
+
+    //NOTEME javadoc
+    /**
+     * Creates and adds a Scene2D Text Field using the specified parameters and default skin, text starts empty.
+     *
+     * @param size The size of the Text Field
+     * @param pixelCoords The center coordinates of the Text Field
+     * @return The created Text Field
+     */
+    TextField createTextField(Vector2 size, Vector2 pixelCoords) {
+
+        TextField textField = new TextField("", skin);
+        textField.setSize(size.x, size.y);
+        textField.setPosition(pixelCoords.x - textField.getWidth() / 2.0f, pixelCoords.y - textField.getHeight() / 2.0f);
+
+        game.getStage().addActor(textField);
+
+        return textField;
+    }
 }

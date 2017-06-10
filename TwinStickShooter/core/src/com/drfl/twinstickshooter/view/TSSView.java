@@ -223,8 +223,6 @@ public class TSSView extends ScreenAdapter {
     @Override
     public void render(float delta) {
 
-
-
         if(TSSModel.getInstance().getMainChar().isDead()) {
             game.getStateM().processState(TSSState.GameEvent.MC_DIED);
             return;
