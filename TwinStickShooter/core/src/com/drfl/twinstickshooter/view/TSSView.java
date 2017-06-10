@@ -56,8 +56,8 @@ public class TSSView extends ScreenAdapter {
      * The width of the viewport in meters (equivalent to number of tiles). The height is
      * automatically calculated using the screen ratio.
      */
-    private static final float VIEWPORT_WIDTH = 40;
-    private static final float VIEWPORT_HEIGHT = 22.5f;
+    static final float VIEWPORT_WIDTH = 40;
+    static final float VIEWPORT_HEIGHT = 22.5f;
 
     /**
      * The game this screen belongs to.
@@ -341,8 +341,11 @@ public class TSSView extends ScreenAdapter {
         view.draw(game.getBatch());
     }
 
+    //NOTEME javadoc
     /**
-     * Draws the Tile Map.
+     * Draws current Tiled map to a certain sprite batch.
+     *
+     * @param batch The sprite batch to use
      */
     private void drawTileMap(SpriteBatch batch) {
 

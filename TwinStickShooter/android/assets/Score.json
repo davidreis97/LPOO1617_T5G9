@@ -17,4 +17,10 @@
 	score: 100
 	date: 2017/06/09
 }
+{
+	class: com.drfl.twinstickshooter.game.TSSScore
+	name: FTL
+	score: 100
+	date: 2017/06/10
+}
 ]

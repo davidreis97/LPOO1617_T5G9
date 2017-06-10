@@ -15,46 +15,107 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.drfl.twinstickshooter.game.TSSGame;
 import com.drfl.twinstickshooter.gamepad.TSSGamePad;
 import com.drfl.twinstickshooter.game.TSSState;
 import com.drfl.twinstickshooter.model.TSSModel;
 
+/**
+ * Main menu screen, options for starting game, seeing highscores, controlling volume,
+ * choosing input method and exiting game.
+ */
 public class TSSMainMenu extends ScreenAdapter {
 
+    //NOTEME javadoc
+    /**
+     * Max cooldown for playing a sound effect when changing sound volume.
+     */
+    private static final float SOUND_CD = 0.3f;
+
+    //NOTEME javadoc
+    /**
+     * Current value of the sound change cooldown.
+     */
+    private float changeSound = SOUND_CD;
+
+    //NOTEME javadoc
     /**
      * The game this screen belongs to.
      */
     private final TSSGame game;
 
+    //NOTEME javadoc
     /**
      * The camera used to show the viewport.
      */
     private final OrthographicCamera camera;
 
+    //NOTEME javadoc
+    /**
+     * The viewport for the Scene2D stage.
+     */
     private final Viewport viewport;
 
+    //NOTEME javadoc
+    /**
+     * Selected input method for the game.
+     */
     private TSSGame.ControlType selectedController = TSSGame.ControlType.KBM;
 
+    //NOTEME javadoc
+    /**
+     * Select box for choosing the input method.
+     */
     private SelectBox inputChoose;
+
+    //NOTEME javadoc
+    /**
+     * Label for warning about potential issues on input method chosen.
+     */
     private Label controlWarning;
+
+    //NOTEME javadoc
+    /**
+     * Label for showing local IP.
+     */
     private Label IPBox;
+
+    //NOTEME javadoc
+    /**
+     * Actual value of the IPBox label.
+     */
     private String IPField;
+
+    //NOTEME javadoc
+    /**
+     * Slider for controlling music volume.
+     */
     private Slider musicVolume;
+
+    //NOTEME javadoc
+    /**
+     * Slider for controlling sound volume.
+     */
     private Slider soundVolume;
 
+    //NOTEME javadoc
+    /**
+     * Input options available for setting in the select box.
+     */
     private String[] inputOptions = new String[] {
             "Keyboard / Mouse",
             "X360 Controller",
             "Android Controller",
     };
 
-    private static final float SOUND_CD = 0.3f;
-
-    private float changeSound = SOUND_CD;
-
+    //NOTEME javadoc
+    /**
+     * Constructs a main menu screen belonging to a certain game.
+     *
+     * @param game The game this screen belongs to
+     */
     public TSSMainMenu(TSSGame game) {
 
         this.game = game;
@@ -64,13 +125,17 @@ public class TSSMainMenu extends ScreenAdapter {
         loadAssets();
         TSSMenuHelper.getInstance().playMusic("Menu.ogg", game.getMusicVolume(), true);
 
-        camera = createCamera();
+        camera = TSSMenuHelper.getInstance().createCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        viewport = TSSMenuHelper.getInstance().createFitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
 
-        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
-
-        TSSModel.getInstance().setScore(0);
+        TSSModel.getInstance().setScore(0); //Prevent score from carrying over
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when this screen becomes the current screen for a game. Creates all the actors for a Scene2D stage
+     * representing the main menu screen.
+     */
     @Override
     public void show() {
 
@@ -109,19 +174,19 @@ public class TSSMainMenu extends ScreenAdapter {
         inputChoose = TSSMenuHelper.getInstance().createSelectBox(currSize, currCoords, inputOptions);
 
         currCoords.y -= currSize.y;
-        controlWarning = TSSMenuHelper.getInstance().createLabel("", currSize, currCoords, Color.RED);
+        controlWarning = TSSMenuHelper.getInstance().createLabel("", currSize, currCoords, Color.RED, Align.left);
 
         currCoords.y -= currSize.y;
         if(!game.findSiteLocalAddress().isEmpty()) {
-            IPBox = TSSMenuHelper.getInstance().createLabel("Suggested IP: " + game.findSiteLocalAddress().get(0), currSize, currCoords, Color.WHITE);
+            IPBox = TSSMenuHelper.getInstance().createLabel("Suggested IP: " + game.findSiteLocalAddress().get(0), currSize, currCoords, Color.WHITE, Align.left);
             IPField = "Suggested IP: " + game.findSiteLocalAddress().get(0);
         } else {
-            IPBox = TSSMenuHelper.getInstance().createLabel("Suggested IP: not found", currSize, currCoords, Color.WHITE);
+            IPBox = TSSMenuHelper.getInstance().createLabel("Suggested IP: not found", currSize, currCoords, Color.WHITE, Align.left);
             IPField = "Suggested IP: not found";
         }
 
         currCoords.y -= currSize.y;
-        TSSMenuHelper.getInstance().createLabel("Music Volume", currSize, currCoords, Color.WHITE);
+        TSSMenuHelper.getInstance().createLabel("Music Volume", currSize, currCoords, Color.WHITE, Align.center);
 
         currCoords.y -= currSize.y;
         musicVolume = TSSMenuHelper.getInstance().createHorSlider(new Vector2(0, 1), game.getMusicVolume(), currSize, currCoords, new ChangeListener() {
@@ -132,7 +197,7 @@ public class TSSMainMenu extends ScreenAdapter {
         });
 
         currCoords.y -= currSize.y;
-        TSSMenuHelper.getInstance().createLabel("Sound Volume", currSize, currCoords, Color.WHITE);
+        TSSMenuHelper.getInstance().createLabel("Sound Volume", currSize, currCoords, Color.WHITE, Align.center);
 
         currCoords.y -= currSize.y;
         soundVolume = TSSMenuHelper.getInstance().createHorSlider(new Vector2(0, 1), game.getSoundVolume(), currSize, currCoords, new ClickListener() {
@@ -168,15 +233,10 @@ public class TSSMainMenu extends ScreenAdapter {
         });
     }
 
-    private OrthographicCamera createCamera() {
-
-        OrthographicCamera camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
-        camera.update();
-
-        return camera;
-    }
-
+    //NOTEME javadoc
+    /**
+     * Loads assets needed for this screen.
+     */
     private void loadAssets() {
 
         this.game.getAssetManager().load( "MainMenuBack.jpg" , Texture.class);
@@ -184,6 +244,13 @@ public class TSSMainMenu extends ScreenAdapter {
         this.game.getAssetManager().finishLoading();
     }
 
+    //NOTEME javadoc
+    /**
+     * Handles input method choosing by checking the select box value and checking whether the input method
+     * is valid by testing whether needed device exists.
+     *
+     * @return The control method to use
+     */
     private TSSGame.ControlType parseInputMode() {
 
         controlWarning.setText("");
@@ -207,10 +274,11 @@ public class TSSMainMenu extends ScreenAdapter {
         return TSSGame.ControlType.KBM;
     }
 
+    //NOTEME javadoc
     /**
-     * Renders this screen.
+     * Called when the screen should render itself.
      *
-     * @param delta time since last renders in seconds.
+     * @param delta The time in seconds since the last render.
      */
     @Override
     public void render(float delta) {
@@ -234,11 +302,19 @@ public class TSSMainMenu extends ScreenAdapter {
         selectedController = parseInputMode();
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when this screen is no longer the current screen for a Game.
+     */
     @Override
     public void hide() {
         this.dispose();
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when this screen should release all resources.
+     */
     @Override
     public void dispose() {
         game.getStage().dispose();

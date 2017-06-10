@@ -199,6 +199,8 @@ public abstract class EntityModel {
     /**
      * Returns entity's max shoot cooldown.
      * Overrided by some subclasses, otherwise returns 0.
+     *
+     * @return The max shoot cooldown
      */
     public float getShootCooldown() {
         return 0;

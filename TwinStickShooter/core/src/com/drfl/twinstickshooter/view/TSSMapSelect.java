@@ -3,99 +3,142 @@ package com.drfl.twinstickshooter.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.drfl.twinstickshooter.game.TSSGame;
 import com.drfl.twinstickshooter.game.TSSState;
 
+import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;
+import static com.drfl.twinstickshooter.view.TSSView.VIEWPORT_HEIGHT;
+import static com.drfl.twinstickshooter.view.TSSView.VIEWPORT_WIDTH;
+
 public class TSSMapSelect extends ScreenAdapter {
 
+    //NOTEME javadoc
     /**
-     * Tileset size. (must be square tiles)
+     * Height constant for image buttons.
      */
-    public static final int TILESIZE = 32; //32x32
+    private static final float BUTTON_HEIGHT = 0.25f * Gdx.graphics.getHeight();
 
+    //NOTEME javadoc
     /**
-     * Every tile is a meter.
+     * Height constant for labels.
      */
-    public static final float PIXEL_TO_METER = 1.0f / TILESIZE;
+    private static final float LABEL_HEIGHT = 0.05f * Gdx.graphics.getHeight();
 
+    //NOTEME javadoc
     /**
-     * The width of the viewport in meters (equivalent to number of tiles). The height is
-     * automatically calculated using the screen ratio.
+     * Width constant for all widgets.
      */
-    private static final float VIEWPORT_WIDTH = 40;
-    private static final float VIEWPORT_HEIGHT = 22.5f;
+    private static final float WIDGET_WIDTH = 0.25f * Gdx.graphics.getWidth();
 
+    //NOTEME javadoc
+    /**
+     * Increment constant between each image button. Jumps from the center of an
+     * image button to the next one with a spacing of (0.80f * Gdx.graphics.getWidth() - WIDGET_WIDTH * 3) / 2.0f.
+     */
+    private static final float INCREMENT = WIDGET_WIDTH + (0.80f * Gdx.graphics.getWidth() - WIDGET_WIDTH * 3) / 2.0f;
+
+    //NOTEME javadoc
+    /**
+     * Center width of the first image button. Pads 10% of the screen to the left.
+     */
+    private static final float START_WIDTH = WIDGET_WIDTH / 2.0f + 0.10f * Gdx.graphics.getWidth();
+
+    //NOTEME javadoc
     /**
      * The game this screen belongs to.
      */
     private final TSSGame game;
 
+    //NOTEME javadoc
     /**
      * The camera used to show the viewport.
      */
     private OrthographicCamera camera;
 
+    //NOTEME javadoc
+    /**
+     * The viewport for the Scene2D stage.
+     */
     private Viewport viewport;
 
-    private Label title;
+    //NOTEME javadoc
+    /**
+     * Tiled maps to use for creating thumbnails.
+     */
+    private Array<TiledMap> tiledMaps = new Array<>();
 
-    private ImageButton firstMap;
-    private Skin firstMapSkin;
-    private Label firstMapText;
+    //NOTEME javadoc
+    /**
+     * Array to fill with textures created from the snapshots of Tiled maps.
+     */
+    private Array<Texture> mapTextures = new Array<>();
 
-    private ImageButton secondMap;
-    private Skin secondMapSkin;
-    private Label secondMapText;
+    //NOTEME javadoc
+    /**
+     * Thumbnails to use for the Scene2D image buttons for map selection.
+     */
+    private Array<Skin> thumbnails = new Array<>();
 
-    private ImageButton thirdMap;
-    private Skin thirdMapSkin;
-    private Label thirdMapText;
+    //NOTEME javadoc
+    /**
+     * Names of the maps on the map select screen.
+     */
+    private String[] mapNames = new String[] {
+            "Badlands",
+            "Grasslands",
+            "Custom",
+    };
 
-    private Array<Texture> mapTextures = new Array<Texture>();
-    private Array<TiledMap> tiledMaps = new Array<TiledMap>();
-
+    //NOTEME javadoc
+    /**
+     * Are snapshots being created?
+     */
     private boolean isTakingSnapshots = true;
+
+    //NOTEME javadoc
+    /**
+     * Is Scene2D stage created?
+     */
     private boolean isStageCreated = false;
 
-    private int currSnapshot = 0;
-
-    Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-
+    //NOTEME javadoc
+    /**
+     * Constructs a map select screen belonging to a certain game.
+     *
+     * @param game The game this screen belongs to
+     */
     public TSSMapSelect(TSSGame game) {
 
         this.game = game;
 
+        TSSMenuHelper.initInstance(game);
+
         loadAssets();
+        TSSMenuHelper.getInstance().playMusic("Menu.ogg", game.getMusicVolume(), true);
 
-        startMusic();
-
-        camera = createSnapshotCamera();
-
-        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+        camera = TSSMenuHelper.getInstance().createCamera(VIEWPORT_WIDTH / PIXEL_TO_METER, VIEWPORT_HEIGHT / PIXEL_TO_METER);
+        viewport = TSSMenuHelper.getInstance().createFitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
     }
 
-    private void startMusic() {
-
-        ((Music)game.getAssetManager().get("Menu.ogg")).setLooping(true);
-        ((Music)game.getAssetManager().get("Menu.ogg")).setVolume(game.getMusicVolume());
-        ((Music)game.getAssetManager().get("Menu.ogg")).play();
-    }
-
+    //NOTEME javadoc
+    /**
+     * Called when this screen becomes the current screen for a game. Adds Tiled maps to class array.
+     */
     @Override
     public void show() {
 
@@ -104,28 +147,14 @@ public class TSSMapSelect extends ScreenAdapter {
         tiledMaps.add((TiledMap) game.getAssetManager().get("Custom.tmx"));
     }
 
-    private OrthographicCamera createSnapshotCamera() {
-
-        OrthographicCamera camera = new OrthographicCamera(VIEWPORT_WIDTH / PIXEL_TO_METER, VIEWPORT_HEIGHT / PIXEL_TO_METER);
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
-        camera.update();
-
-        return camera;
-    }
-
-    private OrthographicCamera createCamera() {
-
-        OrthographicCamera camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
-        camera.update();
-
-        return camera;
-    }
-
+    //NOTEME javadoc
+    /**
+     * Loads assets needed for this screen.
+     */
     private void loadAssets() {
 
         this.game.getAssetManager().load( "MainMenuBack.jpg" , Texture.class);
-        this.game.getAssetManager().load("Menu.ogg", Music.class);
+        TSSMenuHelper.getInstance().loadMusic("Menu.ogg");
 
         this.game.getAssetManager().setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         this.game.getAssetManager().load("Badlands.tmx", TiledMap.class);
@@ -135,15 +164,14 @@ public class TSSMapSelect extends ScreenAdapter {
         this.game.getAssetManager().finishLoading();
     }
 
+    //NOTEME javadoc
     /**
-     * Renders this screen.
+     * Called when the screen should render itself.
      *
-     * @param delta time since last renders in seconds.
+     * @param delta The time in seconds since the last render.
      */
     @Override
     public void render(float delta) {
-
-//        handleInputs();
 
         game.getBatch().setProjectionMatrix(camera.combined);
 
@@ -152,130 +180,90 @@ public class TSSMapSelect extends ScreenAdapter {
 
         if(isTakingSnapshots) {
 
-            drawTileMap(game.getBatch(), tiledMaps.get(currSnapshot));
-            mapTextures.add(takeSnapshot());
-            currSnapshot++;
-            if(currSnapshot > 2) isTakingSnapshots = !isTakingSnapshots;
-
-            game.getBatch().begin();
-            drawElements();
-            game.getBatch().end();
+            createThumbnails();
+            isTakingSnapshots = false;
+            drawBackground();
         } else if(!isStageCreated) {
 
-            camera = createCamera();
-            viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+            camera = TSSMenuHelper.getInstance().createCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            viewport = TSSMenuHelper.getInstance().createFitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
 
             createStage();
-
-            game.getBatch().begin();
-            drawElements();
-            game.getBatch().end();
+            isStageCreated = true;
+            drawBackground();
         } else {
 
-            game.getBatch().begin();
-            drawElements();
-            game.getBatch().end();
+            drawBackground();
 
             game.getStage().act(delta);
             game.getStage().draw();
         }
     }
 
+    //NOTEME javadoc
+    /**
+     * Draws Tiled maps and saves a snapshot of the render to a texture which is then used
+     * to create a skin for future usage.
+     */
+    private void createThumbnails() {
+
+        for(TiledMap map : tiledMaps) {
+            drawTileMap(game.getBatch(), map);
+            mapTextures.add(takeSnapshot());
+        }
+
+        for(int i = 0; i < mapTextures.size; i++) {
+
+            thumbnails.add(new Skin());
+            thumbnails.get(i).add("default", mapTextures.get(i));
+        }
+    }
+
+    //NOTEME javadoc
+    /**
+     * Creates all the actors for a Scene2D stage representing the map select screen.
+     */
     private void createStage() {
 
         game.setStage(new Stage(viewport));
 
         Gdx.input.setInputProcessor(game.getStage());
 
-        float paddingRatio = 0.10f;
-        float spacingRatio = (1.00f - 0.25f * 3 - 2 * paddingRatio) / 2.0f;
-        float incrementRatio = 0.125f;
+        Vector2 currCoords = new Vector2(Gdx.graphics.getWidth() / 2.0f, Gdx.graphics.getHeight());
+        Vector2 currSize = new Vector2(WIDGET_WIDTH, LABEL_HEIGHT);
 
-        title = new Label("Map Select", skin);
-        title.setFontScale(1.2f);
-        title.setColor(Color.DARK_GRAY);
-        title.setPosition(calcWidthRatio(title.getWidth(), 0.5f), calcHeightRatio(title.getHeight(), 0.90f));
+        currCoords.y -= currSize.y;
+        TSSMenuHelper.getInstance().createLabel("Map Select", currSize, currCoords, Color.DARK_GRAY, Align.center);
 
-        firstMapSkin = new Skin();
-        firstMapSkin.add("default", mapTextures.get(0));
+        for(int i = 0; i < thumbnails.size; i++) {
 
-        firstMap = new ImageButton(firstMapSkin.getDrawable("default"));
-        firstMap.setSize(0.25f * Gdx.graphics.getWidth(),0.25f * Gdx.graphics.getHeight());
-        firstMap.setPosition(calcWidthRatio(firstMap.getWidth(), paddingRatio + incrementRatio), calcHeightCenter(firstMap.getHeight()));
-        firstMap.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
+            final int index = i;
 
-                game.setCurrentMap(tiledMaps.get(0));
-                game.getStateM().processState(TSSState.GameEvent.CHOOSE);
-                return false;
-            }
-        });
+            currSize.y = BUTTON_HEIGHT;
+            currCoords.set(START_WIDTH + INCREMENT * i, Gdx.graphics.getHeight() / 2.0f);
+            TSSMenuHelper.getInstance().createImageButton(thumbnails.get(i).getDrawable("default"), currSize, currCoords, new ClickListener() {
+                @Override
+                public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
 
-        firstMapText = new Label("Badlands", skin);
-        firstMapText.setPosition(calcWidthRatio(firstMap.getWidth(), paddingRatio + incrementRatio), calcHeightCenter(-firstMap.getHeight() - firstMapText.getHeight()));
+                    game.setCurrentMap(tiledMaps.get(index));
+                    game.getStateM().processState(TSSState.GameEvent.CHOOSE);
+                    return false;
+                }
+            });
 
-        secondMapSkin = new Skin();
-        secondMapSkin.add("default", mapTextures.get(1));
-
-        secondMap = new ImageButton(secondMapSkin.getDrawable("default"));
-        secondMap.setSize(0.25f * Gdx.graphics.getWidth(),0.25f * Gdx.graphics.getHeight());
-        secondMap.setPosition(calcWidthRatio(secondMap.getWidth(), paddingRatio + incrementRatio * 3 + spacingRatio), calcHeightCenter(secondMap.getHeight()));
-        secondMap.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
-
-                game.setCurrentMap(tiledMaps.get(1));
-                game.getStateM().processState(TSSState.GameEvent.CHOOSE);
-                return false;
-            }
-        });
-
-        secondMapText = new Label("Grasslands", skin);
-        secondMapText.setPosition(calcWidthRatio(secondMap.getWidth(), paddingRatio + incrementRatio * 3 + spacingRatio), calcHeightCenter(-secondMap.getHeight() - secondMapText.getHeight()));
-
-        thirdMapSkin = new Skin();
-        thirdMapSkin.add("default", mapTextures.get(2));
-
-        thirdMap = new ImageButton(thirdMapSkin.getDrawable("default"));
-        thirdMap.setSize(0.25f * Gdx.graphics.getWidth(),0.25f * Gdx.graphics.getHeight());
-        thirdMap.setPosition(calcWidthRatio(thirdMap.getWidth(), paddingRatio + incrementRatio * 5 + spacingRatio * 2), calcHeightCenter(thirdMap.getHeight()));
-        thirdMap.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
-
-                game.setCurrentMap(tiledMaps.get(2));
-                game.getStateM().processState(TSSState.GameEvent.CHOOSE);
-                return false;
-            }
-        });
-
-        thirdMapText = new Label("Custom", skin);
-        thirdMapText.setPosition(calcWidthRatio(thirdMap.getWidth(), paddingRatio + incrementRatio * 5 + spacingRatio * 2), calcHeightCenter(-thirdMap.getHeight() - thirdMapText.getHeight()));
-
-        game.getStage().addActor(title);
-        game.getStage().addActor(firstMap);
-        game.getStage().addActor(firstMapText);
-        game.getStage().addActor(secondMap);
-        game.getStage().addActor(secondMapText);
-        game.getStage().addActor(thirdMap);
-        game.getStage().addActor(thirdMapText);
-
-        this.isStageCreated = true;
+            currCoords.y += currSize.y / 2.0f;
+            currSize.y = LABEL_HEIGHT;
+            currCoords.y += currSize.y / 2.0f;
+            TSSMenuHelper.getInstance().createLabel(mapNames[i], currSize, currCoords, Color.WHITE, Align.center);
+        }
     }
 
-    private float calcHeightCenter(float y) {
-        return Gdx.graphics.getHeight() / 2.0f - y / 2.0f;
-    }
-
-    private float calcWidthRatio(float x, float ratio) {
-        return Gdx.graphics.getWidth() * ratio - x / 2.0f;
-    }
-
-    private float calcHeightRatio(float y, float ratio) {
-        return Gdx.graphics.getHeight() * ratio - y / 2.0f;
-    }
-
+    //NOTEME javadoc
+    /**
+     * Saves current frame buffer to a texture (snapshot).
+     *
+     * @return The texture created from the frame buffer
+     */
     private Texture takeSnapshot() {
 
         byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), true);
@@ -286,8 +274,12 @@ public class TSSMapSelect extends ScreenAdapter {
         return new Texture(pixmap);
     }
 
+    //NOTEME javadoc
     /**
-     * Draws the Tile Map.
+     * Draws a Tiled map to a certain sprite batch.
+     *
+     * @param batch The sprite batch to use
+     * @param map The Tiled map to use
      */
     private void drawTileMap(SpriteBatch batch, TiledMap map) {
 
@@ -296,29 +288,41 @@ public class TSSMapSelect extends ScreenAdapter {
         renderer.render();
     }
 
-    private void drawElements() {
+    //NOTEME javadoc
+    /**
+     * Draws the map select screen background, calls batch begin and end.
+     */
+    private void drawBackground() {
 
-        Texture background = game.getAssetManager().get("MainMenuBack.jpg");
-
-        game.getBatch().draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.getBatch().begin();
+        game.getBatch().draw((Texture) game.getAssetManager().get("MainMenuBack.jpg"), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.getBatch().end();
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when this screen is no longer the current screen for a Game.
+     */
     @Override
     public void hide() {
         this.dispose();
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when this screen should release all resources.
+     */
     @Override
     public void dispose() {
+
         game.getStage().dispose();
         game.getAssetManager().unload("MainMenuBack.jpg");
         game.getAssetManager().unload("Menu.ogg");
-        skin.dispose();
-        firstMapSkin.dispose();
-        secondMapSkin.dispose();
-        thirdMapSkin.dispose();
         for(TiledMap tiled : tiledMaps) {
             tiled.dispose();
+        }
+        for(Skin skin : thumbnails) {
+            skin.dispose();
         }
     }
 }

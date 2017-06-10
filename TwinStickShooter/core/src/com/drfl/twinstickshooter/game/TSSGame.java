@@ -104,7 +104,8 @@ public class TSSGame extends Game {
 
 	//NOTEME javadoc
     /**
-     * Initializes sprite batch, asset manager and server. Also loads sound effects.
+     * Called when the Application is first created. Initializes sprite batch, asset manager and server.
+     * Also loads sound effects.
      */
     @Override
     public void create () {

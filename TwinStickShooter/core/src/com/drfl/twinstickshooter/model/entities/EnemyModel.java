@@ -123,7 +123,7 @@ public class EnemyModel extends EntityModel {
 
     //NOTEME javadoc
     /**
-     * Removes hitpoints from an enemy. Also adds score if hp <= 0.
+     * Removes hitpoints from an enemy. Also adds score if hp &lt;= 0.
      *
      * @param value The amount of hitpoints to remove
      */
