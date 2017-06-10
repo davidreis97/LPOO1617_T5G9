@@ -19,32 +19,98 @@ import com.drfl.tsscontroller.Network.TSSCClient;
 import com.drfl.tsscontroller.TSSCGame;
 import com.esotericsoftware.minlog.Log;
 
+/**
+ * ControllerScreen, handles movement and shooting input to send to game server.
+ */
+public class ControllerScreen implements Screen {
 
-public class ControllerScreen implements Screen{
+    //NOTEME javadoc
+    /**
+     * Debug flag.
+     */
+    private static final boolean DEBUG = false;
 
-    private Touchpad touchpadLeft;
-    private Touchpad touchpadRight;
-    private Skin touchpadSkin;
-    private Stage stage;
-    private Drawable touchBackground;
-    private Drawable touchKnob;
-    private Touchpad.TouchpadStyle touchpadStyle;
-    private TSSCClient client;
-    private Viewport viewport;
+    //NOTEME javadoc
+    /**
+     * The camera used to show the viewport.
+     */
     private Camera camera;
+
+    //NOTEME javadoc
+    /**
+     * The viewport for the Scene2D stage.
+     */
+    private Viewport viewport;
+
+    //NOTEME javadoc
+    /**
+     * The game this screen belongs to.
+     */
     private TSSCGame game;
 
-    public ControllerScreen(TSSCGame game){
+    //NOTEME javadoc
+    /**
+     * Kryonet client.
+     */
+    private TSSCClient client;
+
+    //NOTEME javadoc
+    /**
+     * Left touchpad for movement input.
+     */
+    private Touchpad touchpadLeft;
+
+    //NOTEME javadoc
+    /**
+     * Right touchpad for shooting input.
+     */
+    private Touchpad touchpadRight;
+
+    //NOTEME javadoc
+    /**
+     * Skin used for touch pads.
+     */
+    private Skin touchpadSkin;
+
+    //NOTEME javadoc
+    /**
+     * Scene2D stage used for UI.
+     */
+    private Stage stage;
+
+    //NOTEME javadoc
+    /**
+     * Touchpad style.
+     */
+    private Touchpad.TouchpadStyle touchpadStyle;
+
+    //NOTEME javadoc
+    /**
+     * Constructs a ControllerScreen belonging to a certain game.
+     *
+     * @param game The game this screen belongs to
+     */
+    ControllerScreen(TSSCGame game) {
+
         this.game = game;
         loadAssets();
     }
 
+    //NOTEME javadoc
+    /**
+     * Loads assets needed for this screen.
+     */
     private void loadAssets() {
 
         this.game.getAssetManager().load("Background.jpg", Texture.class);
         this.game.getAssetManager().finishLoading();
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when this screen becomes the current screen for a game. Creates all the actors for a Scene2D stage
+     * representing the ControllerScreen.
+     */
     @Override
     public void show() {
 
@@ -60,11 +126,17 @@ public class ControllerScreen implements Screen{
         viewport = new StretchViewport(1920, 1080, camera);
 
         stage = new Stage(viewport);
+
         stage.addActor(touchpadLeft);
         stage.addActor(touchpadRight);
+
         Gdx.input.setInputProcessor(stage);
     }
 
+    //NOTEME javadoc
+    /**
+     * Initializes the left touch pad.
+     */
     private void loadTouchpadLeft() {
 
         touchpadLeft = new Touchpad(10, touchpadStyle);
@@ -78,11 +150,15 @@ public class ControllerScreen implements Screen{
                 packet.movement = new Vector2(touchpadLeft.getKnobPercentX(),touchpadLeft.getKnobPercentY());
                 packet.shooting = new Vector2(touchpadRight.getKnobPercentX(),touchpadRight.getKnobPercentY());
                 client.client.sendTCP(packet);
-                Log.info("Sent Packet from Left Touchpad");
+                if(DEBUG) Log.info("Sent Packet from Left Touchpad");
             }
         });
     }
 
+    //NOTEME javadoc
+    /**
+     * Initializes the right touch pad.
+     */
     private void loadTouchpadRight() {
 
         touchpadRight = new Touchpad(10, touchpadStyle);
@@ -96,19 +172,23 @@ public class ControllerScreen implements Screen{
                 packet.movement = new Vector2(touchpadLeft.getKnobPercentX(),touchpadLeft.getKnobPercentY());
                 packet.shooting = new Vector2(touchpadRight.getKnobPercentX(),touchpadRight.getKnobPercentY());
                 client.client.sendTCP(packet);
-                Log.info("Sent Packet from Right Touchpad");
+                if(DEBUG) Log.info("Sent Packet from Right Touchpad");
             }
         });
     }
 
+    //NOTEME javadoc
+    /**
+     * Creates the touch pad style to use as skin.
+     */
     private void loadTouchpadStyle() {
 
         touchpadSkin = new Skin();
         touchpadSkin.add("touchBackground", new Texture("touchBackground.png"));
         touchpadSkin.add("touchKnob", new Texture("touchKnob.png"));
 
-        touchBackground = touchpadSkin.getDrawable("touchBackground");
-        touchKnob = touchpadSkin.getDrawable("touchKnob");
+        Drawable touchBackground = touchpadSkin.getDrawable("touchBackground");
+        Drawable touchKnob = touchpadSkin.getDrawable("touchKnob");
 
         touchKnob.setMinHeight((float) (touchBackground.getMinHeight() * 1.2));
         touchKnob.setMinWidth((float) (touchBackground.getMinWidth() * 1.2));
@@ -124,6 +204,12 @@ public class ControllerScreen implements Screen{
         touchpadStyle.knob = touchKnob;
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when the screen should render itself.
+     *
+     * @param delta The time in seconds since the last render
+     */
     @Override
     public void render(float delta) {
 
@@ -139,6 +225,13 @@ public class ControllerScreen implements Screen{
         stage.draw();
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when screen is resized.
+     *
+     * @param width The new width
+     * @param height The new height
+     */
     @Override
     public void resize(int width, int height) {
 
@@ -161,6 +254,10 @@ public class ControllerScreen implements Screen{
 
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when this screen should release all resources.
+     */
     @Override
     public void dispose() {
         touchpadSkin.dispose();

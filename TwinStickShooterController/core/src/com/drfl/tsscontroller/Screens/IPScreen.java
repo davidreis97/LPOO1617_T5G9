@@ -15,36 +15,80 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.drfl.tsscontroller.Network.TSSCClient;
 import com.drfl.tsscontroller.TSSCGame;
 
+/**
+ * IPScreen, handles inputting an IP address to connect to a game instance.
+ */
 public class IPScreen implements Screen {
 
+    //NOTEME javadoc
+    /**
+     * The game this screen belongs to.
+     */
     private TSSCGame game;
+
+    //NOTEME javadoc
+    /**
+     * Scene2D stage used for UI.
+     */
     private Stage stage;
 
-    private Viewport viewport;
+    //NOTEME javadoc
+    /**
+     * The camera used to show the viewport.
+     */
     private Camera camera;
 
+    //NOTEME javadoc
+    /**
+     * The viewport for the Scene2D stage.
+     */
+    private Viewport viewport;
+
+    //NOTEME javadoc
+    /**
+     * Text button for accepting IP input.
+     */
     private TextButton btnAccept;
+
+    //NOTEME javadoc
+    /**
+     * Text field for inputting the IP adress to connect to.
+     */
     private TextField ipAddressField;
 
-    private Label askIP;
-
-    private Table statusTable;
+    //NOTEME javadoc
+    /**
+     * Current connection status.
+     */
     private Label status;
 
-    private int attempts = 0;
-
+    //NOTEME javadoc
+    /**
+     * Constructs a IPScreen belonging to a certain game.
+     *
+     * @param game The game this screen belongs to
+     */
     public IPScreen(TSSCGame game) {
 
         this.game = game;
         loadAssets();
     }
 
+    //NOTEME javadoc
+    /**
+     * Loads assets needed for this screen.
+     */
     private void loadAssets() {
 
         this.game.getAssetManager().load("Background.jpg", Texture.class);
         this.game.getAssetManager().finishLoading();
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when this screen becomes the current screen for a game. Creates all the actors for a Scene2D stage
+     * representing the IPScreen.
+     */
     @Override
     public void show() {
 
@@ -87,11 +131,11 @@ public class IPScreen implements Screen {
         status.setWidth(1000);
         status.setWrap(true);
 
-        askIP = new Label("IP Address: ",skin);
+        Label askIP = new Label("IP Address: ",skin);
         askIP.setPosition(100,1000);
         askIP.setFontScale(5);
 
-        statusTable = new Table(skin);
+        Table statusTable = new Table(skin);
         statusTable.setPosition(600,600);
         statusTable.add(status).width(1000f);
 
@@ -103,10 +147,20 @@ public class IPScreen implements Screen {
         stage.addActor(btnAccept);
     }
 
-    public void setStatus(String text){
+    //NOTEME javadoc
+    /**
+     *  @param text The text to set in the status label.
+     */
+    private void setStatus(String text) {
         status.setText("STATUS: " + text);
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when the screen should render itself.
+     *
+     * @param delta The time in seconds since the last render
+     */
     @Override
     public void render(float delta) {
 
@@ -120,14 +174,20 @@ public class IPScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         this.game.getBatch().begin();
-        Texture back = this.game.getAssetManager().get("Background.jpg");
-        this.game.getBatch().draw(back, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        this.game.getBatch().draw((Texture) game.getAssetManager().get("Background.jpg"), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.game.getBatch().end();
 
-        stage.act();
+        stage.act(delta);
         stage.draw();
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when screen is resized.
+     *
+     * @param width The new width
+     * @param height The new height
+     */
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
@@ -149,6 +209,10 @@ public class IPScreen implements Screen {
 
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when this screen should release all resources.
+     */
     @Override
     public void dispose() {
         stage.dispose();
