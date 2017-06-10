@@ -278,7 +278,7 @@ public class TSSMainMenu extends ScreenAdapter {
     /**
      * Called when the screen should render itself.
      *
-     * @param delta The time in seconds since the last render.
+     * @param delta The time in seconds since the last render
      */
     @Override
     public void render(float delta) {

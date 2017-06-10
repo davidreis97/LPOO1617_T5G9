@@ -6,25 +6,48 @@ import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
 
+/**
+ * Wrapper for kryonet client. Handles android controller packets to send.
+ */
 public class TSSCClient {
 
+    //NOTEME javadoc
+    /**
+     * Milliseconds to attempt connection.
+     */
+    private static final int TIMEOUT = 5000;
+
+    //NOTEME javadoc
+    /**
+     * TCP port to use.
+     */
+    private static final int PORT = 54555;
+
+    //NOTEME javadoc
+    /**
+     * Kryonet client.
+     */
     public Client client;
-    private int timeout;
-    private int port;
-    private String IPAddress;
 
+    //NOTEME javadoc
+    /**
+     * Is connection established?
+     */
     private boolean connected;
-    private String errorMsg;
 
+    //NOTEME javadoc
+    /**
+     * Error message if connection failed.
+     */
+    private String errorMsg = "";
+
+    //NOTEME javadoc
+    /**
+     * Constructs a kryonet client and attempts to connect to a game server.
+     */
     public TSSCClient(String IPAddress) {
 
         client = new Client();
-        timeout = 5000;
-
-        errorMsg = "";
-
-        this.port = 54555;
-        this.IPAddress = IPAddress;
 
         registerPackets();
 
@@ -32,7 +55,7 @@ public class TSSCClient {
 
         try {
             client.start();
-            client.connect(timeout, IPAddress, port);
+            client.connect(TIMEOUT, IPAddress, PORT);
             connected = true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,40 +64,29 @@ public class TSSCClient {
         }
     }
 
-    private void registerPackets(){
+    //NOTEME javadoc
+    /**
+     * Initializes kryo instance so it handles android controller packets.
+     */
+    private void registerPackets() {
+
         Kryo kryo = client.getKryo();
         kryo.register(Packet.ControllerInfoPacket.class);
         kryo.register(Vector2.class);
     }
 
+    //NOTEME javadoc
+    /**
+     * @return Whether a connection was established
+     */
     public boolean isConnected() {
         return connected;
     }
 
-    public int getTimeout() {
-        return timeout;
-    }
-
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public String getIPAddress() {
-        return IPAddress;
-    }
-
-    public void setIPAddress(String IPAddress) {
-        this.IPAddress = IPAddress;
-    }
-
+    //NOTEME javadoc
+    /**
+     *  @return The current error message
+     */
     public String getErrorMsg() {
         return errorMsg;
     }
