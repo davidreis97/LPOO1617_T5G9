@@ -39,37 +39,41 @@ On this document, TwinStickShooter is mentioned as TSS and TwinStickShooterContr
 # User Manual
 
 ## TSS
+
+### Main Menu
 - Firstly, you will be presented to the main menu.
 ![Main Menu](Docs/mainmenu.png)
 - The first thing you should do is choose the input with which you will control the character in-game. To do that, you should choose from the dropdown menu, which will give you the following options:
 ![Input Dropdown](Docs/inputdropdown.png)
 
-### Keyboard / Mouse
+#### Keyboard / Mouse
 - With this input mode you control the in-game character using the WASD keys on your keyboard, using your mouse to aim and shoot bullets.
 
-### X360 Controller
+#### X360 Controller
 - With this input mode you control the in-game character using a XBOX360 controller. [BUTTONS???]???????
-- Please note that you must plug-in the controller before running the application.
+- Please note that you must plug-in the controller before running the application, otherwise the game won't detect the controller and an error message will be displayed on the screen.
 
-### Android Controller
+#### Android Controller
 - With this input mode you control the in-game character using an Android App, which is described in greater detail [here](#tssc), transmiting data with a server-client connection. This app is the server, and the Android App is the client.
 - When you select this input mode, the local IP will be appear on the screen for your convenience, as you will need to insert it on the Android App.
 - Under the input dropdown, you will see a red message until you run and connect the Android App, which will make the message disappear.
+Before Connection:
 ![Android Controller Selection before connection](Docs/androidbefore.png)
+After Connection:
 ![Android Controller Selection after connection](Docs/androidafter.png)
 
 - You can change the music and SFX volume using two sliders, located below the Input Dropdown.
 ![Sound Control](Docs/soundcontrol.png)
-
 - Pressing "Start Game" will take you to the map selection screen, which shows the preview of the 3 maps available. After selecting the map, the game will start.
+![Map Select](Docs/mapselect.png)
 
 ### In-Game
 ![In-Game](Docs/ingame.png)
 - The objective of the game is to shoot and kill as many enemies as you can without being hit by their bullets.
 - You can control the character using the input mode selected on the Main Menu.
 - On the top left corner of the screen you can see your Health and your Score, which is determined by how many enemies you've killed so far.
-![Health and Score](Docs/healthscore.png)
 
+![Health and Score](Docs/healthscore.png)
 ### After the Game
 - This is an "endless" type of game, so the only way to finish the game is to die.
 - When you die, a Game Over screen is shown for a few seconds.
@@ -77,7 +81,7 @@ On this document, TwinStickShooter is mentioned as TSS and TwinStickShooterContr
 - AFter that you will be taken to a Highscores screen, which show the highest scores ever achieved on your computer, as well as the date of the highscore and the name of the user who achieved it.
 ![Highscores](Docs/highscores.png)
 - Insert your username on the textfield located on the bottom of the screen and press "OK" to add your score to the list and return to the Main Menu.
-- You can also access the Highscores screen by pressing the "Highscores button on the Main Menu"
+- You can also access the Highscores screen by pressing the "Highscores" button on the Main Menu.
 
 ## TSSC
 
