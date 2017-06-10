@@ -75,8 +75,8 @@ public class ControllerScreen implements Screen{
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 ControllerInfoPacket packet = new ControllerInfoPacket();
-                packet.acceleration = new Vector2(touchpadLeft.getKnobPercentX(),touchpadLeft.getKnobPercentY());
-                packet.bullet = new Vector2(touchpadRight.getKnobPercentX(),touchpadRight.getKnobPercentY());
+                packet.movement = new Vector2(touchpadLeft.getKnobPercentX(),touchpadLeft.getKnobPercentY());
+                packet.shooting = new Vector2(touchpadRight.getKnobPercentX(),touchpadRight.getKnobPercentY());
                 client.client.sendTCP(packet);
                 Log.info("Sent Packet from Left Touchpad");
             }
@@ -93,8 +93,8 @@ public class ControllerScreen implements Screen{
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 ControllerInfoPacket packet = new ControllerInfoPacket();
-                packet.acceleration = new Vector2(touchpadLeft.getKnobPercentX(),touchpadLeft.getKnobPercentY());
-                packet.bullet = new Vector2(touchpadRight.getKnobPercentX(),touchpadRight.getKnobPercentY());
+                packet.movement = new Vector2(touchpadLeft.getKnobPercentX(),touchpadLeft.getKnobPercentY());
+                packet.shooting = new Vector2(touchpadRight.getKnobPercentX(),touchpadRight.getKnobPercentY());
                 client.client.sendTCP(packet);
                 Log.info("Sent Packet from Right Touchpad");
             }

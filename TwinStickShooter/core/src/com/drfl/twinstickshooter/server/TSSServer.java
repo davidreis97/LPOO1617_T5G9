@@ -15,19 +15,19 @@ public class TSSServer {
 
     //NOTEME javadoc
     /**
-     * Debug flag
+     * Debug flag.
      */
     private static final boolean DEBUG = false;
 
     //NOTEME javadoc
     /**
-     * Port used for connections
+     * Port used for connections.
      */
     private static final int PORT = 54555;
 
     //NOTEME javadoc
     /**
-     * Kryonet server
+     * Kryonet server.
      */
     private Server server;
 

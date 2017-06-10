@@ -19,6 +19,12 @@
 }
 {
 	class: com.drfl.twinstickshooter.game.TSSScore
+	name: Android
+	score: 600
+	date: 2017/06/10
+}
+{
+	class: com.drfl.twinstickshooter.game.TSSScore
 	name: FTL
 	score: 200
 	date: 2017/06/10

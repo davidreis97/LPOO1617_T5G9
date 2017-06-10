@@ -16,18 +16,34 @@ public class NetworkListener extends Listener {
     private static final boolean DEBUG = false;
 
     //NOTEME javadoc
+    /**
+     * Connection established.
+     *
+     * @param conn The TCP and optionally UDP connection between Client and Server that was established
+     */
     @Override
     public void connected(Connection conn) {
         Log.info("[SERVER] Someone connected.");
     }
 
     //NOTEME javadoc
+    /**
+     * Connection ended.
+     *
+     * @param conn The TCP and optionally UDP connection between Client and Server that ended
+     */
     @Override
     public void disconnected(Connection conn) {
         Log.info("[SERVER] Someone disconnected.");
     }
 
     //NOTEME javadoc
+    /**
+     * Received a packet. Updates the server with the current packet info for use in-game.
+     *
+     * @param conn The TCP and optionally UDP connection between Client and Server associated with the reception
+     * @param obj The received object
+     */
     @Override
     public void received(Connection conn, Object obj) {
 

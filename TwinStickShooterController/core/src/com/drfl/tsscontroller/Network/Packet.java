@@ -2,7 +2,17 @@ package com.drfl.tsscontroller.Network;
 
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Types of packets to send.
+ */
 public class Packet {
+
+    //NOTEME javadoc
+    /**
+     * Android controller info packet.
+     */
     public static class ControllerInfoPacket {
-        public Vector2 acceleration; public Vector2 bullet;}
+        public Vector2 movement;
+        public Vector2 shooting;
+    }
 }
