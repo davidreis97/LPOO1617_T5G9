@@ -14,9 +14,7 @@ On this document, TwinStickShooter is mentioned as TSS and TwinStickShooterContr
 [Test Design](Docs/TestDesign.pdf)
 
 # Setup and Installation
-
 ## Setting up the develpment environment
-
 ### Requirements:
 - JDK
 - Android SDK
@@ -37,13 +35,11 @@ On this document, TwinStickShooter is mentioned as TSS and TwinStickShooterContr
 - Please note that TSSC is only meant to only run on Android, and TSS is only meant to run as a Desktop Application. Running these applications on other platforms will almost certainly cause them to misbehave.
 
 # User Manual
-
 ## TSS
-
 ### Main Menu
-- Firstly, you will be presented to the main menu.
+- Firstly, the main menu will show on the screen.
 ![Main Menu](Docs/mainmenu.png)
-- The first thing you should do is choose the input with which you will control the character in-game. To do that, you should choose from the dropdown menu, which will give you the following options:
+- The first thing you should do is choose the input with which you will control the character in-game. To do that, you should choose from the input dropdown menu, which will give you the following options:
 ![Input Dropdown](Docs/inputdropdown.png)
 
 #### Keyboard / Mouse
@@ -54,9 +50,9 @@ On this document, TwinStickShooter is mentioned as TSS and TwinStickShooterContr
 - Please note that you must plug-in the controller before running the application, otherwise the game won't detect the controller and an error message will be displayed on the screen.
 
 #### Android Controller
-- With this input mode you control the in-game character using an Android App, which is described in greater detail [here](#tssc), transmiting data with a server-client connection. This app is the server, and the Android App is the client.
+- With this input mode you control the in-game character using an Android App, which is described in greater detail [here](#tssc), transmitting data with a server-client network connection. This app is the server, and the Android App is the client.
 - When you select this input mode, the local IP will be appear on the screen for your convenience, as you will need to insert it on the Android App.
-- Under the input dropdown, you will see a red message until you run and connect the Android App, which will make the message disappear.
+- Under the input dropdown, you will see an error message until you run and connect the Android App.
 Before Connection:
 ![Android Controller Selection before connection](Docs/androidbefore.png)
 After Connection:
@@ -75,15 +71,31 @@ After Connection:
 
 ![Health and Score](Docs/healthscore.png)
 ### After the Game
-- This is an "endless" type of game, so the only way to finish the game is to die.
+- This is an "endless" type of game, so the only way to end the game is to die, and there is no "Win" situation (other than beating your highscore).
 - When you die, a Game Over screen is shown for a few seconds.
 ![Game Over](Docs/gameover.png)
-- AFter that you will be taken to a Highscores screen, which show the highest scores ever achieved on your computer, as well as the date of the highscore and the name of the user who achieved it.
+- After that you will be taken to the Highscores screen, which shows the highest scores ever achieved on your computer, as well as the date of the highscore and the name of the user who achieved it.
 ![Highscores](Docs/highscores.png)
 - Insert your username on the textfield located on the bottom of the screen and press "OK" to add your score to the list and return to the Main Menu.
 - You can also access the Highscores screen by pressing the "Highscores" button on the Main Menu.
 
 ## TSSC
+- Before following these steps you should start TSS and choose Android Controller as your input mode, as described [here](#tss).
+
+### Connecting to TSS
+- Firstly, a connection menu will appear. On this menu you will be able to connect to your running TSS Desktop application.
+![Connection Menu](Docs/connectionmenu.png)
+- On this screen, there is a textfield you should insert the IP Address of the computer which is running TSS.
+- After inserting the IP Address, press the "Enter" button to attempt a connection.
+- If the connection fails, an error message will be shown on the screen to help you identify the problem.
+![Connection Error](Docs/connectionerror.png)
+- You can try to connect again by following the same steps.
+- If the connection succeeds, you will be taken to the controller menu.
+
+### Controlling the Character
+- The controller itself has two sticks, the left one controls the character movement and the right one shoots bullets.
+![Controller Menu](Docs/controllermenu.png)
+- Every time you move one or both sticks a packet will be sent to the TSS, which will trigger the appropriate action (Move character/Shoot bullet).
 
 
 
