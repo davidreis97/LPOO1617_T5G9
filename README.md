@@ -82,20 +82,21 @@ After Connection:
 ## TSSC
 - Before following these steps you should start TSS and choose Android Controller as your input mode, as described [here](#tss).
 
-### Connecting to TSS
-- Firstly, a connection menu will appear. On this menu you will be able to connect to your running TSS Desktop application.
+### Connection Menu
+- Firstly, the connection menu will appear. On this menu you will be able to connect to your running TSS Desktop application.
 ![Connection Menu](Docs/connectionmenu.png)
-- On this screen, there is a textfield you should insert the IP Address of the computer which is running TSS.
-- After inserting the IP Address, press the "Enter" button to attempt a connection.
+- On this menu there is a textfield where you should insert the IP Address of the computer which is running TSS.
+- After inserting the IP Address, press the "Enter" button to attempt to connect.
 - If the connection fails, an error message will be shown on the screen to help you identify the problem.
 ![Connection Error](Docs/connectionerror.png)
 - You can try to connect again by following the same steps.
 - If the connection succeeds, you will be taken to the controller menu.
 
-### Controlling the Character
+### Controller Menu
+- The controller menu is where you are able to effectively control the character.
 - The controller itself has two sticks, the left one controls the character movement and the right one shoots bullets.
 ![Controller Menu](Docs/controllermenu.png)
-- Every time you move one or both sticks a packet will be sent to the TSS, which will trigger the appropriate action (Move character/Shoot bullet).
+- Every time you move one or both sticks a packet will be sent to the TSS, which will trigger and execute the appropriate action (Move character/Shoot bullet).
 
 
 
