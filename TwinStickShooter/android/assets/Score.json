@@ -25,6 +25,12 @@
 }
 {
 	class: com.drfl.twinstickshooter.game.TSSScore
+	name: fernando
+	score: 200
+	date: 2017/06/10
+}
+{
+	class: com.drfl.twinstickshooter.game.TSSScore
 	name: Zacarias
 	score: 100
 	date: 2017/06/09
@@ -32,6 +38,12 @@
 {
 	class: com.drfl.twinstickshooter.game.TSSScore
 	name: FTL
+	score: 100
+	date: 2017/06/10
+}
+{
+	class: com.drfl.twinstickshooter.game.TSSScore
+	name: d
 	score: 100
 	date: 2017/06/10
 }
