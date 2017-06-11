@@ -67,7 +67,7 @@ public class TSSController implements ContactListener {
     /**
      * Max cooldown for enemy spawning.
      */
-    private static final float SPAWN_MAX_COOL = 3.5f;
+    private static final float SPAWN_MAX_COOL = 3.0f;
 
     //NOTEME javadoc
     /**

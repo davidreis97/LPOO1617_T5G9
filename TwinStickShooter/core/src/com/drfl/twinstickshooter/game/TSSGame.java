@@ -88,7 +88,7 @@ public class TSSGame extends Game {
     /**
      * Overall sound effect volume.
      */
-	private float soundVolume = 0.35f;
+	private float soundVolume = 0.30f;
 
 	//NOTEME javadoc
     /**
