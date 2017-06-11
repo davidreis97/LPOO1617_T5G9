@@ -7,7 +7,7 @@ David Alexandre Gomes Reis - 201607927 - up201607927@fe.up.pt
 
 On this document, TwinStickShooter is mentioned as TSS and TwinStickShooterController is mentioned as TSSC.
 
-# Development Documentation
+# Intermediate Delivery Documentation
 
 [Architecture Design](Docs/Intermediate/Architecture%20Design.pdf)
 
@@ -16,30 +16,34 @@ On this document, TwinStickShooter is mentioned as TSS and TwinStickShooterContr
 [Test Design](Docs/Intermediate/TestDesign.pdf)
 
 # Setup and Installation
-## Setting up the develpment environment
+## Setting up the development environment
 ### Requirements:
 - JDK
 - Android SDK
 - IntelliJ IDEA is recommended and used in this guide, although other IDE's with similar capabilities should also work.
  
-### Step-by-step (Works for TSS and TSSC):
-- On IntelliJ, press "Open Project" and open the build.gradle file on the project root directory.
+### TSS (Desktop)
+- On IntelliJ, press "Open Project" and open the build.gradle file in the project root directory.
+- Select "Open as Project."
+- On the window that pops up, untick "Create separate module per source set" and set up your Gradle JVM. Leave everything else on default settings and press "OK".
+- TSS should be executed on Desktop, create the following run configuration:
+![Desktop Configuration](Docs/Setup/desktop.png)
+- To run unit tests, create the following run configuration:
+![JUnit Configuration](Docs/Setup/junit.png)
+
+### TSSC (Android)
+- On IntelliJ, press "Open Project" and open the build.gradle file in the project root directory.
 - Select "Open as Project."
 - On the window that pops up, untick "Create separate module per source set" and set up your Gradle JVM. Leave everything else on default settings and press "OK".
 - Wait for Gradle and IntelliJ to load and configure the project.
 - If your Android SDK is not set up, go to File -> Project Structure, click the "New" button, press "Android SDK" and choose your Android SDK path. You might need to update your SDK, go to your SDK Manager to do that.
 - You should now have an Android run configuration with the following configuration:
 ![Android Configuration](Docs/Setup/android.png)
-- To run on Desktop, create the following run configuration:
-![Desktop Configuration](Docs/Setup/desktop.png)
-- To run the unit tests, create the following run configuration:
-![JUnit Configuration](Docs/Setup/junit.png)
-- Please note that TSSC is only meant to only run on Android, and TSS is only meant to run as a Desktop Application. Running these applications on other platforms will almost certainly cause them to misbehave.
 
 # User Manual
 ## TSS
 ### Main Menu
-- Firstly, the main menu will show on the screen.
+- Firstly, the main menu will show on-screen.
 ![Main Menu](Docs/UserManualTSS/mainmenu.png)
 - The first thing you should do is choose the input with which you will control the character in-game. To do that, you should choose from the input dropdown menu, which will give you the following options:
 ![Input Dropdown](Docs/UserManualTSS/inputdropdown.png)
@@ -48,15 +52,17 @@ On this document, TwinStickShooter is mentioned as TSS and TwinStickShooterContr
 - With this input mode you control the in-game character using the WASD keys on your keyboard, using your mouse to aim and shoot bullets.
 
 #### X360 Controller
-- With this input mode you control the in-game character using a XBOX360 controller. [BUTTONS???]???????
+- With this input mode you control the in-game character using an XBOX360 controller, the left thumbstick controls movement and the right thumbstick controls shooting direction.
 - Please note that you must plug-in the controller before running the application, otherwise the game won't detect the controller and an error message will be displayed on the screen.
 
 #### Android Controller
 - With this input mode you control the in-game character using an Android App, which is described in greater detail [here](#tssc), transmitting data with a server-client network connection. This app is the server, and the Android App is the client.
-- When you select this input mode, the local IP will be appear on the screen for your convenience, as you will need to insert it on the Android App.
+- When you select this input mode, the most likely IP address will appear on-screen for your convenience, as you will need to insert it on the Android App. In case it doesn't work, the IP needed is from the local network and both devices should be connected, be it from WAN/LAN or the same subnet.
 - Under the input dropdown, you will see an error message until you run and connect the Android App.
+
 Before Connection:
 ![Android Controller Selection before connection](Docs/UserManualTSS/androidbefore.png)
+
 After Connection:
 ![Android Controller Selection after connection](Docs/UserManualTSS/androidafter.png)
 
@@ -73,12 +79,12 @@ After Connection:
 
 ![Health and Score](Docs/UserManualTSS/healthscore.png)
 ### After the Game
-- This is an "endless" type of game, so the only way to end the game is to die, and there is no "Win" situation (other than beating your highscore).
+- This is an arcade survival game, there is no "Win" condition and the objective is to beat the top high score.
 - When you die, a Game Over screen is shown for a few seconds.
 ![Game Over](Docs/UserManualTSS/gameover.png)
-- After that you will be taken to the Highscores screen, which shows the highest scores ever achieved on your computer, as well as the date of the highscore and the name of the user who achieved it.
+- If you managed to beat a high score then you'll be taken to the Highscores screen, which shows the highest scores ever achieved on your computer, as well as the date of the highscore and the name of the user who achieved it.
 ![Highscores](Docs/UserManualTSS/highscores.png)
-- Insert your username on the textfield located on the bottom of the screen and press "OK" to add your score to the list and return to the Main Menu.
+- Insert your username on the text field located on the bottom of the screen and press "OK" to add your score to the list and return to the Main Menu.
 - You can also access the Highscores screen by pressing the "Highscores" button on the Main Menu.
 
 ## TSSC
@@ -87,7 +93,7 @@ After Connection:
 ### Connection Menu
 - Firstly, the connection menu will appear. On this menu you will be able to connect to your running TSS Desktop application.
 ![Connection Menu](Docs/UserManualTSSC/connectionmenu.png)
-- On this menu there is a textfield where you should insert the IP Address of the computer which is running TSS.
+- On this menu there is a text field where you should insert the IP Address of the computer that is running TSS.
 - After inserting the IP Address, press the "Enter" button to attempt to connect.
 - If the connection fails, an error message will be shown on the screen to help you identify the problem.
 ![Connection Error](Docs/UserManualTSSC/connectionerror.png)
@@ -96,6 +102,6 @@ After Connection:
 
 ### Controller Menu
 - The controller menu is where you are able to effectively control the character.
-- The controller itself has two sticks, the left one controls the character movement and the right one shoots bullets.
+- The controller itself has two sticks, the left one controls the character movement and the right one controls the shooting direction.
 ![Controller Menu](Docs/UserManualTSSC/controllermenu.png)
-- Every time you move one or both sticks a packet will be sent to the TSS, which will trigger and execute the appropriate action (Move character/Shoot bullet).
+- Every time you move one or both sticks a packet will be sent to TSS, which will trigger and execute the appropriate action (Move character / Shoot bullet).
