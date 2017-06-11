@@ -1,5 +1,6 @@
 package com.drfl.twinstickshooter.controller.entities;
 
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.drfl.twinstickshooter.model.entities.BulletModel;
 
@@ -21,7 +22,14 @@ public class BulletBody extends EntityBody {
         float density = 1f, friction = 0.4f, restitution = 0.5f;
         int width = 9, height = 15;
 
-        createFixture(body, new float[]{0,0, width,0, 0,height, width,height},
-                width, height, density, friction, restitution, BULLET_BODY, (short) (COLLIDE_ALL ^ BULLET_BODY));
+        FixtureDef fixtureDef = new FixtureDef();
+
+        fixtureDef.density = density;
+        fixtureDef.friction = friction;
+        fixtureDef.restitution = restitution;
+        fixtureDef.filter.categoryBits = BULLET_BODY;
+        fixtureDef.filter.maskBits = (short) (COLLIDE_ALL ^ BULLET_BODY);
+
+        createFixture(body, new float[]{0,0, width,0, 0,height, width,height}, width, height, fixtureDef);
     }
 }

@@ -1,5 +1,6 @@
 package com.drfl.twinstickshooter.controller.entities;
 
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
 
@@ -21,7 +22,15 @@ public class MainCharBody extends EntityBody {
         super(world, model);
 
         float density = 0.5f, friction = 0.4f, restitution = 0.5f;
-        createFixture(body, new float[]{4,0, 28,0, 4,TILESIZE, 28,TILESIZE},
-                TILESIZE, TILESIZE, density, friction, restitution, MAINCHAR_BODY, COLLIDE_ALL);
+
+        FixtureDef fixtureDef = new FixtureDef();
+
+        fixtureDef.density = density;
+        fixtureDef.friction = friction;
+        fixtureDef.restitution = restitution;
+        fixtureDef.filter.categoryBits = MAINCHAR_BODY;
+        fixtureDef.filter.maskBits = COLLIDE_ALL;
+
+        createFixture(body, new float[]{4,0, 28,0, 4,TILESIZE, 28,TILESIZE}, TILESIZE, TILESIZE, fixtureDef);
     }
 }

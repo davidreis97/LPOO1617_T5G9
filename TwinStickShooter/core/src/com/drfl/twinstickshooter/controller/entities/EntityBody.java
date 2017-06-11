@@ -88,13 +88,9 @@ public abstract class EntityBody {
      *                 easier to get them from a bitmap image
      * @param width The width of the bitmap the vertexes where extracted from
      * @param height The height of the bitmap the vertexes where extracted from
-     * @param density The density of the fixture. How heavy it is in relation to its area
-     * @param friction The friction of the fixture. How slippery it is
-     * @param restitution The restitution of the fixture. How much it bounces
-     * @param category The collision category bits
-     * @param mask The collision mask bits. This states the categories that this shape would accept for collision
+     * @param fixtureDef The initialized FixtureDef with only polygon missing
      */
-    final void createFixture(Body body, float[] vertexes, int width, int height, float density, float friction, float restitution, short category, short mask) {
+    final void createFixture(Body body, float[] vertexes, int width, int height, FixtureDef fixtureDef) {
 
         // Transform pixels into meters, center and invert the y-coordinate
         for (int i = 0; i < vertexes.length; i++) {
@@ -109,14 +105,7 @@ public abstract class EntityBody {
         PolygonShape polygon = new PolygonShape();
         polygon.set(vertexes);
 
-        FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = polygon;
-
-        fixtureDef.density = density;
-        fixtureDef.friction = friction;
-        fixtureDef.restitution = restitution;
-        fixtureDef.filter.categoryBits = category;
-        fixtureDef.filter.maskBits = mask;
 
         body.createFixture(fixtureDef);
 

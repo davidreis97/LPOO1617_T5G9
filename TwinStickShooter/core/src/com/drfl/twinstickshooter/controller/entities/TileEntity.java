@@ -1,6 +1,7 @@
 package com.drfl.twinstickshooter.controller.entities;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
 import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;
@@ -24,7 +25,15 @@ public class TileEntity extends EntityBody {
                 coords.y * PIXEL_TO_METER + height * PIXEL_TO_METER / 2));
 
         float density = 0.0f, friction = 0.0f, restitution = 0.0f;
-        createFixture(body, new float[]{0,0, width,0, 0,height, width,height},
-                Math.round(width), Math.round(height), density, friction, restitution, TILE_ENTITY, COLLIDE_ALL);
+
+        FixtureDef fixtureDef = new FixtureDef();
+
+        fixtureDef.density = density;
+        fixtureDef.friction = friction;
+        fixtureDef.restitution = restitution;
+        fixtureDef.filter.categoryBits = TILE_ENTITY;
+        fixtureDef.filter.maskBits = COLLIDE_ALL;
+
+        createFixture(body, new float[]{0,0, width,0, 0,height, width,height}, Math.round(width), Math.round(height), fixtureDef);
     }
 }
