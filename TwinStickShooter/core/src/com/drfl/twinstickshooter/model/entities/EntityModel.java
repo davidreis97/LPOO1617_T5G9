@@ -17,7 +17,7 @@ public abstract class EntityModel {
     /**
      * Enumerator for animation directions.
      */
-    public enum AnimDirection {NONE, DOWN, LEFT, RIGHT, UP}
+    public enum AnimDirection {UP, LEFT, DOWN, RIGHT, NONE}
 
     //NOTEME javadoc
     /**

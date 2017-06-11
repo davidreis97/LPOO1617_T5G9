@@ -13,45 +13,48 @@ import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;
  */
 public abstract class EntityView {
 
+    //NOTEME javadoc
     /**
      * The sprite representing this entity view.
      */
-    protected Sprite sprite;
+    Sprite sprite;
 
+    //NOTEME javadoc
     /**
      * Creates a view belonging to a game.
      *
-     * @param game the game this view belongs to. Needed to access the
-     *             asset manager to get textures.
+     * @param game The game this view belongs to
      */
     EntityView(TSSGame game) {
         sprite = createSprite(game);
     }
 
+    //NOTEME javadoc
     /**
      * Draws the sprite from this view using a sprite batch.
      *
-     * @param batch The sprite batch to be used for drawing.
+     * @param batch The sprite batch to be used for drawing
      */
     public void draw(SpriteBatch batch) {
         sprite.draw(batch);
     }
 
+    //NOTEME javadoc
     /**
      * Abstract method that creates the view sprite. Concrete
      * implementation should extend this method to create their
      * own sprites.
      *
-     * @param game the game this view belongs to. Needed to access the
-     *             asset manager to get textures.
-     * @return the sprite representing this view.
+     * @param game The game this view belongs to
+     * @return The sprite representing this view
      */
     public abstract Sprite createSprite(TSSGame game);
 
+    //NOTEME javadoc
     /**
      * Updates this view based on a certain model.
      *
-     * @param model the model used to update this view
+     * @param model The model used to update this view
      */
     public void update(EntityModel model) {
         sprite.setCenter(model.getPosition().x / PIXEL_TO_METER, model.getPosition().y / PIXEL_TO_METER);

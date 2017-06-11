@@ -35,57 +35,77 @@ import com.drfl.twinstickshooter.view.entities.ViewFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * MVC View, handles displaying the graphics associated with the Model entities.
+ */
 public class TSSView extends ScreenAdapter {
 
+    //NOTEME javadoc
     /**
-     * Used to debug the position of the physics fixtures
+     * Used to debug the position of the physics fixtures.
      */
     private static final boolean DEBUG_PHYSICS = true;
 
+    //NOTEME javadoc
     /**
      * Tileset size. (must be square tiles)
      */
     public static final int TILESIZE = 32; //32x32
 
+    //NOTEME javadoc
     /**
      * Every tile is a meter.
      */
     public static final float PIXEL_TO_METER = 1.0f / TILESIZE;
 
+    //NOTEME javadoc
     /**
-     * The width of the viewport in meters (equivalent to number of tiles). The height is
-     * automatically calculated using the screen ratio.
+     * The width of the viewport in meters which equals the number of tiles.
      */
     static final float VIEWPORT_WIDTH = 40;
+
+    //NOTEME javadoc
+    /**
+     * The height of the viewport in meters which equals the number of tiles.
+     */
     static final float VIEWPORT_HEIGHT = 22.5f;
 
+    //NOTEME javadoc
     /**
      * The game this screen belongs to.
      */
     private final TSSGame game;
 
-    /**
-     * The singleton instance of the game view
-     */
-    private static TSSView instance;
-
+    //NOTEME javadoc
     /**
      * The camera used to show the viewport.
      */
     private final OrthographicCamera camera;
 
+    //NOTEME javadoc
+    /**
+     * The viewport for the Scene2D stage.
+     */
+    private final Viewport viewport;
+
+    //NOTEME javadoc
     /**
      * A renderer used to debug the physical fixtures.
      */
     private Box2DDebugRenderer debugRenderer;
 
+    //NOTEME javadoc
     /**
      * The transformation matrix used to transform meters into
      * pixels in order to show fixtures in their correct places.
      */
     private Matrix4 debugCamera;
 
-    String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+    //NOTEME javadoc
+    /**
+     * Vertex shader used for red tint effect.
+     */
+    private String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
             + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
             + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
             + "uniform mat4 u_projTrans;\n" //
@@ -98,7 +118,12 @@ public class TSSView extends ScreenAdapter {
             + "   v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
             + "   gl_Position =  u_projTrans * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
             + "}\n";
-    String fragmentShader = "#ifdef GL_ES\n" //
+
+    //NOTEME javadoc
+    /**
+     * Fragment shader used for red tint effect.
+     */
+    private String fragmentShader = "#ifdef GL_ES\n" //
             + "#define LOWP lowp\n" //
             + "precision mediump float;\n" //
             + "#else\n" //
@@ -113,23 +138,41 @@ public class TSSView extends ScreenAdapter {
             + "  gl_FragColor = c_color * texture2D(u_texture, v_texCoords).a;\n" //
             + "}";
 
+    //NOTEME javadoc
+    /**
+     * Constructs a new ShaderProgram and immediately compiles it.
+     */
     private ShaderProgram shader = new ShaderProgram(vertexShader, fragmentShader);
 
+    //NOTEME javadoc
     /**
-     * Array of enemy views to keep track of independent animation cycles
+     * Array of enemy views to keep track of independent animation cycles.
      */
-    private ArrayList<EnemyView> enemies = new ArrayList<EnemyView>();
+    private ArrayList<EnemyView> enemies = new ArrayList<>();
 
-    Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-    Texture health;
+    //NOTEME javadoc
+    /**
+     * Skin used for Scene2D stage actors.
+     */
+    private Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
+    //NOTEME javadoc
+    /**
+     * Texture used to represent main character health.
+     */
+    private Texture health;
+
+    //NOTEME javadoc
+    /**
+     * Label for representing current score.
+     */
     private Label score;
 
-    private final Viewport viewport;
-
+    //NOTEME javadoc
     /**
-     * Create game view using libGDX screen
-     * @param game game this screen belongs to
+     * Creates a new View that displays the current state of the Model.
+     *
+     * @param game The game associated with this view
      */
     public TSSView(TSSGame game) {
 
@@ -139,7 +182,7 @@ public class TSSView extends ScreenAdapter {
 
         loadAssets();
 
-        startMusic();
+        setupMusic();
 
         TSSModel.initInstance();
         TSSModel.getInstance().createEntityModels(game.getCurrentMap().getLayers().get("Entities"));
@@ -148,11 +191,15 @@ public class TSSView extends ScreenAdapter {
         TSSController.getInstance().createTileEntities(game.getCurrentMap().getLayers().get("Collision"));
 
         camera = createCamera();
-
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
     }
 
-    private void startMusic() {
+    //NOTEME javadoc
+    /**
+     * Setups the music to be played during the game by playing the intro and registering a
+     * listener so it plays the main theme after playing the intro.
+     */
+    private void setupMusic() {
 
         ((Music)game.getAssetManager().get("GameIntro.ogg")).setOnCompletionListener(new Music.OnCompletionListener() {
             @Override
@@ -167,22 +214,26 @@ public class TSSView extends ScreenAdapter {
         ((Music)game.getAssetManager().get("GameIntro.ogg")).play();
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when this screen becomes the current screen for a game. Creates all the actors for a Scene2D stage
+     * representing the HUD.
+     */
     @Override
     public void show() {
 
         game.setStage(new Stage(viewport));
-
         Gdx.input.setInputProcessor(game.getStage());
 
         score = new Label("Score: 0", skin);
-
         game.getStage().addActor(score);
     }
 
+    //NOTEME javadoc
     /**
-     * Creates the camera used to show the viewport.
+     * Creates an orthographic camera for displaying the screen.
      *
-     * @return the camera
+     * @return The orthographic camera
      */
     private OrthographicCamera createCamera() {
 
@@ -199,8 +250,9 @@ public class TSSView extends ScreenAdapter {
         return camera;
     }
 
+    //NOTEME javadoc
     /**
-     * Loads the assets needed by this screen.
+     * Loads assets needed for this screen.
      */
     private void loadAssets() {
 
@@ -215,10 +267,11 @@ public class TSSView extends ScreenAdapter {
         this.game.getAssetManager().finishLoading();
     }
 
+    //NOTEME javadoc
     /**
-     * Renders this screen.
+     * Called when the screen should render itself.
      *
-     * @param delta time since last renders in seconds.
+     * @param delta The time in seconds since the last render
      */
     @Override
     public void render(float delta) {
@@ -260,6 +313,10 @@ public class TSSView extends ScreenAdapter {
         }
     }
 
+    //NOTEME javadoc
+    /**
+     * Draws the game HUD, displays score and main character HP.
+     */
     private void drawHUD() {
 
         health = game.getAssetManager().get("Heart.png");
@@ -273,8 +330,9 @@ public class TSSView extends ScreenAdapter {
         game.getBatch().draw(healthRegion, 10.0f, Gdx.graphics.getHeight() - healthRegion.getRegionHeight() * 1.1f);
     }
 
+    //NOTEME javadoc
     /**
-     * Handles any inputs and passes them to the controller.
+     * Handles inputs and changes main character model so Controller can use the changes.
      */
     private void handleInputs() {
 
@@ -309,8 +367,9 @@ public class TSSView extends ScreenAdapter {
         }
     }
 
+    //NOTEME javadoc
     /**
-     * Draws the entities to the screen.
+     * Draws the entities to the screen, bullets, enemies and main character.
      */
     private void drawEntities() {
 
@@ -352,10 +411,20 @@ public class TSSView extends ScreenAdapter {
         renderer.render();
     }
 
-    public void addEnemyView() {
+    //NOTEME javadoc
+    /**
+     * Adds a new default enemy view.
+     */
+    private void addEnemyView() {
         enemies.add(new EnemyView(game));
     }
 
+    //NOTEME javadoc
+    /**
+     * Removes all enemies that were flagged as dead by the Controller.
+     *
+     * @param deadIndex The indexes of the flagged enemies
+     */
     private void cleanEnemyView(Array<Integer> deadIndex) {
 
         for(Integer index : deadIndex) {
@@ -363,11 +432,19 @@ public class TSSView extends ScreenAdapter {
         }
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when this screen is no longer the current screen for a Game.
+     */
     @Override
     public void hide() {
         this.dispose();
     }
 
+    //NOTEME javadoc
+    /**
+     * Called when this screen should release all resources.
+     */
     @Override
     public void dispose() {
 
@@ -381,9 +458,5 @@ public class TSSView extends ScreenAdapter {
         game.getAssetManager().unload("Rogue.png");
         game.getAssetManager().unload("Heart.png");
         game.getAssetManager().unload("Bullet.png");
-    }
-
-    public TSSGame getGame() {
-        return game;
     }
 }

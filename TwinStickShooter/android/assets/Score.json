@@ -13,6 +13,12 @@
 }
 {
 	class: com.drfl.twinstickshooter.game.TSSScore
+	name: KBM
+	score: 1300
+	date: 2017/06/11
+}
+{
+	class: com.drfl.twinstickshooter.game.TSSScore
 	name: \\
 	score: 800
 	date: 2017/06/10
@@ -28,6 +34,12 @@
 	name: FTL
 	score: 200
 	date: 2017/06/10
+}
+{
+	class: com.drfl.twinstickshooter.game.TSSScore
+	name: Fail
+	score: 200
+	date: 2017/06/11
 }
 {
 	class: com.drfl.twinstickshooter.game.TSSScore

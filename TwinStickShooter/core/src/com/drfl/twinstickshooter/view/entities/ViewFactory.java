@@ -9,13 +9,24 @@ import java.util.Map;
 import static com.drfl.twinstickshooter.model.entities.EntityModel.ModelType.*;
 
 /**
- * A factory for EntityView objects with cache
+ * A factory for EntityView objects with cache.
  */
-
 public class ViewFactory {
 
+    //NOTEME javadoc
+    /**
+     * Cache for the factory.
+     */
     private static Map<EntityModel.ModelType, EntityView> cache = new HashMap<EntityModel.ModelType, EntityView>();
 
+    //NOTEME javadoc
+    /**
+     * Create new view if not present on cache.
+     *
+     * @param game The current game instance
+     * @param model The entity model to create a view of
+     * @return The created or fetched view
+     */
     public static EntityView makeView(TSSGame game, EntityModel model) {
 
         if (!cache.containsKey(model.getType())) {
@@ -31,7 +42,11 @@ public class ViewFactory {
         return cache.get(model.getType());
     }
 
+    //NOTEME javadoc
+    /**
+     * Reset the factory's cache.
+     */
     public static void initViewFactory() {
-        cache = new HashMap<EntityModel.ModelType, EntityView>();
+        cache = new HashMap<>();
     }
 }

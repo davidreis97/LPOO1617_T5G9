@@ -8,11 +8,11 @@ import com.drfl.twinstickshooter.game.TSSGame;
  */
 public class MainCharView extends AnimatedEntityView {
 
+    //NOTEME javadoc
     /**
      * Constructs a main character view.
      *
-     * @param game the game this view belongs to. Needed to access the
-     *             asset manager to get textures.
+     * @param game The game this view belongs to
      */
     public MainCharView(TSSGame game) {
         super(game, (Texture) game.getAssetManager().get("Pistolero.png"), 0.15f);

@@ -9,22 +9,22 @@ import com.drfl.twinstickshooter.game.TSSGame;
  */
 public class BulletView extends EntityView {
 
+    //NOTEME javadoc
     /**
      * Constructs a bullet view.
      *
-     * @param game the game this view belongs to. Needed to access the
-     *             asset manager to get textures.
+     * @param game The game this view belongs to
      */
     public BulletView(TSSGame game) {
         super(game);
     }
 
+    //NOTEME javadoc
     /**
      * Creates a sprite representing this bullet.
      *
-     * @param game the game this view belongs to. Needed to access the
-     *             asset manager to get textures.
-     * @return the sprite representing this bullet
+     * @param game The game this view belongs to
+     * @return The sprite representing this bullet
      */
     public Sprite createSprite(TSSGame game) {
 
