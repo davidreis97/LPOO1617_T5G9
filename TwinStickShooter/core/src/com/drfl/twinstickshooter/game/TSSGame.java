@@ -104,21 +104,34 @@ public class TSSGame extends Game {
 
 	//NOTEME javadoc
     /**
+     * Flag used for testing, doesn't enable screens and sprite batches.
+     */
+	private boolean testing = false;
+
+	//NOTEME javadoc
+    /**
+     * Flag for signalling whether this application listener has been initialized.
+     */
+	private volatile boolean readyForTest = false;
+
+	//NOTEME javadoc
+    /**
      * Called when the Application is first created. Initializes sprite batch, asset manager and server.
      * Also loads sound effects.
      */
     @Override
     public void create () {
 
-        batch = new SpriteBatch();
+        if(!testing) batch = new SpriteBatch();
         assetManager = new AssetManager();
-        server = new TSSServer();
+        if(!testing) server = new TSSServer();
 
         assetManager.load("Shoot.mp3", Sound.class);
         assetManager.load("Hurt.mp3", Sound.class);
         assetManager.finishLoading();
 
-        startGame();
+        if(testing) readyForTest = true;
+        if(!testing) startGame();
     }
 
     //NOTEME javadoc
@@ -385,5 +398,21 @@ public class TSSGame extends Game {
      */
     public void setCurrentMap(TiledMap currentMap) {
         this.currentMap = currentMap;
+    }
+
+    //NOTEME javadoc
+    /**
+     *  @param testing Whether testing is happening
+     */
+    public void setTesting(boolean testing) {
+        this.testing = testing;
+    }
+
+    //NOTEME javadoc
+    /**
+     *  @return Whether application listener has been initialized
+     */
+    public boolean isReadyForTest() {
+        return readyForTest;
     }
 }

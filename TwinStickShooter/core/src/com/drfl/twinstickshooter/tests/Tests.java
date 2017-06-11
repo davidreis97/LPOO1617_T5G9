@@ -2,6 +2,8 @@ package com.drfl.twinstickshooter.tests;
 
 import static org.junit.Assert.*;
 
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
+import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
@@ -13,13 +15,12 @@ import com.drfl.twinstickshooter.model.entities.EnemySpawnerModel;
 import com.drfl.twinstickshooter.model.entities.MainCharModel;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
  * Unit tests for the Model/Controller packages
  */
-@RunWith(GdxTestRunner.class)
 public class Tests {
 
     //NOTEME javadoc
@@ -44,17 +45,34 @@ public class Tests {
     /**
      * Game instance.
      */
-    private TSSGame game;
+    private static TSSGame game;
 
+    //NOTEME javadoc
     /**
-     * Runs before each test.
+     * Runs before all tests once. Initializes headless LibGDX.
+     */
+    @BeforeClass
+    public static void setUpBeforeAll() {
+
+        final HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
+        config.renderInterval = 1.0f / 60;
+
+        game = new TSSGame();
+        game.setTesting(true);
+
+        new HeadlessApplication(game, config);
+    }
+
+    //NOTEME javadoc
+    /**
+     * Runs before each test. Makes sure LibGDX has been initialized before running tests.
      */
     @Before
     public void setUpBefore() {
 
-        game = new TSSGame();
-
-        game.setSoundVolume(0);
+        while(true) {
+            if(game.isReadyForTest()) break;
+        }
 
         model = TSSModel.initInstance();
         model.setMainChar(new MainCharModel(new Vector2(0, 0),0));
