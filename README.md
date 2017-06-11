@@ -7,6 +7,10 @@ David Alexandre Gomes Reis - 201607927 - up201607927@fe.up.pt
 
 On this document, TwinStickShooter is mentioned as TSS and TwinStickShooterController is mentioned as TSSC.
 
+# Final Design Doc
+
+[Final Design Doc](Docs/Design/Architecture%20Design.pdf) [May need to zoom on the UML]
+
 # Intermediate Delivery Documentation
 
 [Architecture Design](Docs/Intermediate/Architecture%20Design.pdf)
@@ -14,6 +18,14 @@ On this document, TwinStickShooter is mentioned as TSS and TwinStickShooterContr
 [GUI Design](Docs/Intermediate/GUI%20Design.pdf)
 
 [Test Design](Docs/Intermediate/TestDesign.pdf)
+
+# Major Difficulties
+
+One of the biggest challenges we had to overcome during the development of this project was employing an architectural pattern that allowed us to write clean and well structured code. The pattern we chose was the `Model View Controller` architectural pattern. This was a big priority since the start of the development process because we knew, both from what we learned from previous experiences and from the LPOO lectures, that having a good architecture that allowed us to couple components loosely would make our whole development process a lot easier and faster, and would also allow us to easily implement unit testing. This strategy allowed us to implement unit tests without instanciating a single class from the `View` component, using only the `Model` and the `Controller` components.
+
+# Lessons Learned
+
+During this project (and the LPOO course) we learned about the thought process that should take place before writing code. We planned the general design/structure of our project and consequently we were able to create code that was easier to maintain and build upon, avoiding and specially solving a lot faster many of the bugs that would otherwise send us to the depths of Stack Overflow looking for a solution. We also learned about the importance of Unit Testing as a way to detect and solve bugs more efficiently, as well as Design Patterns which allowed us to solve some of the coding challenges we faced with an elegant solution.
 
 # Setup and Installation
 ## Setting up the development environment
@@ -105,12 +117,3 @@ After Connection:
 - The controller itself has two sticks, the left one controls the character movement and the right one controls the shooting direction.
 ![Controller Menu](Docs/UserManualTSSC/controllermenu.png)
 - Every time you move one or both sticks a packet will be sent to TSS, which will trigger and execute the appropriate action (Move character / Shoot bullet).
-
-# Major Difficulties
-
-One of the biggest challenges we had to overcome during the development of this project was to employ an architectural pattern that allowed us to write clean and well structured code. The pattern we chose was the `Model View Controller` architectural pattern. This was a big priority since the start of the development process because we knew, both from what we learned from previous experiences and from the LPOO lectures, that having a good architecture which allowed us to couple components loosely would make our whole development process a lot easier and faster, and would also allow us to easily implement unit testing. This strategy allowed us to implement unit tests without instanciating a single class from the `View`, using only the `Model` and the `Controller`.
-
-# Lessons Learned
-
-During this project (and the LPOO course) we learned about the thought process that should take place in our minds before writing code. We planned the general design/structure of our project and consequently we were able to create code that was easier to maintain and build upon, avoiding and specially solving a lot faster many of the bugs that would otherwise send us to the depths of Stack Overflow looking for a solution. We also learned about the importance of Unit Testing as a way to detect and solve bugs more efficiently, as well as Design Patterns which allowed us to solve some of the coding challenges we faced with an elegant solution.
-
