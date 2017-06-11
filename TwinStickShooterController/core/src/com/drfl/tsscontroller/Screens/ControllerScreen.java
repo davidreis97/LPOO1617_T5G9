@@ -24,67 +24,56 @@ import com.esotericsoftware.minlog.Log;
  */
 public class ControllerScreen implements Screen {
 
-    //NOTEME javadoc
     /**
      * Debug flag.
      */
     private static final boolean DEBUG = false;
 
-    //NOTEME javadoc
     /**
      * The camera used to show the viewport.
      */
     private Camera camera;
 
-    //NOTEME javadoc
     /**
      * The viewport for the Scene2D stage.
      */
     private Viewport viewport;
 
-    //NOTEME javadoc
     /**
      * The game this screen belongs to.
      */
     private TSSCGame game;
 
-    //NOTEME javadoc
     /**
      * Kryonet client.
      */
     private TSSCClient client;
 
-    //NOTEME javadoc
     /**
      * Left touchpad for movement input.
      */
     private Touchpad touchpadLeft;
 
-    //NOTEME javadoc
     /**
      * Right touchpad for shooting input.
      */
     private Touchpad touchpadRight;
 
-    //NOTEME javadoc
     /**
      * Skin used for touch pads.
      */
     private Skin touchpadSkin;
 
-    //NOTEME javadoc
     /**
      * Scene2D stage used for UI.
      */
     private Stage stage;
 
-    //NOTEME javadoc
     /**
      * Touchpad style.
      */
     private Touchpad.TouchpadStyle touchpadStyle;
 
-    //NOTEME javadoc
     /**
      * Constructs a ControllerScreen belonging to a certain game.
      *
@@ -96,7 +85,6 @@ public class ControllerScreen implements Screen {
         loadAssets();
     }
 
-    //NOTEME javadoc
     /**
      * Loads assets needed for this screen.
      */
@@ -106,7 +94,6 @@ public class ControllerScreen implements Screen {
         this.game.getAssetManager().finishLoading();
     }
 
-    //NOTEME javadoc
     /**
      * Called when this screen becomes the current screen for a game. Creates all the actors for a Scene2D stage
      * representing the ControllerScreen.
@@ -133,7 +120,6 @@ public class ControllerScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
-    //NOTEME javadoc
     /**
      * Initializes the left touch pad.
      */
@@ -155,7 +141,6 @@ public class ControllerScreen implements Screen {
         });
     }
 
-    //NOTEME javadoc
     /**
      * Initializes the right touch pad.
      */
@@ -177,9 +162,8 @@ public class ControllerScreen implements Screen {
         });
     }
 
-    //NOTEME javadoc
     /**
-     * Creates the touch pad style to use as skin.
+     * Creates the touch pad style to use as a skin.
      */
     private void loadTouchpadStyle() {
 
@@ -204,7 +188,6 @@ public class ControllerScreen implements Screen {
         touchpadStyle.knob = touchKnob;
     }
 
-    //NOTEME javadoc
     /**
      * Called when the screen should render itself.
      *
@@ -225,7 +208,6 @@ public class ControllerScreen implements Screen {
         stage.draw();
     }
 
-    //NOTEME javadoc
     /**
      * Called when screen is resized.
      *
@@ -254,7 +236,6 @@ public class ControllerScreen implements Screen {
 
     }
 
-    //NOTEME javadoc
     /**
      * Called when this screen should release all resources.
      */

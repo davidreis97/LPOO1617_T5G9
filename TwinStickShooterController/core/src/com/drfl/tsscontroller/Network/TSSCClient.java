@@ -11,39 +11,35 @@ import java.io.IOException;
  */
 public class TSSCClient {
 
-    //NOTEME javadoc
     /**
-     * Milliseconds to attempt connection.
+     * Milliseconds to attempt connection for.
      */
     private static final int TIMEOUT = 5000;
 
-    //NOTEME javadoc
     /**
      * TCP port to use.
      */
     private static final int PORT = 54555;
 
-    //NOTEME javadoc
     /**
      * Kryonet client.
      */
     public Client client;
 
-    //NOTEME javadoc
     /**
      * Is connection established?
      */
     private boolean connected;
 
-    //NOTEME javadoc
     /**
      * Error message if connection failed.
      */
     private String errorMsg = "";
 
-    //NOTEME javadoc
     /**
      * Constructs a kryonet client and attempts to connect to a game server.
+     *
+     * @param IPAddress The IP address to use for the connection
      */
     public TSSCClient(String IPAddress) {
 
@@ -64,7 +60,6 @@ public class TSSCClient {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Initializes kryo instance so it handles android controller packets.
      */
@@ -75,7 +70,6 @@ public class TSSCClient {
         kryo.register(Vector2.class);
     }
 
-    //NOTEME javadoc
     /**
      * @return Whether a connection was established
      */
@@ -83,7 +77,6 @@ public class TSSCClient {
         return connected;
     }
 
-    //NOTEME javadoc
     /**
      *  @return The current error message
      */

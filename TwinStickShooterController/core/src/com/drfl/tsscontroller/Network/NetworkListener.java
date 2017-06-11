@@ -9,7 +9,6 @@ import com.esotericsoftware.minlog.Log;
  */
 public class NetworkListener extends Listener {
 
-    //NOTEME javadoc
     /**
      * Connection established.
      *
@@ -20,7 +19,6 @@ public class NetworkListener extends Listener {
         Log.info("[CLIENT] You have connected.");
     }
 
-    //NOTEME javadoc
     /**
      * Connection ended.
      *
@@ -31,7 +29,6 @@ public class NetworkListener extends Listener {
         Log.info("[CLIENT] You have disconnected.");
     }
 
-    //NOTEME javadoc
     /**
      * Received a packet.
      *

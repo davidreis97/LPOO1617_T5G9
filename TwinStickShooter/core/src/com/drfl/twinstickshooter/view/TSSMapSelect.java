@@ -13,10 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.BufferUtils;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.drfl.twinstickshooter.game.TSSGame;
 import com.drfl.twinstickshooter.game.TSSState;
@@ -156,15 +153,24 @@ public class TSSMapSelect extends ScreenAdapter {
      */
     private void loadAssets() {
 
-        this.game.getAssetManager().load( "MainMenuBack.jpg" , Texture.class);
+        game.getAssetManager().load( "MainMenuBack.jpg" , Texture.class);
         TSSMenuHelper.getInstance().loadMusic("Menu.ogg");
 
-        this.game.getAssetManager().setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        this.game.getAssetManager().load("Badlands.tmx", TiledMap.class);
-        this.game.getAssetManager().load("Grasslands.tmx", TiledMap.class);
-        this.game.getAssetManager().load("Custom.tmx", TiledMap.class);
+        game.getAssetManager().setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
 
-        this.game.getAssetManager().finishLoading();
+        try {
+            game.getAssetManager().unload("Badlands.tmx");
+            game.getAssetManager().unload("Grasslands.tmx");
+            game.getAssetManager().unload("Custom.tmx");
+        } catch(GdxRuntimeException e) {
+            //Ignore
+        }
+
+        game.getAssetManager().load("Badlands.tmx", TiledMap.class);
+        game.getAssetManager().load("Grasslands.tmx", TiledMap.class);
+        game.getAssetManager().load("Custom.tmx", TiledMap.class);
+
+        game.getAssetManager().finishLoading();
     }
 
     //NOTEME javadoc

@@ -20,49 +20,41 @@ import com.drfl.tsscontroller.TSSCGame;
  */
 public class IPScreen implements Screen {
 
-    //NOTEME javadoc
     /**
      * The game this screen belongs to.
      */
     private TSSCGame game;
 
-    //NOTEME javadoc
     /**
      * Scene2D stage used for UI.
      */
     private Stage stage;
 
-    //NOTEME javadoc
     /**
      * The camera used to show the viewport.
      */
     private Camera camera;
 
-    //NOTEME javadoc
     /**
      * The viewport for the Scene2D stage.
      */
     private Viewport viewport;
 
-    //NOTEME javadoc
     /**
      * Text button for accepting IP input.
      */
     private TextButton btnAccept;
 
-    //NOTEME javadoc
     /**
-     * Text field for inputting the IP adress to connect to.
+     * Text field for inputting the IP address to connect to.
      */
     private TextField ipAddressField;
 
-    //NOTEME javadoc
     /**
      * Current connection status.
      */
     private Label status;
 
-    //NOTEME javadoc
     /**
      * Constructs a IPScreen belonging to a certain game.
      *
@@ -74,7 +66,6 @@ public class IPScreen implements Screen {
         loadAssets();
     }
 
-    //NOTEME javadoc
     /**
      * Loads assets needed for this screen.
      */
@@ -84,7 +75,6 @@ public class IPScreen implements Screen {
         this.game.getAssetManager().finishLoading();
     }
 
-    //NOTEME javadoc
     /**
      * Called when this screen becomes the current screen for a game. Creates all the actors for a Scene2D stage
      * representing the IPScreen.
@@ -147,7 +137,6 @@ public class IPScreen implements Screen {
         stage.addActor(btnAccept);
     }
 
-    //NOTEME javadoc
     /**
      *  @param text The text to set in the status label.
      */
@@ -155,7 +144,6 @@ public class IPScreen implements Screen {
         status.setText("STATUS: " + text);
     }
 
-    //NOTEME javadoc
     /**
      * Called when the screen should render itself.
      *
@@ -181,7 +169,6 @@ public class IPScreen implements Screen {
         stage.draw();
     }
 
-    //NOTEME javadoc
     /**
      * Called when screen is resized.
      *
@@ -209,7 +196,6 @@ public class IPScreen implements Screen {
 
     }
 
-    //NOTEME javadoc
     /**
      * Called when this screen should release all resources.
      */
