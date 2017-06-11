@@ -8,7 +8,6 @@ import com.drfl.twinstickshooter.game.TSSGame;
  */
 public class EnemyView extends AnimatedEntityView {
 
-    //NOTEME javadoc
     /**
      * Constructs an enemy entity view.
      *

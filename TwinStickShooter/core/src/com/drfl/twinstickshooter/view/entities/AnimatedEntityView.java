@@ -18,51 +18,43 @@ import static com.drfl.twinstickshooter.view.TSSView.TILESIZE;
  */
 public abstract class AnimatedEntityView extends EntityView {
 
-    //NOTEME javadoc
     /**
      * Array of animations for entity movement, indexes are
      * aligned with Enum AnimDirection from EntityModel.java
      */
     private Array<Animation> animations = new Array<>();
 
-    //NOTEME javadoc
     /**
      * Array of sprites for when no movement happens, indexes are
      * aligned with Enum AnimDirection from EntityModel.java
      */
     private Array<TextureRegion> idleSprites = new Array<>();
 
-    //NOTEME javadoc
     /**
      * Current animation direction.
      */
     private EntityModel.AnimDirection direction = EntityModel.AnimDirection.DOWN;
 
-    //NOTEME javadoc
     /**
      * Previous animation direction.
      */
     private EntityModel.AnimDirection previousDirection = EntityModel.AnimDirection.DOWN;
 
-    //NOTEME javadoc
     /**
      * Time the entity has been in the same animation cycle.
      */
     private float stateTime = 0;
 
-    //NOTEME javadoc
     /**
      * Maximum amount of time entity should spend in the hurt state.
      */
     private final static float HURT_FRAMES = 0.5f;
 
-    //NOTEME javadoc
     /**
      * Current time spent in hurt state.
      */
     private float hurtTime = 0;
 
-    //NOTEME javadoc
     /**
      * Creates an animated view belonging to a game with a certain sprite sheet
      * and frame time for animations.
@@ -78,7 +70,6 @@ public abstract class AnimatedEntityView extends EntityView {
         sprite.setBounds(0, 0, TILESIZE, TILESIZE);
     }
 
-    //NOTEME javadoc
     /**
      * Calls the creation of the animations and idle textures for
      * a given sprite sheet and frame time.
@@ -91,7 +82,6 @@ public abstract class AnimatedEntityView extends EntityView {
         createIdleRegions(spriteSheet);
     }
 
-    //NOTEME javadoc
     /**
      * Stub implementation, not supposed to be called.
      */
@@ -100,7 +90,6 @@ public abstract class AnimatedEntityView extends EntityView {
         return new Sprite();
     }
 
-    //NOTEME javadoc
     /**
      * Draws the sprite to the screen after choosing the appropriate sprite
      * according to the current animation state enumerator. The enumerator works as
@@ -124,7 +113,6 @@ public abstract class AnimatedEntityView extends EntityView {
         sprite.draw(batch);
     }
 
-    //NOTEME javadoc
     /**
      * Updates the animated view animation state according to model
      * animation direction and model flags.
@@ -153,7 +141,6 @@ public abstract class AnimatedEntityView extends EntityView {
         model.setAnimDirection(EntityModel.AnimDirection.NONE);
     }
 
-    //NOTEME javadoc
     /**
      * Creates idle textures for all 4 directions.
      *
@@ -170,7 +157,6 @@ public abstract class AnimatedEntityView extends EntityView {
         idleSprites.add(downRegion);
     }
 
-    //NOTEME javadoc
     /**
      * Creates animations for all 4 directions.
      *

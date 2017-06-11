@@ -28,79 +28,66 @@ import com.drfl.twinstickshooter.model.TSSModel;
  */
 public class TSSMainMenu extends ScreenAdapter {
 
-    //NOTEME javadoc
     /**
      * Max cooldown for playing a sound effect when changing sound volume.
      */
     private static final float SOUND_CD = 0.3f;
 
-    //NOTEME javadoc
     /**
      * Current value of the sound change cooldown.
      */
     private float changeSound = SOUND_CD;
 
-    //NOTEME javadoc
     /**
      * The game this screen belongs to.
      */
     private final TSSGame game;
 
-    //NOTEME javadoc
     /**
      * The camera used to show the viewport.
      */
     private final OrthographicCamera camera;
 
-    //NOTEME javadoc
     /**
      * The viewport for the Scene2D stage.
      */
     private final Viewport viewport;
 
-    //NOTEME javadoc
     /**
      * Selected input method for the game.
      */
     private TSSGame.ControlType selectedController = TSSGame.ControlType.KBM;
 
-    //NOTEME javadoc
     /**
      * Select box for choosing the input method.
      */
     private SelectBox inputChoose;
 
-    //NOTEME javadoc
     /**
      * Label for warning about potential issues on input method chosen.
      */
     private Label controlWarning;
 
-    //NOTEME javadoc
     /**
      * Label for showing local IP.
      */
     private Label IPBox;
 
-    //NOTEME javadoc
     /**
      * Actual value of the IPBox label.
      */
     private String IPField;
 
-    //NOTEME javadoc
     /**
      * Slider for controlling music volume.
      */
     private Slider musicVolume;
 
-    //NOTEME javadoc
     /**
      * Slider for controlling sound volume.
      */
     private Slider soundVolume;
 
-    //NOTEME javadoc
     /**
      * Input options available for setting in the select box.
      */
@@ -110,7 +97,6 @@ public class TSSMainMenu extends ScreenAdapter {
             "Android Controller",
     };
 
-    //NOTEME javadoc
     /**
      * Constructs a main menu screen belonging to a certain game.
      *
@@ -131,7 +117,6 @@ public class TSSMainMenu extends ScreenAdapter {
         TSSModel.getInstance().setScore(0); //Prevent score from carrying over
     }
 
-    //NOTEME javadoc
     /**
      * Called when this screen becomes the current screen for a game. Creates all the actors for a Scene2D stage
      * representing the main menu screen.
@@ -233,7 +218,6 @@ public class TSSMainMenu extends ScreenAdapter {
         });
     }
 
-    //NOTEME javadoc
     /**
      * Loads assets needed for this screen.
      */
@@ -244,7 +228,6 @@ public class TSSMainMenu extends ScreenAdapter {
         this.game.getAssetManager().finishLoading();
     }
 
-    //NOTEME javadoc
     /**
      * Handles input method choosing by checking the select box value and checking whether the input method
      * is valid by testing whether needed device exists.
@@ -274,7 +257,6 @@ public class TSSMainMenu extends ScreenAdapter {
         return TSSGame.ControlType.KBM;
     }
 
-    //NOTEME javadoc
     /**
      * Called when the screen should render itself.
      *
@@ -302,7 +284,6 @@ public class TSSMainMenu extends ScreenAdapter {
         selectedController = parseInputMode();
     }
 
-    //NOTEME javadoc
     /**
      * Called when this screen is no longer the current screen for a Game.
      */
@@ -311,7 +292,6 @@ public class TSSMainMenu extends ScreenAdapter {
         this.dispose();
     }
 
-    //NOTEME javadoc
     /**
      * Called when this screen should release all resources.
      */

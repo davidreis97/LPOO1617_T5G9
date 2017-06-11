@@ -8,7 +8,6 @@ import com.drfl.twinstickshooter.game.TSSGame;
  */
 public class MainCharView extends AnimatedEntityView {
 
-    //NOTEME javadoc
     /**
      * Constructs a main character view.
      *

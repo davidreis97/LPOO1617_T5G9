@@ -13,13 +13,11 @@ import static com.drfl.twinstickshooter.model.entities.EntityModel.ModelType.*;
  */
 public class ViewFactory {
 
-    //NOTEME javadoc
     /**
      * Cache for the factory.
      */
     private static Map<EntityModel.ModelType, EntityView> cache = new HashMap<EntityModel.ModelType, EntityView>();
 
-    //NOTEME javadoc
     /**
      * Create new view if not present on cache.
      *
@@ -42,7 +40,6 @@ public class ViewFactory {
         return cache.get(model.getType());
     }
 
-    //NOTEME javadoc
     /**
      * Reset the factory's cache.
      */

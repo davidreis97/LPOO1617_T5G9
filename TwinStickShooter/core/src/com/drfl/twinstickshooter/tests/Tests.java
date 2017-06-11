@@ -23,31 +23,26 @@ import org.junit.Test;
  */
 public class Tests {
 
-    //NOTEME javadoc
     /**
      * Physics step to use for tests.
      */
     private static final float UPDATE_STEP = 50;
 
-    //NOTEME javadoc
     /**
      * Controller instance.
      */
     private TSSController controller;
 
-    //NOTEME javadoc
     /**
      * Model instance.
      */
     private TSSModel model;
 
-    //NOTEME javadoc
     /**
      * Game instance.
      */
     private static TSSGame game;
 
-    //NOTEME javadoc
     /**
      * Runs before all tests once. Initializes headless LibGDX.
      */
@@ -63,7 +58,6 @@ public class Tests {
         new HeadlessApplication(game, config);
     }
 
-    //NOTEME javadoc
     /**
      * Runs before each test. Makes sure LibGDX has been initialized before running tests.
      */
@@ -80,7 +74,6 @@ public class Tests {
         controller = TSSController.initInstance(game);
     }
 
-    //NOTEME javadoc
     /**
      * Spawns enemy and tests that score goes up if enemy's health drops to 0 or less.
      */
@@ -99,7 +92,6 @@ public class Tests {
         assertNotEquals(score, model.getScore());
     }
 
-    //NOTEME javadoc
     /**
      * Spawns enemy and tests that enemy changes position over time.
      */
@@ -121,7 +113,6 @@ public class Tests {
         assertTrue(true);
     }
 
-    //NOTEME javadoc
     /**
      * Spawns enemy and tests shooting by allowing the enemy
      * to hit the player and checking that player health drops.
@@ -142,7 +133,6 @@ public class Tests {
         assertTrue(oldHitpoints > model.getMainChar().getHitpoints());
     }
 
-    //NOTEME javadoc
     /**
      * Spawns enemy and tests if player hitting it with a bullet results in enemy losing health.
      */
@@ -162,7 +152,6 @@ public class Tests {
         assertTrue(oldHitpoints > model.getEnemies().get(0).getHitpoints());
     }
 
-    //NOTEME javadoc
     /**
      * Tests 8-directional movement of the main character by
      * checking whether the character moved as expected.

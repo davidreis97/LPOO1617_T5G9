@@ -10,7 +10,6 @@ import static com.drfl.twinstickshooter.view.TSSView.TILESIZE;
  */
 public class MainCharBody extends EntityBody {
 
-    //NOTEME javadoc
     /**
      * Constructs a main char body using a main char model.
      *

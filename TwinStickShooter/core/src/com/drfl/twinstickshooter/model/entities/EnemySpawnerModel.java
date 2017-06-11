@@ -7,13 +7,11 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class EnemySpawnerModel extends EntityModel {
 
-    //NOTEME javadoc
     /**
      * Whether the spawner has spawned an enemy.
      */
     private boolean spawned = false;
 
-    //NOTEME javadoc
     /**
      * Constructs an enemy spawner model belonging to a game.
      *
@@ -23,7 +21,6 @@ public class EnemySpawnerModel extends EntityModel {
         super(new Vector2(coords.x + CENTER_ADJUST, coords.y + CENTER_ADJUST), 0);
     }
 
-    //NOTEME javadoc
     /**
      *  @return Whether the enemy spawner has spawned an enemy
      */
@@ -31,7 +28,6 @@ public class EnemySpawnerModel extends EntityModel {
         return spawned;
     }
 
-    //NOTEME javadoc
     /**
      *  @param spawned Whether the enemy spawner has spawned an enemy
      */
@@ -39,7 +35,6 @@ public class EnemySpawnerModel extends EntityModel {
         this.spawned = spawned;
     }
 
-    //NOTEME javadoc
     @Override
     public ModelType getType() {
         return ModelType.SPAWNER;

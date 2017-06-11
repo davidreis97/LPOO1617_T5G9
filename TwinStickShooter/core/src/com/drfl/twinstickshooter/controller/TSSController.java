@@ -21,97 +21,81 @@ import java.util.ArrayList;
  */
 public class TSSController implements ContactListener {
 
-    //NOTEME javadoc
     /**
      * The singleton instance of the controller.
      */
     private static TSSController instance;
 
-    //NOTEME javadoc
     /**
      * The tile map width in meters.
      */
     private static final float MAP_WIDTH = 40;
 
-    //NOTEME javadoc
     /**
      * The tile map height in meters.
      */
     private static final float MAP_HEIGHT = 22.5f;
 
-    //NOTEME javadoc
     /**
      * The speed of bullets for all entities.
      */
     private static final float BULLET_SPEED = 20f;
 
-    //NOTEME javadoc
     /**
-     * Regular pitch for playing sounds
+     * Regular pitch for playing sounds.
      */
     private static final float NORMAL_PITCH = 1.0f;
 
-    //NOTEME javadoc
     /**
-     * Enemy bullet SFX pitch
+     * Enemy bullet SFX pitch.
      */
     private static final float ENEMY_BULLET_PITCH = 1.6f;
 
-    //NOTEME javadoc
     /**
-     * Bullet damage
+     * Bullet damage.
      */
     private static int BULLET_DAMAGE = 5;
 
-    //NOTEME javadoc
     /**
      * Max cooldown for enemy spawning.
      */
     private static final float SPAWN_MAX_COOL = 3.0f;
 
-    //NOTEME javadoc
     /**
      * Current enemy spawning cooldown.
      */
     private float timeToNextSpawn = SPAWN_MAX_COOL;
 
-    //NOTEME javadoc
     /**
      * The physics world controlled by this controller.
      */
     private final World world;
 
-    //NOTEME javadoc
     /**
      * The main character body.
      */
     private final MainCharBody mainCharBody;
 
-    //NOTEME javadoc
     /**
      * Enemy bodies.
      */
     private ArrayList<EnemyBody> enemies = new ArrayList<>();
 
-    //NOTEME javadoc
     /**
      * The game associated with this controller.
      */
     private final TSSGame game;
 
-    //NOTEME javadoc
     /**
      * Accumulator used to calculate the simulation step.
      */
     private float accumulator;
 
-    //NOTEME javadoc
     /**
      * Flags whether an enemy has been spawned recently, reset by accessing it through getter method.
      */
     private boolean spawned = false;
 
-    //NOTEME javadoc
     /**
      * Creates a new GameController that controls the physics of a TSSModel.
      *
@@ -128,7 +112,6 @@ public class TSSController implements ContactListener {
         this.game = game;
     }
 
-    //NOTEME javadoc
     /**
      * Returns a singleton instance of controller, instance must
      * be initiated by a call to initInstance beforehand. Null is returned if not.
@@ -139,7 +122,6 @@ public class TSSController implements ContactListener {
         return instance;
     }
 
-    //NOTEME javadoc
     /**
      * Initializes a controller instance, associating it with a game.
      *
@@ -151,7 +133,6 @@ public class TSSController implements ContactListener {
         return instance;
     }
 
-    //NOTEME javadoc
     /**
      * Creates tile entities from a collision map layer loaded from a Tiled map.
      *
@@ -166,7 +147,6 @@ public class TSSController implements ContactListener {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Moves an entity by applying a linear impulse. Also calls animation direction handling.
      *
@@ -180,7 +160,6 @@ public class TSSController implements ContactListener {
         entity.applyLinearImpulse(new Vector2(entity.getMass() * direction.x, entity.getMass() * direction.y), true);
     }
 
-    //NOTEME javadoc
     /**
      * Tries to shoot by testing the shot cooldown, returns whether it was able to shoot.
      *
@@ -204,7 +183,6 @@ public class TSSController implements ContactListener {
         return true;
     }
 
-    //NOTEME javadoc
     /**
      * Tries to change enemy direction by testing move cooldown.
      *
@@ -230,7 +208,6 @@ public class TSSController implements ContactListener {
         model.setMoveDirection(moveDir);
     }
 
-    //NOTEME javadoc
     /** Plays the sound. If the sound is already playing, it will be played again, concurrently.
      *
      * @param sound The sound to play
@@ -242,7 +219,6 @@ public class TSSController implements ContactListener {
         sound.play(volume, pitch, pan);
     }
 
-    //NOTEME javadoc
     /**
      * Handles all player logic. Moves the player and then tries to shoot a bullet.
      * Plays sound effect if bullet shot.
@@ -258,7 +234,6 @@ public class TSSController implements ContactListener {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Handles all enemy logic. For each enemy tries to change current direction,
      * moves the enemy and then tries to shoot in the player's direction. Plays sound effect
@@ -282,7 +257,6 @@ public class TSSController implements ContactListener {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Try to spawn an enemy if cooldown is <= 0. Can only spawn if
      * a spawner has free space.
@@ -308,7 +282,6 @@ public class TSSController implements ContactListener {
         timeToNextSpawn = SPAWN_MAX_COOL;
     }
 
-    //NOTEME javadoc
     /**
      * Updates entity models to correspond to current body position and angle.
      * Checks if bodies are inside game area before updating.
@@ -327,7 +300,6 @@ public class TSSController implements ContactListener {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Calculates the next physics step of duration delta (in seconds).
      *
@@ -353,7 +325,6 @@ public class TSSController implements ContactListener {
         this.updateBodies(bodies);
     }
 
-    //NOTEME javadoc
     /**
      * Verifies if the body is inside the Tiled map bounds.
      *
@@ -374,7 +345,6 @@ public class TSSController implements ContactListener {
             body.setTransform(body.getPosition().x, 0, body.getAngle());
     }
 
-    //NOTEME javadoc
     /**
      * Sets animation direction for an entity model based on its heading.
      *
@@ -397,7 +367,6 @@ public class TSSController implements ContactListener {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Returns a vector starting at enemy shooter's position
      * and ending in player's current position.
@@ -410,7 +379,6 @@ public class TSSController implements ContactListener {
         return new Vector2(target.getPosition().x - shooter.getPosition().x, target.getPosition().y - shooter.getPosition().y);
     }
 
-    //NOTEME javadoc
     /**
      * Shoots a bullet by creating its model and body with specified direction and owner.
      *
@@ -426,7 +394,6 @@ public class TSSController implements ContactListener {
         body.setLinearVelocity(BULLET_SPEED);
     }
 
-    //NOTEME javadoc
     /**
      * Called when two fixtures begin to touch. Handles specific
      * collision resolution.
@@ -452,7 +419,6 @@ public class TSSController implements ContactListener {
         if (bodyB.getUserData() instanceof BulletModel) ((BulletModel) bodyB.getUserData()).setFlaggedForRemoval(true);
     }
 
-    //NOTEME javadoc
     /**
      * Set enemy's time to next direction to 0 since it hit a wall.
      *
@@ -462,7 +428,6 @@ public class TSSController implements ContactListener {
         enemy.setTimeToNextDirection(0);
     }
 
-    //NOTEME javadoc
     /**
      * Bullet collided with enemy, flag bullet for removal and hurt enemy.
      *
@@ -479,7 +444,6 @@ public class TSSController implements ContactListener {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Bullet collided with main char, flag bullet for removal, hurt main char and apply knockback.
      * If main char is flagged as hurt nothing happens as it has invincibility frames.
@@ -503,7 +467,6 @@ public class TSSController implements ContactListener {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Removes bullet entities flagged for removal by destroying their Box2D body and removing them from the model.
      */
@@ -523,7 +486,6 @@ public class TSSController implements ContactListener {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Stops all sound effects.
      */
@@ -533,9 +495,8 @@ public class TSSController implements ContactListener {
         ((Sound) game.getAssetManager().get("Hurt.mp3")).stop();
     }
 
-    //NOTEME javadoc
     /**
-     * Removes entities whose HP is <= 0. For main char sets dead flag,
+     * Removes entities whose HP is &lt;= 0. For main char sets dead flag,
      * for enemies removes them from model and destroys Box2D body.
      */
     public Array<Integer> removeDead() {
@@ -562,7 +523,6 @@ public class TSSController implements ContactListener {
         return deadIndex;
     }
 
-    //NOTEME javadoc
     /**
      * @return The world controlled by this controller
      */
@@ -570,7 +530,6 @@ public class TSSController implements ContactListener {
         return this.world;
     }
 
-    //NOTEME javadoc
     /**
      * @return Enemy spawn flag and resets it
      */
@@ -582,7 +541,6 @@ public class TSSController implements ContactListener {
         } else return false;
     }
 
-    //NOTEME javadoc
     /**
      * @return Enemy spawn max cooldown in seconds
      */

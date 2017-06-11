@@ -7,25 +7,21 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class MainCharModel extends EntityModel {
 
-    //NOTEME javadoc
     /**
      * Shoot cooldown.
      */
     private static final float TIME_BETWEEN_SHOTS = 0.2f;
 
-    //NOTEME javadoc
     /**
      * Max HP.
      */
     private static final int HP_MAX = 40;
 
-    //NOTEME javadoc
     /**
      * Whether the main character is dead.
      */
     private boolean isDead = false;
 
-    //NOTEME javadoc
     /**
      * Constructs a main character model belonging to a game.
      *
@@ -38,13 +34,11 @@ public class MainCharModel extends EntityModel {
         this.hitpoints = HP_MAX;
     }
 
-    //NOTEME javadoc
     @Override
     public ModelType getType() {
         return ModelType.MAINCHAR;
     }
 
-    //NOTEME javadoc
     /**
      *  @return Whether main character is dead
      */
@@ -52,7 +46,6 @@ public class MainCharModel extends EntityModel {
         return isDead;
     }
 
-    //NOTEME javadoc
     /**
      *  @param dead Whether the main character is dead
      */
@@ -60,13 +53,11 @@ public class MainCharModel extends EntityModel {
         isDead = dead;
     }
 
-    //NOTEME javadoc
     @Override
     public float getShootCooldown() {
         return TIME_BETWEEN_SHOTS;
     }
 
-    //NOTEME javadoc
     /**
      *  @return The maximum hitpoints of the main character
      */

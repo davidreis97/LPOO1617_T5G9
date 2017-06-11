@@ -13,19 +13,16 @@ import com.esotericsoftware.minlog.Log;
  */
 public class TSSGamePad implements ControllerListener {
 
-    //NOTEME javadoc
     /**
      * Debug flag.
      */
     private static final boolean DEBUG = false;
 
-    //NOTEME javadoc
     /**
      * Whether a controller is in use.
      */
     private boolean useController = true;
 
-    //NOTEME javadoc
     /**
      * Represents a connected controller. Provides methods to query the state of buttons, axes, POVs, sliders and
      * accelerometers on the controller. Multiple ControllerListener instances can be registered with the Controller
@@ -33,13 +30,11 @@ public class TSSGamePad implements ControllerListener {
      */
     private Controller controller;
 
-    //NOTEME javadoc
     /**
      * The singleton instance of the gamepad.
      */
     private static TSSGamePad instance;
 
-    //NOTEME javadoc
     /**
      * Returns a singleton instance of the gamepad.
      *
@@ -52,7 +47,6 @@ public class TSSGamePad implements ControllerListener {
         return instance;
     }
 
-    //NOTEME javadoc
     /**
      * Constructs a new gamepad instance, adds listener and detects connected controllers.
      */
@@ -67,7 +61,6 @@ public class TSSGamePad implements ControllerListener {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Gets the current data from the left analog stick, if it's outside of the deadzone.
      *
@@ -88,7 +81,6 @@ public class TSSGamePad implements ControllerListener {
         return left;
     }
 
-    //NOTEME javadoc
     /**
      * Gets the current data from the right analog stick, if it's outside of the deadzone.
      *
@@ -109,7 +101,6 @@ public class TSSGamePad implements ControllerListener {
         return right;
     }
 
-    //NOTEME javadoc
     /**
      * @param button Button ID to check
      * @return Whether button is pressed
@@ -118,7 +109,6 @@ public class TSSGamePad implements ControllerListener {
         return this.controller.getButton(button);
     }
 
-    //NOTEME javadoc
     /**
      * @return Whether a controller is connected
      */
@@ -126,7 +116,6 @@ public class TSSGamePad implements ControllerListener {
         return useController;
     }
 
-    //NOTEME javadoc
     /**
      * A button on the Controller was pressed.
      *
@@ -157,7 +146,6 @@ public class TSSGamePad implements ControllerListener {
         return false;
     }
 
-    //NOTEME javadoc
     /**
      * A POV on the Controller moved.
      *
@@ -183,7 +171,6 @@ public class TSSGamePad implements ControllerListener {
         return false;
     }
 
-    //NOTEME javadoc
     /**
      * A Controller got connected. (X360 controller doesn't notify properly)
      *
@@ -192,7 +179,6 @@ public class TSSGamePad implements ControllerListener {
     @Override
     public void connected(Controller controller) { useController = true;}
 
-    //NOTEME javadoc
     /**
      * A Controller got disconnected. (X360 controller doesn't notify properly)
      *
@@ -201,23 +187,23 @@ public class TSSGamePad implements ControllerListener {
     @Override
     public void disconnected(Controller controller) { useController = false;}
 
-    //NOTEME javadoc
+
     @Override
     public boolean xSliderMoved(Controller controller, int sliderCode, boolean value) { return false;}
 
-    //NOTEME javadoc
+
     @Override
     public boolean ySliderMoved(Controller controller, int sliderCode, boolean value) { return false;}
 
-    //NOTEME javadoc
+
     @Override
     public boolean accelerometerMoved(Controller controller, int accelerometerCode, Vector3 value) { return false; }
 
-    //NOTEME javadoc
+
     @Override
     public boolean buttonUp(Controller controller, int buttonCode) { return false;}
 
-    //NOTEME javadoc
+
     @Override
     public boolean axisMoved(Controller controller, int axisCode, float value) { return false; }
 }

@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Packet {
 
-    //NOTEME javadoc
     /**
      * Android controller info packet.
      */

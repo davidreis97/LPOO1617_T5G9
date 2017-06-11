@@ -11,49 +11,41 @@ import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;
  */
 public abstract class EntityBody {
 
-    //NOTEME javadoc
     /**
      * Bit flag representing main char body.
      */
     static final short MAINCHAR_BODY = 0x0001;
 
-    //NOTEME javadoc
     /**
      * Bit flag representing bullet body.
      */
     static final short BULLET_BODY = 0x0002;
 
-    //NOTEME javadoc
     /**
      * Bit flag representing tile body.
      */
     static final short TILE_ENTITY = 0x0004;
 
-    //NOTEME javadoc
     /**
      * Bit flag representing enemy body.
      */
     static final short ENEMY_BODY = 0x0008;
 
-    //NOTEME javadoc
     /**
      * Flag representing all possible collision bits.
      */
     static final short COLLIDE_ALL = (short) (MAINCHAR_BODY | BULLET_BODY | TILE_ENTITY | ENEMY_BODY);
 
-    //NOTEME javadoc
     /**
      * Linear damping used for all dynamic bodies.
      */
     private static final float DAMPING = 5;
 
-    //NOTEME javadoc
     /**
      * The Box2D body that supports this entity's body.
      */
     final Body body;
 
-    //NOTEME javadoc
     /**
      * Constructs an entity body representing a model in a certain world.
      *
@@ -73,7 +65,6 @@ public abstract class EntityBody {
         body.setUserData(model);
     }
 
-    //NOTEME javadoc
     /**
      * Constructs a tile entity belonging to a certain world.
      *
@@ -89,7 +80,6 @@ public abstract class EntityBody {
         body.setUserData(this);
     }
 
-    //NOTEME javadoc
     /**
      * Helper method to create a polygon fixture represented by a set of vertexes.
      *
@@ -133,7 +123,6 @@ public abstract class EntityBody {
         polygon.dispose();
     }
 
-    //NOTEME javadoc
     /**
      * Wraps the getPosition method from the Box2D body class.
      *
@@ -143,7 +132,6 @@ public abstract class EntityBody {
         return body.getPosition().cpy();
     }
 
-    //NOTEME javadoc
     /**
      * Wraps the getMass method from the Box2D body class.
      *
@@ -153,7 +141,6 @@ public abstract class EntityBody {
         return body.getMass();
     }
 
-    //NOTEME javadoc
     /**
      * Wraps the setLinearVelocity method from the Box2D body class.
      *
@@ -163,7 +150,6 @@ public abstract class EntityBody {
         body.setLinearVelocity((float) (velocity * -Math.sin(body.getAngle())), (float) (velocity * Math.cos(body.getAngle())));
     }
 
-    //NOTEME javadoc
     /**
      * Wraps the setLinearDamping method from the Box2D body class.
      *
@@ -173,7 +159,6 @@ public abstract class EntityBody {
         body.setLinearDamping(damping);
     }
 
-    //NOTEME javadoc
     /**
      * Wraps the applyLinearImpulse method from the Box2D body class.
      * Point of application is always the center of the body.
@@ -185,7 +170,6 @@ public abstract class EntityBody {
         body.applyLinearImpulse(impulse, body.getWorldCenter(), wake);
     }
 
-    //NOTEME javadoc
     /**
      * @return The Box2D body used by an entity body.
      */
@@ -193,7 +177,6 @@ public abstract class EntityBody {
         return body;
     }
 
-    //NOTEME javadoc
     /**
      * Wraps the getUserData method from the Box2D body class.
      *

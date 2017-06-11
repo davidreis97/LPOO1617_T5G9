@@ -17,25 +17,21 @@ import com.drfl.twinstickshooter.game.TSSGame;
  */
 public class TSSMenuHelper {
 
-    //NOTEME javadoc
     /**
      * The singleton instance of the menu helper.
      */
     private static TSSMenuHelper instance;
 
-    //NOTEME javadoc
     /**
      * The game currently active to access asset manager.
      */
     private static TSSGame game;
 
-    //NOTEME javadoc
     /**
      * Skin used for Scene2D stage actors.
      */
     private static Skin skin;
 
-    //NOTEME javadoc
     /**
      * Constructs a new menu helper with a certain game.
      *
@@ -46,7 +42,6 @@ public class TSSMenuHelper {
         skin = new Skin(Gdx.files.internal("uiskin.json"));
     }
 
-    //NOTEME javadoc
     /**
      * Returns a singleton instance of menu helper, instance must
      * be initiated by a call to initInstance beforehand. Null is returned if not.
@@ -57,7 +52,6 @@ public class TSSMenuHelper {
         return instance;
     }
 
-    //NOTEME javadoc
     /**
      * Initializes a menu helper instance, associating it with a game.
      *
@@ -68,7 +62,6 @@ public class TSSMenuHelper {
         instance = new TSSMenuHelper(game);
     }
 
-    //NOTEME javadoc
     /**
      * Load music specified.
      *
@@ -78,7 +71,6 @@ public class TSSMenuHelper {
         game.getAssetManager().load(music, Music.class);
     }
 
-    //NOTEME javadoc
     /**
      * Plays music specified at a certain volume, looping or not.
      * Music must've been loaded by asset manager.
@@ -94,7 +86,6 @@ public class TSSMenuHelper {
         ((Music) game.getAssetManager().get(music)).play();
     }
 
-    //NOTEME javadoc
     /**
      * Creates an orthographic camera for displaying the screen.
      *
@@ -111,7 +102,6 @@ public class TSSMenuHelper {
         return camera;
     }
 
-    //NOTEME javadoc
     /**
      * Creates a FitViewport from the specified width, height and already created camera.
      *
@@ -124,7 +114,6 @@ public class TSSMenuHelper {
         return new FitViewport(viewportWidth, viewportHeight, camera);
     }
 
-    //NOTEME javadoc
     /**
      * Creates and adds a Scene2D Text Button using the specified parameters and default skin.
      *
@@ -146,7 +135,6 @@ public class TSSMenuHelper {
         return textButton;
     }
 
-    //NOTEME javadoc
     /**
      * Creates and adds a Scene2D Select Box using the specified parameters and default skin.
      *
@@ -167,7 +155,6 @@ public class TSSMenuHelper {
         return selectBox;
     }
 
-    //NOTEME javadoc
     /**
      * Creates and adds a Scene2D Label using the specified parameters and default skin.
      *
@@ -191,7 +178,6 @@ public class TSSMenuHelper {
         return label;
     }
 
-    //NOTEME javadoc
     /**
      * Creates and adds a Scene2D Slider using the specified parameters and default skin, always horizontal.
      *
@@ -215,7 +201,6 @@ public class TSSMenuHelper {
         return slider;
     }
 
-    //NOTEME javadoc
     /**
      * Creates and adds a Scene2D Image Button using the specified parameters and custom texture.
      *
@@ -237,7 +222,6 @@ public class TSSMenuHelper {
         return imageButton;
     }
 
-    //NOTEME javadoc
     /**
      * Creates and adds a Scene2D Text Field using the specified parameters and default skin, text starts empty.
      *

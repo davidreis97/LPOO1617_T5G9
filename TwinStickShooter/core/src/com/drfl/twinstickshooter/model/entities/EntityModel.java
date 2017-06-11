@@ -7,79 +7,66 @@ import com.badlogic.gdx.math.Vector2;
  */
 public abstract class EntityModel {
 
-    //NOTEME javadoc
     /**
      * Enumerator for model types.
      */
     public enum ModelType {MAINCHAR, BULLET, SPAWNER, ENEMY}
 
-    //NOTEME javadoc
     /**
      * Enumerator for animation directions.
      */
     public enum AnimDirection {UP, LEFT, DOWN, RIGHT, NONE}
 
-    //NOTEME javadoc
     /**
      * Meters needed to center entity.
      */
     static final float CENTER_ADJUST = 0.5f;
 
-    //NOTEME javadoc
     /**
      * Vector representing entity shoot direction.
      */
     private Vector2 shootDirection = new Vector2(0, 0);
 
-    //NOTEME javadoc
     /**
      * Vector representing entity move direction.
      */
     private Vector2 moveDirection = new Vector2(0, 0);
 
-    //NOTEME javadoc
     /**
      * The coordinates of an entity model in meters.
      */
     private Vector2 coords;
 
-    //NOTEME javadoc
     /**
      * The rotation of a model in radians.
      */
     private float rotation;
 
-    //NOTEME javadoc
     /**
      * Has this model been flagged for removal?
      */
     private boolean flaggedForRemoval = false;
 
-    //NOTEME javadoc
     /**
      * Animation direction of entity.
      */
     private AnimDirection direction = AnimDirection.NONE;
 
-    //NOTEME javadoc
     /**
      * Entity hitpoints.
      */
     int hitpoints;
 
-    //NOTEME javadoc
     /**
      * Seconds until entity can shoot again.
      */
     float timeToNextShoot = 0;
 
-    //NOTEME javadoc
     /**
      * Flag representing whether an entity is currently damaged.
      */
     private boolean isHurt = false;
 
-    //NOTEME javadoc
     /**
      * Constructs an entity model with a position and a rotation.
      *
@@ -91,7 +78,6 @@ public abstract class EntityModel {
         this.rotation = rotation;
     }
 
-    //NOTEME javadoc
     /**
      * Removes hitpoints from an entity.
      *
@@ -101,7 +87,6 @@ public abstract class EntityModel {
         this.hitpoints -= value;
     }
 
-    //NOTEME javadoc
     /**
      * @return A copy of the entity's coordinates
      */
@@ -109,7 +94,6 @@ public abstract class EntityModel {
         return coords.cpy();
     }
 
-    //NOTEME javadoc
     /**
      * @return The entity's rotation in radians
      */
@@ -117,7 +101,6 @@ public abstract class EntityModel {
         return rotation;
     }
 
-    //NOTEME javadoc
     /**
      * @param coords The entity's coordinates to set
      */
@@ -125,7 +108,6 @@ public abstract class EntityModel {
         this.coords = coords;
     }
 
-    //NOTEME javadoc
     /**
      * @param direction The entity's animation direction to set
      */
@@ -133,7 +115,6 @@ public abstract class EntityModel {
         this.direction = direction;
     }
 
-    //NOTEME javadoc
     /**
      * @return The entity's animation direction
      */
@@ -141,7 +122,6 @@ public abstract class EntityModel {
         return this.direction;
     }
 
-    //NOTEME javadoc
     /**
      * @param rotation The entity's rotation to set (in radians)
      */
@@ -149,7 +129,6 @@ public abstract class EntityModel {
         this.rotation = rotation;
     }
 
-    //NOTEME javadoc
     /**
      * @return Whether the entity has been flagged for removal
      */
@@ -157,7 +136,6 @@ public abstract class EntityModel {
         return flaggedForRemoval;
     }
 
-    //NOTEME javadoc
     /**
      * @param flaggedForRemoval Whether the entity should be removed on the next step
      */
@@ -165,7 +143,6 @@ public abstract class EntityModel {
         this.flaggedForRemoval = flaggedForRemoval;
     }
 
-    //NOTEME javadoc
     /**
      * @return The entity's hitpoints
      */
@@ -173,13 +150,11 @@ public abstract class EntityModel {
         return hitpoints;
     }
 
-    //NOTEME javadoc
     /**
      * @return The entity model type
      */
     public abstract ModelType getType();
 
-    //NOTEME javadoc
     /**
      *  @return The time (in seconds) until entity can shoot again
      */
@@ -187,7 +162,6 @@ public abstract class EntityModel {
         return timeToNextShoot;
     }
 
-    //NOTEME javadoc
     /**
      * @param timeToNextShoot How many seconds until entity can shoot again
      */
@@ -195,7 +169,6 @@ public abstract class EntityModel {
         this.timeToNextShoot = timeToNextShoot;
     }
 
-    //NOTEME javadoc
     /**
      * Returns entity's max shoot cooldown.
      * Overrided by some subclasses, otherwise returns 0.
@@ -206,7 +179,6 @@ public abstract class EntityModel {
         return 0;
     }
 
-    //NOTEME javadoc
     /**
      *  @return Whether entity is currently damaged
      */
@@ -214,7 +186,6 @@ public abstract class EntityModel {
         return isHurt;
     }
 
-    //NOTEME javadoc
     /**
      *  @param hurt Whether the entity is currently damaged
      */
@@ -222,7 +193,6 @@ public abstract class EntityModel {
         isHurt = hurt;
     }
 
-    //NOTEME javadoc
     /**
      *  @return A vector copy representing entity shoot direction
      */
@@ -230,7 +200,6 @@ public abstract class EntityModel {
         return shootDirection.cpy();
     }
 
-    //NOTEME javadoc
     /**
      * @param shootDirection The vector representing entity shoot direction
      */
@@ -238,7 +207,6 @@ public abstract class EntityModel {
         this.shootDirection = shootDirection;
     }
 
-    //NOTEME javadoc
     /**
      * @return A vector copy representing entity move direction
      */
@@ -246,7 +214,6 @@ public abstract class EntityModel {
         return moveDirection.cpy();
     }
 
-    //NOTEME javadoc
     /**
      * @param moveDirection The vector representing entity move direction
      */

@@ -10,7 +10,6 @@ import static com.drfl.twinstickshooter.view.TSSView.TILESIZE;
  */
 public class EnemyBody extends EntityBody {
 
-    //NOTEME javadoc
     /**
      * Constructs an enemy body using an enemy model.
      *

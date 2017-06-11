@@ -7,19 +7,16 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class BulletModel extends EntityModel {
 
-    //NOTEME javadoc
     /**
      * The model type of the owner of the bullet.
      */
     private ModelType owner;
 
-    //NOTEME javadoc
     /**
      * Vector representing bullet direction.
      */
     private Vector2 bulletDirection;
 
-    //NOTEME javadoc
     /**
      * Constructs a bullet model belonging to a game.
      *
@@ -30,13 +27,11 @@ public class BulletModel extends EntityModel {
         super(coords, rotation);
     }
 
-    //NOTEME javadoc
     @Override
     public ModelType getType() {
         return ModelType.BULLET;
     }
 
-    //NOTEME javadoc
     /**
      *  @return The model type that owns the bullet
      */
@@ -44,7 +39,6 @@ public class BulletModel extends EntityModel {
         return owner;
     }
 
-    //NOTEME javadoc
     /**
      *  @param owner The model type to set as owner of the bullet
      */
@@ -52,7 +46,6 @@ public class BulletModel extends EntityModel {
         this.owner = owner;
     }
 
-    //NOTEME javadoc
     /**
      *  @param direction The direction vector of the bullet
      */
@@ -60,7 +53,6 @@ public class BulletModel extends EntityModel {
         this.bulletDirection = direction;
     }
 
-    //NOTEME javadoc
     /**
      *  @return A vector copy of the bullet direction
      */

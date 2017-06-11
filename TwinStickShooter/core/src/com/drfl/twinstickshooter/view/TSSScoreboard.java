@@ -24,44 +24,37 @@ import com.drfl.twinstickshooter.model.TSSModel;
  */
 public class TSSScoreboard extends ScreenAdapter {
 
-    //NOTEME javadoc
     /**
      * Amount of columns in high scores table.
      */
     private static final int COLUMN_NUMBER = 3;
 
-    //NOTEME javadoc
     /**
      * Max number of letters allowed for high score name.
      */
     private static final int MAX_NAME_SIZE = 12;
 
-    //NOTEME javadoc
     /**
      * Height constant for labels.
      */
     private static final float LABEL_HEIGHT = 0.05f * Gdx.graphics.getHeight();
 
-    //NOTEME javadoc
     /**
      * Width constant for all widgets.
      */
     private static final float WIDGET_WIDTH = 0.25f * Gdx.graphics.getWidth();
 
-    //NOTEME javadoc
     /**
      * Increment constant between each column. Jumps from the center of a
      * column to the next one with a spacing of (0.80f * Gdx.graphics.getWidth() - WIDGET_WIDTH * 3) / 2.0f.
      */
     private static final float INCREMENT = WIDGET_WIDTH + (0.80f * Gdx.graphics.getWidth() - WIDGET_WIDTH * 3) / 2.0f;
 
-    //NOTEME javadoc
     /**
      * Center width of the first column. Pads 10% of the screen to the left.
      */
     private static final float START_WIDTH = WIDGET_WIDTH / 2.0f + 0.10f * Gdx.graphics.getWidth();
 
-    //NOTEME javadoc
     /**
      * Adapter pattern interface for getting the different values from a TSSScore object without having to
      * explicitly write the getter methods.
@@ -70,7 +63,6 @@ public class TSSScoreboard extends ScreenAdapter {
         String getter(TSSScore score);
     }
 
-    //NOTEME javadoc
     /**
      * Adapter pattern class to get a TSSScore object's name by overriding the
      * interface method with the getter from TSSScore.
@@ -82,7 +74,6 @@ public class TSSScoreboard extends ScreenAdapter {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Adapter pattern class to get a TSSScore object's score value by overriding the
      * interface method with the getter from TSSScore.
@@ -94,7 +85,6 @@ public class TSSScoreboard extends ScreenAdapter {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Adapter pattern class to get a TSSScore object's date by overriding the
      * interface method with the getter from TSSScore.
@@ -106,7 +96,6 @@ public class TSSScoreboard extends ScreenAdapter {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Array of concrete classes that implement ScoreFunction to use for adapter pattern.
      */
@@ -116,37 +105,31 @@ public class TSSScoreboard extends ScreenAdapter {
             new ScoreDate(),
     };
 
-    //NOTEME javadoc
     /**
      * The game this screen belongs to.
      */
     private final TSSGame game;
 
-    //NOTEME javadoc
     /**
      * The camera used to show the viewport.
      */
     private final OrthographicCamera camera;
 
-    //NOTEME javadoc
     /**
      * The viewport for the Scene2D stage.
      */
     private final Viewport viewport;
 
-    //NOTEME javadoc
     /**
      * Text field to input name for high scores.
      */
     private TextField nameField;
 
-    //NOTEME javadoc
     /**
      * Label for warning the user of mistakes in name input.
      */
     private Label warning;
 
-    //NOTEME javadoc
     /**
      * High score table's column header names.
      */
@@ -156,7 +139,6 @@ public class TSSScoreboard extends ScreenAdapter {
             "Date (YYYY/MM/DD)",
     };
 
-    //NOTEME javadoc
     /**
      * Constructs a scoreboard screen belonging to a certain game.
      *
@@ -175,7 +157,6 @@ public class TSSScoreboard extends ScreenAdapter {
         viewport = TSSMenuHelper.getInstance().createFitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
     }
 
-    //NOTEME javadoc
     /**
      * Called when this screen becomes the current screen for a game. Creates all the actors for a Scene2D stage
      * representing the scoreboard screen.
@@ -237,7 +218,6 @@ public class TSSScoreboard extends ScreenAdapter {
         warning = TSSMenuHelper.getInstance().createLabel("", currSize, currCoords, Color.RED, Align.left);
     }
 
-    //NOTEME javadoc
     /**
      * Loads assets needed for this screen.
      */
@@ -248,7 +228,6 @@ public class TSSScoreboard extends ScreenAdapter {
         this.game.getAssetManager().finishLoading();
     }
 
-    //NOTEME javadoc
     /**
      * Called when the screen should render itself.
      *
@@ -275,7 +254,6 @@ public class TSSScoreboard extends ScreenAdapter {
         game.getStage().draw();
     }
 
-    //NOTEME javadoc
     /**
      * Draws the scoreboard screen background, calls batch begin and end.
      */
@@ -286,7 +264,6 @@ public class TSSScoreboard extends ScreenAdapter {
         game.getBatch().end();
     }
 
-    //NOTEME javadoc
     /**
      * Called when this screen is no longer the current screen for a Game.
      */
@@ -295,7 +272,6 @@ public class TSSScoreboard extends ScreenAdapter {
         this.dispose();
     }
 
-    //NOTEME javadoc
     /**
      * Called when this screen should release all resources.
      */

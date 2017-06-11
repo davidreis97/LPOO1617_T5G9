@@ -13,13 +13,11 @@ import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;
  */
 public abstract class EntityView {
 
-    //NOTEME javadoc
     /**
      * The sprite representing this entity view.
      */
     Sprite sprite;
 
-    //NOTEME javadoc
     /**
      * Creates a view belonging to a game.
      *
@@ -29,7 +27,6 @@ public abstract class EntityView {
         sprite = createSprite(game);
     }
 
-    //NOTEME javadoc
     /**
      * Draws the sprite from this view using a sprite batch.
      *
@@ -39,7 +36,6 @@ public abstract class EntityView {
         sprite.draw(batch);
     }
 
-    //NOTEME javadoc
     /**
      * Abstract method that creates the view sprite. Concrete
      * implementation should extend this method to create their
@@ -50,7 +46,6 @@ public abstract class EntityView {
      */
     public abstract Sprite createSprite(TSSGame game);
 
-    //NOTEME javadoc
     /**
      * Updates this view based on a certain model.
      *

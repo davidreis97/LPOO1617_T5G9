@@ -30,91 +30,76 @@ import java.util.Enumeration;
  */
 public class TSSGame extends Game {
 
-    //NOTEME javadoc
     /**
      * Maximum amount of high scores.
      */
     private static final int NUM_SCORES = 10;
 
-    //NOTEME javadoc
     /**
      * Enumerator for controller types.
      */
     public enum ControlType {CONTROLLER, REMOTE, KBM}
 
-    //NOTEME javadoc
     /**
      * The type of input currently in use to control the game.
      */
     private ControlType inputMode = ControlType.KBM;
 
-    //NOTEME javdoc
     /**
      * The server instance of the game for android controller.
      */
     private TSSServer server;
 
-    //NOTEME javadoc
     /**
      * The batch associated with all the game's sprites.
      */
 	private SpriteBatch batch;
 
-	//NOTEME javadoc
     /**
      * Asset manager for all the game's assets.
      */
 	private AssetManager assetManager;
 
-	//NOTEME javadoc
     /**
      * Scene2D stage used for UI and HUD.
      */
 	private Stage stage;
 
-	//NOTEME javadoc
     /**
      * The game's state machine for handling menus and screens.
      */
 	private TSSState stateM;
 
-	//NOTEME javadoc
     /**
      * Overall music volume.
      */
 	private float musicVolume = 0.60f;
 
-	//NOTEME javadoc
     /**
      * Overall sound effect volume.
      */
 	private float soundVolume = 0.30f;
 
-	//NOTEME javadoc
     /**
      * High scores.
      */
 	private Array<TSSScore> scores = new Array<>();
 
-	//NOTEME javadoc
     /**
      * Tiled map the game takes place in.
      */
 	private TiledMap currentMap;
 
-	//NOTEME javadoc
     /**
      * Flag used for testing, doesn't enable screens and sprite batches.
      */
 	private boolean testing = false;
 
-	//NOTEME javadoc
     /**
      * Flag for signalling whether this application listener has been initialized.
      */
 	private volatile boolean readyForTest = false;
 
-	//NOTEME javadoc
     /**
      * Called when the Application is first created. Initializes sprite batch, asset manager and server.
      * Also loads sound effects.
@@ -134,7 +119,6 @@ public class TSSGame extends Game {
         if(!testing) startGame();
     }
 
-    //NOTEME javadoc
     /**
      * Loads high scores from JSON file and changes state to main menu.
      */
@@ -147,7 +131,6 @@ public class TSSGame extends Game {
         setScreen(menu);
     }
 
-    //NOTEME javadoc
     /**
      * Loads top 10 high scores from JSON file to array. Initializes array if no JSON file exists.
      */
@@ -165,7 +148,6 @@ public class TSSGame extends Game {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Saves high scores to JSON file.
      */
@@ -182,7 +164,6 @@ public class TSSGame extends Game {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Adds an high score and then sorts and trims the array to top 10 largest score values.
      *
@@ -201,7 +182,6 @@ public class TSSGame extends Game {
         saveScore();
     }
 
-    //NOTEME javadoc
     /**
      * Finds the first site local host address.
      *
@@ -241,7 +221,6 @@ public class TSSGame extends Game {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Disposes of all assets.
      */
@@ -253,7 +232,6 @@ public class TSSGame extends Game {
 		if(currentMap != null) currentMap.dispose();
 	}
 
-	//NOTEME javadoc
     /**
      * @return The asset manager used for loading texture and sounds
      */
@@ -261,7 +239,6 @@ public class TSSGame extends Game {
         return assetManager;
     }
 
-    //NOTEME javadoc
     /**
      * @return The sprite batch of the game
      */
@@ -269,7 +246,6 @@ public class TSSGame extends Game {
         return batch;
     }
 
-    //NOTEME javadoc
     /**
      *  @return The Scene2D stage of the game
      */
@@ -277,7 +253,6 @@ public class TSSGame extends Game {
         return stage;
     }
 
-    //NOTEME javadoc
     /**
      *  @param stage A Scene2D stage
      */
@@ -285,7 +260,6 @@ public class TSSGame extends Game {
         this.stage = stage;
     }
 
-    //NOTEME javadoc
     /**
      *  @return The state machine class of the game
      */
@@ -293,7 +267,6 @@ public class TSSGame extends Game {
         return stateM;
     }
 
-    //NOTEME javadoc
     /**
      *  @return Enumerator with the current input method
      */
@@ -301,7 +274,6 @@ public class TSSGame extends Game {
         return inputMode;
     }
 
-    //NOTEME javadoc
     /**
      *  @param inputMode An enumerator defining an input method
      */
@@ -309,7 +281,6 @@ public class TSSGame extends Game {
         this.inputMode = inputMode;
     }
 
-    //NOTEME javadoc
     /**
      *  @return The server instance of the game
      */
@@ -317,7 +288,6 @@ public class TSSGame extends Game {
         return server;
     }
 
-    //NOTEME javadoc
     /**
      *  @return The current music volume
      */
@@ -325,7 +295,6 @@ public class TSSGame extends Game {
         return musicVolume;
     }
 
-    //NOTEME javadoc
     /**
      *  @param musicVolume A music volume in the range [0, 1]
      */
@@ -335,7 +304,6 @@ public class TSSGame extends Game {
         this.musicVolume = musicVolume;
     }
 
-    //NOTEME javadoc
     /**
      *  @return The current sound volume
      */
@@ -343,7 +311,6 @@ public class TSSGame extends Game {
         return soundVolume;
     }
 
-    //NOTEME javadoc
     /**
      *  @param soundVolume A sound volume in the range [0, 1]
      */
@@ -353,7 +320,6 @@ public class TSSGame extends Game {
         this.soundVolume = soundVolume;
     }
 
-    //NOTEME javadoc
     /**
      *  @return The array of high scores
      */
@@ -361,7 +327,6 @@ public class TSSGame extends Game {
         return scores;
     }
 
-    //NOTEME javadoc
     /**
      * Checks if a score is an high score by comparing to current high scores.
      *
@@ -384,7 +349,6 @@ public class TSSGame extends Game {
         return false;
     }
 
-    //NOTEME javadoc
     /**
      *  @return The current Tiled map
      */
@@ -392,7 +356,6 @@ public class TSSGame extends Game {
         return currentMap;
     }
 
-    //NOTEME javadoc
     /**
      *  @param currentMap A Tiled map
      */
@@ -400,7 +363,6 @@ public class TSSGame extends Game {
         this.currentMap = currentMap;
     }
 
-    //NOTEME javadoc
     /**
      *  @param testing Whether testing is happening
      */
@@ -408,7 +370,6 @@ public class TSSGame extends Game {
         this.testing = testing;
     }
 
-    //NOTEME javadoc
     /**
      *  @return Whether application listener has been initialized
      */

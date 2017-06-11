@@ -10,7 +10,6 @@ import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;
  */
 public class TileEntity extends EntityBody {
 
-    //NOTEME javadoc
     /**
      * Constructs a tile entity body.
      *

@@ -9,13 +9,11 @@ import com.esotericsoftware.minlog.Log;
  */
 public class NetworkListener extends Listener {
 
-    //NOTEME javadoc
     /**
      * Debug flag.
      */
     private static final boolean DEBUG = false;
 
-    //NOTEME javadoc
     /**
      * Connection established.
      *
@@ -26,7 +24,6 @@ public class NetworkListener extends Listener {
         Log.info("[SERVER] Someone connected.");
     }
 
-    //NOTEME javadoc
     /**
      * Connection ended.
      *
@@ -37,7 +34,6 @@ public class NetworkListener extends Listener {
         Log.info("[SERVER] Someone disconnected.");
     }
 
-    //NOTEME javadoc
     /**
      * Received a packet. Updates the server with the current packet info for use in-game.
      *

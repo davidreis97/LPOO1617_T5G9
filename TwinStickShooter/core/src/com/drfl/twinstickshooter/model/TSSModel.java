@@ -17,43 +17,36 @@ import static com.drfl.twinstickshooter.view.TSSView.PIXEL_TO_METER;
  */
 public class TSSModel {
 
-    //NOTEME javadoc
     /**
      * The singleton instance of the game model.
      */
     private static TSSModel instance;
 
-    //NOTEME javadoc
     /**
      * RNG Seed
      */
     private static final Random rand = new Random();
 
-    //NOTEME javadoc
     /**
      * Main character model.
      */
     private MainCharModel mc;
 
-    //NOTEME javadoc
     /**
      * Enemy spawners.
      */
     private ArrayList<EnemySpawnerModel> enemySpawners = new ArrayList<>();
 
-    //NOTEME javadoc
     /**
      * Enemy models.
      */
     private ArrayList<EnemyModel> enemies = new ArrayList<>();
 
-    //NOTEME javadoc
     /**
      * Bullet models.
      */
     private List<BulletModel> bullets;
 
-    //NOTEME javadoc
     /**
      * A pool of bullet models.
      */
@@ -64,13 +57,11 @@ public class TSSModel {
         }
     };
 
-    //NOTEME javadoc
     /**
      * Game score
      */
     private int score = 0;
 
-    //NOTEME javadoc
     /**
      * Constructs game with initial bullets array, other entities
      * are created by calling createEntityModels with the entities layer
@@ -80,7 +71,6 @@ public class TSSModel {
         bullets = new ArrayList<BulletModel>();
     }
 
-    //NOTEME javadoc
     /**
      * Returns a singleton instance of the model.
      *
@@ -92,7 +82,6 @@ public class TSSModel {
         return instance;
     }
 
-    //NOTEME javadoc
     /**
      * Initializes a model instance.
      *
@@ -103,7 +92,6 @@ public class TSSModel {
         return instance;
     }
 
-    //NOTEME javadoc
     /**
      * Creates entity models from a Tiled map object layer. Object type is used to
      * instantiate entity models (MainChar / Spawner)
@@ -124,7 +112,6 @@ public class TSSModel {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Creates a bullet model positioned near its owner and a certain heading.
      *
@@ -153,7 +140,6 @@ public class TSSModel {
         return bullet;
     }
 
-    //NOTEME javadoc
     /**
      * Creates an enemy model from a spawner. Sets spawner flag so it can't spawn until
      * an enemy dies and refreshes it.
@@ -169,7 +155,6 @@ public class TSSModel {
         return enemies.get(enemies.size() - 1);
     }
 
-    //NOTEME javadoc
     /**
      * Tries to find an enemy spawner flagged as free.
      *
@@ -194,7 +179,6 @@ public class TSSModel {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Remove bullet model and free it in pool.
      *
@@ -205,7 +189,6 @@ public class TSSModel {
         bulletPool.free(bullet);
     }
 
-    //NOTEME javadoc
     /**
      * Resets first non free spawner so it can spawn again.
      */
@@ -219,7 +202,6 @@ public class TSSModel {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Removes enemy model at a certain index.
      *
@@ -231,7 +213,6 @@ public class TSSModel {
         enemies.remove(index);
     }
 
-    //NOTEME javadoc
     /**
      * @return The main character model
      */
@@ -239,7 +220,6 @@ public class TSSModel {
         return mc;
     }
 
-    //NOTEME javadoc
     /**
      * @param mc The main character model to set
      */
@@ -247,7 +227,6 @@ public class TSSModel {
         this.mc = mc;
     }
 
-    //NOTEME javadoc
     /**
      * @return The bullet model list
      */
@@ -255,7 +234,6 @@ public class TSSModel {
         return bullets;
     }
 
-    //NOTEME javadoc
     /**
      * @return The enemy spawner model list
      */
@@ -263,7 +241,6 @@ public class TSSModel {
         return enemySpawners;
     }
 
-    //NOTEME javadoc
     /**
      * @return The enemy model list
      */
@@ -271,7 +248,6 @@ public class TSSModel {
         return enemies;
     }
 
-    //NOTEME javadoc
     /**
      * @return The game score
      */
@@ -279,7 +255,6 @@ public class TSSModel {
         return score;
     }
 
-    //NOTEME javadoc
     /**
      * @param score The game score to set
      */

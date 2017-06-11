@@ -1,0 +1,10 @@
+com.drfl.twinstickshooter.controller
+com.drfl.twinstickshooter.controller.entities
+com.drfl.twinstickshooter.game
+com.drfl.twinstickshooter.gamepad
+com.drfl.twinstickshooter.model
+com.drfl.twinstickshooter.model.entities
+com.drfl.twinstickshooter.server
+com.drfl.twinstickshooter.tests
+com.drfl.twinstickshooter.view
+com.drfl.twinstickshooter.view.entities

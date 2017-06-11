@@ -15,31 +15,26 @@ import com.drfl.twinstickshooter.model.TSSModel;
  */
 public class TSSGameOver extends ScreenAdapter {
 
-    //NOTEME javadoc
     /**
      * Time to spend on game over screen.
      */
     private static final float GAMEOVER_COOLDOWN = 2.5f;
 
-    //NOTEME javadoc
     /**
      * The game this screen belongs to.
      */
     private final TSSGame game;
 
-    //NOTEME javadoc
     /**
      * The camera used to show the viewport.
      */
     private final OrthographicCamera camera;
 
-    //NOTEME javadoc
     /**
      * Total time spent on game over screen.
      */
     private float totalTime = 0;
 
-    //NOTEME javadoc
     /**
      * Constructs a game over screen belonging to a certain game.
      *
@@ -57,7 +52,6 @@ public class TSSGameOver extends ScreenAdapter {
         camera = TSSMenuHelper.getInstance().createCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
-    //NOTEME javadoc
     /**
      * Loads assets needed for this screen.
      */
@@ -68,7 +62,6 @@ public class TSSGameOver extends ScreenAdapter {
         this.game.getAssetManager().finishLoading();
     }
 
-    //NOTEME javadoc
     /**
      * Called when the screen should render itself.
      *
@@ -97,7 +90,6 @@ public class TSSGameOver extends ScreenAdapter {
         drawBackground();
     }
 
-    //NOTEME javadoc
     /**
      * Draws the game over screen background, calls batch begin and end.
      */
@@ -108,7 +100,6 @@ public class TSSGameOver extends ScreenAdapter {
         game.getBatch().end();
     }
 
-    //NOTEME javadoc
     /**
      * Called when this screen is no longer the current screen for a Game.
      */
@@ -117,7 +108,6 @@ public class TSSGameOver extends ScreenAdapter {
         this.dispose();
     }
 
-    //NOTEME javadoc
     /**
      * Called when this screen should release all resources.
      */

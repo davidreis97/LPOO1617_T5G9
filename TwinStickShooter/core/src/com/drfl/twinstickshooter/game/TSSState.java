@@ -6,31 +6,26 @@ import com.drfl.twinstickshooter.view.*;
 
 public class TSSState {
 
-    //NOTEME javadoc
     /**
      * Enumerator for game states.
      */
     public enum GameState {MAIN_MENU, PLAYING, GAME_OVER, SCOREBOARD, MAP_SELECT}
 
-    //NOTEME javadoc
     /**
      * Enumerator for game events.
      */
     public enum GameEvent {START, MC_DIED, MAIN, HIGHSCORE, EXIT, CHOOSE}
 
-    //NOTEME javadoc
     /**
      * Current game state.
      */
     private GameState currState;
 
-    //NOTEME javadoc
     /**
      * Instance of the game associated with this state machine.
      */
     private final TSSGame game;
 
-    //NOTEME javadoc
     /**
      * Constructs a state machine belonging to a game with a certain initial state.
      *
@@ -42,7 +37,6 @@ public class TSSState {
         this.game = game;
     }
 
-    //NOTEME javadoc
     /**
      * Changes state according to received event. Switchs the active game screen as the state changes.
      *
@@ -93,7 +87,6 @@ public class TSSState {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Switchs to a new screen and state.
      *

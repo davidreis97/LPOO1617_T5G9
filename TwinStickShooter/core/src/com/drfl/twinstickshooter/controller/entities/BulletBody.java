@@ -8,7 +8,6 @@ import com.drfl.twinstickshooter.model.entities.BulletModel;
  */
 public class BulletBody extends EntityBody {
 
-    //NOTEME javadoc
     /**
      * Constructs a bullet body using a bullet model.
      *

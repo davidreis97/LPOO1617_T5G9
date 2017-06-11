@@ -9,7 +9,6 @@ import com.drfl.twinstickshooter.game.TSSGame;
  */
 public class BulletView extends EntityView {
 
-    //NOTEME javadoc
     /**
      * Constructs a bullet view.
      *
@@ -19,7 +18,6 @@ public class BulletView extends EntityView {
         super(game);
     }
 
-    //NOTEME javadoc
     /**
      * Creates a sprite representing this bullet.
      *

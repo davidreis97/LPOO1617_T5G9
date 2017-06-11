@@ -9,25 +9,21 @@ import java.util.Date;
  */
 public class TSSScore implements Comparable<TSSScore> {
 
-    //NOTEME javadoc
     /**
      * Name of the high scorer.
      */
     private String name;
 
-    //NOTEME javadoc
     /**
      * The high score value.
      */
     private int score;
 
-    //NOTEME javadoc
     /**
      * The current date in string format.
      */
     private String date;
 
-    //NOTEME javadoc
     /**
      * Constructs a score instance with a certain name and score using the current date.
      *
@@ -41,13 +37,11 @@ public class TSSScore implements Comparable<TSSScore> {
         this.date = dateFormat.format(new Date());
     }
 
-    //NOTEME javadoc
     /**
      * Default constructor, needed for JSON serialization.
      */
     public TSSScore() { }
 
-    //NOTEME javadoc
     @Override
     public int compareTo(TSSScore o) {
 
@@ -60,7 +54,6 @@ public class TSSScore implements Comparable<TSSScore> {
         return 0;
     }
 
-    //NOTEME javadoc
     /**
      *  @return The high scorer name
      */
@@ -68,7 +61,6 @@ public class TSSScore implements Comparable<TSSScore> {
         return name;
     }
 
-    //NOTEME javadoc
     /**
      *  @return The high score value
      */
@@ -76,7 +68,6 @@ public class TSSScore implements Comparable<TSSScore> {
         return score;
     }
 
-    //NOTEME javadoc
     /**
      *  @return The string representation of the high score date
      */

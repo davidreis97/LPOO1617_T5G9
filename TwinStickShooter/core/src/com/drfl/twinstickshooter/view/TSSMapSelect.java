@@ -27,74 +27,62 @@ import static com.drfl.twinstickshooter.view.TSSView.VIEWPORT_WIDTH;
  */
 public class TSSMapSelect extends ScreenAdapter {
 
-    //NOTEME javadoc
     /**
      * Height constant for image buttons.
      */
     private static final float BUTTON_HEIGHT = 0.25f * Gdx.graphics.getHeight();
 
-    //NOTEME javadoc
     /**
      * Height constant for labels.
      */
     private static final float LABEL_HEIGHT = 0.05f * Gdx.graphics.getHeight();
 
-    //NOTEME javadoc
     /**
      * Width constant for all widgets.
      */
     private static final float WIDGET_WIDTH = 0.25f * Gdx.graphics.getWidth();
 
-    //NOTEME javadoc
     /**
      * Increment constant between each image button. Jumps from the center of an
      * image button to the next one with a spacing of (0.80f * Gdx.graphics.getWidth() - WIDGET_WIDTH * 3) / 2.0f.
      */
     private static final float INCREMENT = WIDGET_WIDTH + (0.80f * Gdx.graphics.getWidth() - WIDGET_WIDTH * 3) / 2.0f;
 
-    //NOTEME javadoc
     /**
      * Center width of the first image button. Pads 10% of the screen to the left.
      */
     private static final float START_WIDTH = WIDGET_WIDTH / 2.0f + 0.10f * Gdx.graphics.getWidth();
 
-    //NOTEME javadoc
     /**
      * The game this screen belongs to.
      */
     private final TSSGame game;
 
-    //NOTEME javadoc
     /**
      * The camera used to show the viewport.
      */
     private OrthographicCamera camera;
 
-    //NOTEME javadoc
     /**
      * The viewport for the Scene2D stage.
      */
     private Viewport viewport;
 
-    //NOTEME javadoc
     /**
      * Tiled maps to use for creating thumbnails.
      */
     private Array<TiledMap> tiledMaps = new Array<>();
 
-    //NOTEME javadoc
     /**
      * Array to fill with textures created from the snapshots of Tiled maps.
      */
     private Array<Texture> mapTextures = new Array<>();
 
-    //NOTEME javadoc
     /**
      * Thumbnails to use for the Scene2D image buttons for map selection.
      */
     private Array<Skin> thumbnails = new Array<>();
 
-    //NOTEME javadoc
     /**
      * Names of the maps on the map select screen.
      */
@@ -104,19 +92,16 @@ public class TSSMapSelect extends ScreenAdapter {
             "Custom",
     };
 
-    //NOTEME javadoc
     /**
      * Are snapshots being created?
      */
     private boolean isTakingSnapshots = true;
 
-    //NOTEME javadoc
     /**
      * Is Scene2D stage created?
      */
     private boolean isStageCreated = false;
 
-    //NOTEME javadoc
     /**
      * Constructs a map select screen belonging to a certain game.
      *
@@ -135,7 +120,6 @@ public class TSSMapSelect extends ScreenAdapter {
         viewport = TSSMenuHelper.getInstance().createFitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
     }
 
-    //NOTEME javadoc
     /**
      * Called when this screen becomes the current screen for a game. Adds Tiled maps to class array.
      */
@@ -147,7 +131,6 @@ public class TSSMapSelect extends ScreenAdapter {
         tiledMaps.add((TiledMap) game.getAssetManager().get("Custom.tmx"));
     }
 
-    //NOTEME javadoc
     /**
      * Loads assets needed for this screen.
      */
@@ -173,7 +156,6 @@ public class TSSMapSelect extends ScreenAdapter {
         game.getAssetManager().finishLoading();
     }
 
-    //NOTEME javadoc
     /**
      * Called when the screen should render itself.
      *
@@ -211,7 +193,6 @@ public class TSSMapSelect extends ScreenAdapter {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Draws Tiled maps and saves a snapshot of the render to a texture which is then used
      * to create a skin for future usage.
@@ -230,7 +211,6 @@ public class TSSMapSelect extends ScreenAdapter {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Creates all the actors for a Scene2D stage representing the map select screen.
      */
@@ -269,7 +249,6 @@ public class TSSMapSelect extends ScreenAdapter {
         }
     }
 
-    //NOTEME javadoc
     /**
      * Saves current frame buffer to a texture (snapshot).
      *
@@ -285,7 +264,6 @@ public class TSSMapSelect extends ScreenAdapter {
         return new Texture(pixmap);
     }
 
-    //NOTEME javadoc
     /**
      * Draws a Tiled map to a certain sprite batch.
      *
@@ -299,7 +277,6 @@ public class TSSMapSelect extends ScreenAdapter {
         renderer.render();
     }
 
-    //NOTEME javadoc
     /**
      * Draws the map select screen background, calls batch begin and end.
      */
@@ -310,7 +287,6 @@ public class TSSMapSelect extends ScreenAdapter {
         game.getBatch().end();
     }
 
-    //NOTEME javadoc
     /**
      * Called when this screen is no longer the current screen for a Game.
      */
@@ -319,7 +295,6 @@ public class TSSMapSelect extends ScreenAdapter {
         this.dispose();
     }
 
-    //NOTEME javadoc
     /**
      * Called when this screen should release all resources.
      */

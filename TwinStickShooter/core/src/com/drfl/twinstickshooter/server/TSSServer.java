@@ -13,37 +13,31 @@ import java.io.IOException;
  */
 public class TSSServer {
 
-    //NOTEME javadoc
     /**
      * Debug flag.
      */
     private static final boolean DEBUG = false;
 
-    //NOTEME javadoc
     /**
      * Port used for connections.
      */
     private static final int PORT = 54555;
 
-    //NOTEME javadoc
     /**
      * Kryonet server.
      */
     private Server server;
 
-    //NOTEME javadoc
     /**
      * Vector representing movement vector from android controller packet.
      */
     private static Vector2 movement = new Vector2(0, 0);
 
-    //NOTEME javadoc
     /**
      * Vector representing shoot vector from android controller packet.
      */
     private static Vector2 shooting = new Vector2(0, 0);
 
-    //NOTEME javadoc
     /**
      * Constructs a kryonet server and registers a listener so it receives packets.
      */
@@ -63,7 +57,6 @@ public class TSSServer {
         server.start();
     }
 
-    //NOTEME javadoc
     /**
      * Initializes kryo instance so it handles android controller packets.
      */
@@ -74,7 +67,6 @@ public class TSSServer {
         kryo.register(Vector2.class);
     }
 
-    //NOTEME javadoc
     /**
      * Sets server movement and shoot vectors received from android controller.
      *
@@ -87,7 +79,6 @@ public class TSSServer {
         if(DEBUG) Log.info("Received Acceleration: " + cip.movement + " / Received Bullet: " + cip.shooting);
     }
 
-    //NOTEME javadoc
     /**
      * Disposes of server resources.
      */
@@ -102,7 +93,6 @@ public class TSSServer {
         }
     }
 
-    //NOTEME javadoc
     /**
      * @return Vector2 A vector copy representing movement
      */
@@ -110,7 +100,6 @@ public class TSSServer {
         return movement.cpy();
     }
 
-    //NOTEME javadoc
     /**
      * @return Vector2 A vector copy representing direction of shooting
      */
@@ -118,7 +107,6 @@ public class TSSServer {
         return shooting.cpy();
     }
 
-    //NOTEME javadoc
     /**
      * @return Array of connections to the server
      */
