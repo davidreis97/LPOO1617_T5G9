@@ -9,11 +9,11 @@ On this document, TwinStickShooter is mentioned as TSS and TwinStickShooterContr
 
 # Development Documentation
 
-[Architecture Design](Docs/Architecture%20Design.pdf)
+[Architecture Design](Docs/Intermediate/Architecture%20Design.pdf)
 
-[GUI Design](Docs/GUI%20Design.pdf)
+[GUI Design](Docs/Intermediate/GUI%20Design.pdf)
 
-[Test Design](Docs/TestDesign.pdf)
+[Test Design](Docs/Intermediate/TestDesign.pdf)
 
 # Setup and Installation
 ## Setting up the develpment environment
