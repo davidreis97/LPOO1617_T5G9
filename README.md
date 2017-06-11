@@ -19,6 +19,12 @@ On this document, TwinStickShooter is mentioned as TSS and TwinStickShooterContr
 
 [Test Design](Docs/Intermediate/TestDesign.pdf)
 
+# Stats
+
+Overall development time estimate: 82h16 - 87h16
+
+Work distribution: 50 / 50
+
 # Major Difficulties
 
 One of the biggest challenges we had to overcome during the development of this project was employing an architectural pattern that allowed us to write clean and well structured code. The pattern we chose was the `Model View Controller` architectural pattern. This was a big priority since the start of the development process because we knew, both from what we learned from previous experiences and from the LPOO lectures, that having a good architecture that allowed us to couple components loosely would make our whole development process a lot easier and faster, and would also allow us to easily implement unit testing. This strategy allowed us to implement unit tests without instanciating a single class from the `View` component, using only the `Model` and the `Controller` components.
